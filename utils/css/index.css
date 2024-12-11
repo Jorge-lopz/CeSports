@@ -1,0 +1,47 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: Lexend, Courier, monospace;
+}
+
+body {
+	padding: 40px;
+	display: flex;
+	justify-content: center;
+}
+
+#teams {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 30px;
+	row-gap: 20px;
+
+	& .team {
+		padding: 10px;
+		padding-top: 25px;
+		background: #00000010;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-around;
+		border-radius: 6px;
+		min-width: 180px;
+		max-width: 180px;
+		height: max-content;
+		aspect-ratio: 1 / 1;
+
+		p {
+			text-align: center;
+			font-weight: 500;
+			font-size: 15px;
+		}
+
+		img {
+			padding-top: 5px;
+			width: 55%;
+		}
+	}
+}

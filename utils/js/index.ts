@@ -1,3 +1,7 @@
+import { supabase } from "./db";
+
+console.log(supabase);
+
 const teams: Array<string> = [
 	"AC Milan",
 	"Arsenal",

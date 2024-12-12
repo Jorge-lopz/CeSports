@@ -1,14 +1,21 @@
 * {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-	font-family: Lexend, Courier, monospace;
+	&,
+	&::before,
+	&::after {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		font-family: Lexend, Courier, monospace;
+	}
 }
 
 body {
+	width: 100vw;
+	height: 100vh;
 	padding: 40px;
 	display: flex;
 	justify-content: center;
+	padding: 40px;
 }
 
 #teams {
@@ -42,6 +49,53 @@ body {
 		img {
 			padding-top: 5px;
 			width: 55%;
+		}
+	}
+}
+
+#tournament {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	padding-inline: 30px;
+	flex-direction: row;
+	gap: 10px;
+
+	.group {
+		width: 50%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 5%;
+
+		&#group-a {
+			align-items: flex-start;
+		}
+		&#group-b {
+			align-items: flex-end;
+		}
+
+		.match {
+			width: 200px;
+			height: 120px;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-around;
+			align-items: center;
+			border-radius: 6px;
+			gap: 5%;
+
+			.team {
+				width: 94%;
+				height: 48%;
+				background: #00000020;
+				border-radius: 6px;
+				transition: background 0.2s ease-in-out;
+
+				&:hover {
+					background: #00000040;
+				}
+			}
 		}
 	}
 }

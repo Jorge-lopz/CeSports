@@ -32,3 +32,15 @@ const elTeams = document.getElementById("teams");
 teams.forEach((team) => {
 	elTeams?.appendChild(teamCart(team));
 });
+
+// TODO - Create a collection to fll with db retrieved data programatically
+document.getElementById("group-a")?.childNodes.forEach((match, index) => {
+	(match as HTMLDivElement).childNodes.forEach((team, teamIndex) => {
+		(team as HTMLDivElement).innerText = teams[(index + 1) * teamIndex];
+	});
+});
+document.getElementById("group-b")?.childNodes.forEach((match, index) => {
+	(match as HTMLDivElement).childNodes.forEach((team, teamIndex) => {
+		(team as HTMLDivElement).innerText = teams[(index + 1) * teamIndex + 1];
+	});
+});

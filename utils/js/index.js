@@ -1,8 +1,6 @@
-"use strict";
 var _a, _b;
-Object.defineProperty(exports, "__esModule", { value: true });
-const db_1 = require("./db");
-console.log(db_1.supabase);
+import { supabase } from "./db";
+console.log(supabase);
 const teams = [
     "AC Milan",
     "Arsenal",

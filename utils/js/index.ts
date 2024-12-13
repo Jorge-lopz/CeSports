@@ -2,7 +2,7 @@ import { supabase } from "./db";
 
 console.log(supabase);
 
-const teams: Array<string> = [
+const teams = [
 	"AC Milan",
 	"Arsenal",
 	"Atlético Madrid",
@@ -39,12 +39,12 @@ teams.forEach((team) => {
 
 // TODO - Create a collection to fll with db retrieved data programatically
 document.getElementById("group-a")?.childNodes.forEach((match, index) => {
-	(match as HTMLDivElement).childNodes.forEach((team, teamIndex) => {
-		(team as HTMLDivElement).innerText = teams[(index + 1) * teamIndex];
+	match.childNodes.forEach((team, teamIndex) => {
+		(team as HTMLParagraphElement).innerText = teams[(index + 1) * teamIndex];
 	});
 });
 document.getElementById("group-b")?.childNodes.forEach((match, index) => {
-	(match as HTMLDivElement).childNodes.forEach((team, teamIndex) => {
-		(team as HTMLDivElement).innerText = teams[(index + 1) * teamIndex + 1];
+	match.childNodes.forEach((team, teamIndex) => {
+		(team as HTMLParagraphElement).innerText = teams[(index + 1) * teamIndex + 1];
 	});
 });

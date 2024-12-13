@@ -10,4 +10,4 @@ if (process.env.NODE_ENV !== "production") {
 // Initialize Supabase client
 export const supabase = createClient(`https://${Schema.DB}.supabase.co`, process.env.DB_ANON_KEY || "");
 
-console.log(supabase);
+console.log("Hi");

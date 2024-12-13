@@ -1,31 +1,27 @@
-
 <body>
-    <div class="roulette-view-container">
-        <p1 class="tittle-class">DAM2</p1>
-        <div id="roulette" class="roulette-container">
-            <!-- <div class="item">🍌</div>
+  <div class="roulette-view-container">
+    <p1 class="tittle-class">DAM2</p1>
+    <div id="roulette" class="roulette-container">
+      <!-- <div class="item">🍌</div>
             <div class="item">🍄</div>
             <div class="item">⭐</div>
             <div class="item">🔥</div>
             <div class="item">⚡</div> -->
-        </div>
-        <button id="startButton">Iniciar</button>
     </div>
+    <button id="startButton">Iniciar</button>
+  </div>
 </body>
 
-
-
-
-
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
+  @import url("https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap");
 
-body{
+  body {
     background-color: #ff6600;
     padding: 0px;
-    margin: 0px;}
+    margin: 0px;
+  }
 
-.roulette-view-container {
+  .roulette-view-container {
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -33,26 +29,26 @@ body{
     justify-content: center;
     align-items: center;
     background-color: #00000050;
-}
+  }
 
-.tittle-class {
+  .tittle-class {
     color: white;
     font-size: 3rem;
     margin: 0px;
     padding: 0px;
     font-weight: bold;
     font-family: Lexend;
-}
+  }
 
-.roulette-container {
+  .roulette-container {
     margin-top: 8vw;
     width: 40vh;
     height: 40vh;
     overflow: hidden;
     position: relative;
-}
+  }
 
-.item {
+  .item {
     width: 50%;
     height: 50%;
     display: flex;
@@ -64,9 +60,9 @@ body{
     top: 25%;
     left: 25%;
     /* transform: translate(-50%, -50%); */
-}
+  }
 
-#startButton {
+  #startButton {
     font-family: Lexend;
     margin-top: 8vh;
     color: white;
@@ -76,93 +72,109 @@ body{
     border-radius: 5px;
     background-color: #ff6600;
     cursor: pointer;
-}
+  }
 
-#roulette {
+  #roulette {
     --spin-amount: 8;
     --spin-size: -75%;
     --spin-translation: calc(var(--spin-size) * var(--spin-amount));
-}
+  }
 
-
-@keyframes spin {
-    100% { transform: translateY(var(--spin-translation)); } /* Ajusta para el total de elementos */
-}
-@keyframes end-spin {
-    0% { transform: translateY(var(--spin-translation));  }
-    100% { transform: translateY(calc(var(--spin-translation) * 2)); }
-}
-
+  @keyframes spin {
+    100% {
+      transform: translateY(var(--spin-translation));
+    } /* Ajusta para el total de elementos */
+  }
+  @keyframes end-spin {
+    0% {
+      transform: translateY(var(--spin-translation));
+    }
+    100% {
+      transform: translateY(calc(var(--spin-translation) * 2));
+    }
+  }
 </style>
 
-
-
 <script>
-const roulette = document.getElementById('roulette');
-const startButton = document.getElementById('startButton');
-//const itemsArray = ['🍌','🍄' ,'⭐','🔥','⚡'];
-const itemsArray = ["arsenal" ,"ac_milan","atleti","barsa","bayer_leverkusen","bayer_munchen","BVB","chelsea","intern_milan","juventus","liverpool","madrid","manchester_city","manchester_united","psg","tottenham"];
+  const roulette = document.getElementById("roulette");
+  const startButton = document.getElementById("startButton");
+  //const itemsArray = ['🍌','🍄' ,'⭐','🔥','⚡'];
+  const itemsArray = [
+    "arsenal",
+    "ac_milan",
+    "atleti",
+    "barsa",
+    "bayer_leverkusen",
+    "bayer_munchen",
+    "BVB",
+    "chelsea",
+    "intern_milan",
+    "juventus",
+    "liverpool",
+    "madrid",
+    "manchester_city",
+    "manchester_united",
+    "psg",
+    "tottenham",
+  ];
 
+  var item = null;
 
-var item = null;
-
-function shuffleArray(array) {
+  function shuffleArray(array) {
     for (var i = array.length - 1; i >= 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
     }
-}
+  }
 
-function generateRoullete() {
+  function generateRoullete() {
     // Obtén las variables CSS como cadenas
-    const numberOfSpins = getComputedStyle(roulette).getPropertyValue('--spin-amount').trim();
+    const numberOfSpins = getComputedStyle(roulette)
+      .getPropertyValue("--spin-amount")
+      .trim();
 
-    roulette.innerHTML = '';
-    if ((itemsArray).length == 0)
-        return null;
-
-    // console.log("Spins: " + numberOfSpins + " Items: " + (itemsArray).length);
-    // console.log("Spins/Items: " + ((numberOfSpins + 1)  / (itemsArray).length));
+    roulette.innerHTML = "";
+    if (itemsArray.length == 0) return null;
 
     shuffleArray(itemsArray);
-    for (let i = 0; i < ((numberOfSpins + 1)  / (itemsArray).length); i++) {
-        itemsArray.forEach((item, index) => {
+    for (let i = 0; i < (numberOfSpins + 1) / itemsArray.length; i++) {
+      itemsArray.forEach((item, index) => {
         roulette.innerHTML += `<div class='item' style="background-image: url('./iconos_equipos/${item}_icon.png');"></div>`;
+      });
 
-    });
-
-    items = document.querySelectorAll('.item');
-    items.forEach((item, index) => {
+      items = document.querySelectorAll(".item");
+      items.forEach((item, index) => {
         item.style.marginTop = `calc(${index} * 75%)`;
-    });
+      });
     }
-}
+  }
 
-generateRoullete();
-startButton.addEventListener('click', () => {
-    const numberOfSpins = getComputedStyle(roulette).getPropertyValue('--spin-amount').trim();
+  generateRoullete();
+  startButton.addEventListener("click", () => {
+    const numberOfSpins = getComputedStyle(roulette)
+      .getPropertyValue("--spin-amount")
+      .trim();
 
     generateRoullete();
 
     // Iniciar animación
     items.forEach((item, index) => {
-        item.style.animation = `spin ${1.275}s forwards linear`;
+      item.style.animation = `spin ${1.275}s forwards linear`;
     });
 
     // Detener después de un tiempo
     setTimeout(() => {
-        items.forEach((item, index) => {
-            item.style.animation = `end-spin ${2.25}s cubic-bezier(.14,.18,.73,1.32) forwards`;
-        });
-        const itemVencedor = itemsArray[numberOfSpins % itemsArray.length];
-        itemsArray.splice(numberOfSpins % itemsArray.length, 1);
-        console.log(itemVencedor);
-        // setTimeout(() => {
-        //     roulette.innerHTML = "<div class='item'>⚡</div>";
-        // }, 1000)
+      items.forEach((item, index) => {
+        item.style.animation = `end-spin ${2.25}s cubic-bezier(.14,.18,.73,1.32) forwards`;
+      });
+      const itemVencedor = itemsArray[numberOfSpins % itemsArray.length];
+      itemsArray.splice(numberOfSpins % itemsArray.length, 1);
+      console.log(itemVencedor);
+      // setTimeout(() => {
+      //     roulette.innerHTML = "<div class='item'>⚡</div>";
+      // }, 1000)
     }, 1275); // Ajusta el tiempo
-
-});
+  });
 </script>

@@ -1,17 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ES6",
     "outDir": "./dist",
     "rootDir": "./utils/js",
     "moduleResolution": "node",
-    "module": "ESNext",
+    "module": "CommonJS",
+    "target": "ES6",
     "esModuleInterop": true,
-    "strict": true
+    "allowSyntheticDefaultImports": true
   },
   "include": [
-    "utils/js/**/*"
-  ],
-  "exclude": [
-    "node_modules"
+    "./utils/js/**/*"
   ]
 }

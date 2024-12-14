@@ -1,6 +1,4 @@
 var _a, _b;
-import { supabase } from "./db";
-console.log(supabase);
 const teams = [
     "AC Milan",
     "Arsenal",

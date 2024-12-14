@@ -1,15 +1,11 @@
 // DATABASE
 const DB = "rvseyuxbfpmolvyxfspq";
-const DB_ANON_KEY =
-	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ2c2V5dXhiZnBtb2x2eXhmc3BxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5MTI0NjcsImV4cCI6MjA0OTQ4ODQ2N30.nEnVsu7epQDuBuAi5-ByYEckOzJoKPV1yYbETLxBxZk";
-
+const DB_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ2c2V5dXhiZnBtb2x2eXhmc3BxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5MTI0NjcsImV4cCI6MjA0OTQ4ODQ2N30.nEnVsu7epQDuBuAi5-ByYEckOzJoKPV1yYbETLxBxZk";
 // TABLES
 const DB_TEAMS = "teams";
 const DB_MATCHES = "matches";
 const DB_VOTES = "votes";
-
 // COLUMNS
-
 // Teams
 const DB_TEAM_ID = "id";
 const DB_TEAM_CLASS = "class";
@@ -28,7 +24,6 @@ const DB_MATCH_STATE = "state";
 const DB_VOTES_ID = "id";
 const DB_VOTES_MATCH = "match";
 const DB_VOTES_TEAM = "team";
-
 // Consts
 const group = ["A", "B"];
 const states = ["set", "started", "finished"];

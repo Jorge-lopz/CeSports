@@ -18,14 +18,13 @@ async function getUnselectedTeams() {
 	}
 }
 
-function shuffleArray(array: string[], selected: string) {
-	for (var i = array.length; i > 0; i--) {
+function shuffleArray(array: string[]) {
+	for (var i = array.length - 1; i >= 0; i--) {
 		var j = Math.floor(Math.random() * (i + 1));
 		var temp = array[i];
 		array[i] = array[j];
 		array[j] = temp;
 	}
-	array[0] = selected;
 }
 
 let teams: NodeListOf<HTMLElement>;
@@ -35,13 +34,11 @@ async function generateRoulette() {
 	if (teamsArray.length == 0) return null;
 
 	for (let i = 0; i < (Number(numberOfSpins) + 1) / teamsArray.length; i++) {
-		teamsArray.forEach((item, index) => {
-			if (index != 0) {
-				let team = document.createElement("div");
-				team.classList.add("roulette-team");
-				team.appendChild(Object.assign(document.createElement("img"), { src: `./assets/teams/${item}.png` }));
-				roulette.appendChild(team);
-			}
+		teamsArray.forEach((item, _) => {
+			let team = document.createElement("div");
+			team.classList.add("roulette-team");
+			team.appendChild(Object.assign(document.createElement("img"), { src: `./assets/teams/${item}.png` }));
+			roulette.appendChild(team);
 		});
 
 		teams = document.querySelectorAll(".roulette-team");
@@ -66,12 +63,13 @@ startButton.addEventListener("click", () => {
 		teams.forEach((item, _) => {
 			(item as unknown as HTMLElement).style.animation = `end-spin ${2.25}s cubic-bezier(.14,.18,.73,1.32) forwards`;
 		});
-		let selectedTeam = teamsArray[(numberOfSpins % teamsArray.length) + 1];
+		let selectedTeam = teamsArray[numberOfSpins % teamsArray.length];
 		teamsArray.splice(numberOfSpins % teamsArray.length, 1);
-		// Save the team-class-group combination into the database
+		// TODO - Save the team-class-group combination into the database
 		console.log(selectedTeam);
-		shuffleArray(teamsArray, selectedTeam);
 	}, 1275);
+
+	shuffleArray(teamsArray);
 });
 
 async function init() {

@@ -18,7 +18,7 @@ const DB_TEAM_GROUP = "group";
 // Matches
 const DB_MATCH_ID = "id";
 const DB_MATCH_GROUP = "group";
-const DB_MATCH_PHASE = "phase";
+const DB_MATCH_ROUND = "round";
 const DB_MATCH_INDEX = "index";
 const DB_MATCH_TEAM1 = "team1";
 const DB_MATCH_TEAM2 = "team2";

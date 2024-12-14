@@ -83,12 +83,16 @@
   @keyframes spin {
     100% {
       transform: translateY(var(--spin-translation));
-    } /* Ajusta para el total de elementos */
+    }
+
+    /* Ajusta para el total de elementos */
   }
+
   @keyframes end-spin {
     0% {
       transform: translateY(var(--spin-translation));
     }
+
     100% {
       transform: translateY(calc(var(--spin-translation) * 2));
     }

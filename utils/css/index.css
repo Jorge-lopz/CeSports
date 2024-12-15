@@ -13,66 +13,66 @@
 
 body {
 	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.roulette-view-container {
-	width: 100vw;
-	height: 100vh;
-	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	background-color: #00000050;
 }
 
 .title-class {
 	color: white;
 	font-size: 3rem;
-	margin: 0px;
-	padding: 0px;
 	font-weight: bold;
-	font-family: Lexend;
 }
 
-.roulette-container {
-	margin-top: 8vw;
-	width: 40vh;
-	height: 40vh;
-	overflow: hidden;
-	position: relative;
-}
-
-.roulette-team {
-	width: 50%;
-	height: 50%;
+.roulettes {
 	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.roulette-view-container {
+	width: 50vw;
+	padding-left: 20%;
+	height: 80vh;
+	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	font-size: 2rem;
-	position: absolute;
-	background-size: auto 100%;
-	top: 25%;
-	left: 25%;
+
+	.roulette-container {
+		margin-top: 8vw;
+		width: 40vh;
+		height: 40vh;
+		overflow: hidden;
+		position: relative;
+		--spin-amount: 10;
+		--spin-size: 75%;
+		--spin-translation: calc(var(--spin-size) * var(--spin-amount));
+
+		.roulette-team {
+			width: 50%;
+			height: 50%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 2rem;
+			position: absolute;
+			top: 25%;
+			left: 25%;
+		}
+	}
 }
 
-#startButton {
-	font-family: Lexend;
-	margin-top: 8vh;
+#rollButton {
+	margin-top: 5vh;
 	color: black;
-	font-size: 1.5rem;
+	font-size: 1.2rem;
+	font-weight: 600;
 	padding: 0.5rem 1rem;
 	border: none;
-	border-radius: 5px;
+	border-radius: 4px;
 	background-color: #fff;
 	cursor: pointer;
-}
-
-#roulette {
-	--spin-amount: 10;
-	--spin-size: -75%;
-	--spin-translation: calc(var(--spin-size) * var(--spin-amount));
 }
 
 @keyframes spin {

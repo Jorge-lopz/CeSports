@@ -9,9 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 // Create the database connection
 const db = supabase.createClient(`https://${DB}.supabase.co`, DB_ANON_KEY, { db: { schema: "public" } });
-const roulette = document.getElementById("roulette");
-const numberOfSpins = getComputedStyle(roulette).getPropertyValue("--spin-amount").trim();
-const startButton = document.getElementById("startButton");
+const teamRoulette = document.getElementById("teamRoulette");
+const classRoulette = document.getElementById("classRoulette");
+const numberOfSpins = getComputedStyle(teamRoulette).getPropertyValue("--spin-amount").trim();
+const rollButton = document.getElementById("rollButton");
 let teamsArray = [];
 function getUnselectedTeams() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -35,7 +36,7 @@ function shuffleArray(array) {
 let teams;
 function generateRoulette() {
     return __awaiter(this, void 0, void 0, function* () {
-        roulette.innerHTML = "";
+        teamRoulette.innerHTML = "";
         if (teamsArray.length == 0)
             return null;
         for (let i = 0; i < (Number(numberOfSpins) + 1) / teamsArray.length; i++) {
@@ -43,32 +44,32 @@ function generateRoulette() {
                 let team = document.createElement("div");
                 team.classList.add("roulette-team");
                 team.appendChild(Object.assign(document.createElement("img"), { src: `./assets/teams/${item}.png` }));
-                roulette.appendChild(team);
+                teamRoulette.appendChild(team);
             });
             teams = document.querySelectorAll(".roulette-team");
             teams.forEach((item, index) => {
-                item.style.marginTop = `calc(${index} * 75%)`;
+                item.style.marginTop = `calc(${index} * -75%)`;
             });
         }
     });
 }
-startButton.addEventListener("click", () => {
-    const numberOfSpins = Number(getComputedStyle(roulette).getPropertyValue("--spin-amount").trim());
+rollButton.addEventListener("click", () => {
+    const numberOfSpins = Number(getComputedStyle(teamRoulette).getPropertyValue("--spin-amount").trim());
     generateRoulette();
     // Start animation
     teams.forEach((item, _) => {
-        item.style.animation = `spin ${1.275}s forwards linear`;
+        item.style.animation = `spin ${2.3}s forwards ease-in`;
     });
     // End animation
     setTimeout(() => {
         teams.forEach((item, _) => {
-            item.style.animation = `end-spin ${2.25}s cubic-bezier(.14,.18,.73,1.32) forwards`;
+            item.style.animation = `end-spin ${1.7}s cubic-bezier(.14,.18,.73,1.32) forwards`;
         });
         let selectedTeam = teamsArray[numberOfSpins % teamsArray.length];
         teamsArray.splice(numberOfSpins % teamsArray.length, 1);
         // TODO - Save the team-class-group combination into the database
         console.log(selectedTeam);
-    }, 1275);
+    }, 2300);
     shuffleArray(teamsArray);
 });
 function init() {

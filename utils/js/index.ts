@@ -5,7 +5,7 @@ const db = supabase.createClient(`https://${DB}.supabase.co`, DB_ANON_KEY, { db:
 
 const teamRoulette = document.getElementById("teamRoulette");
 const classRoulette = document.getElementById("classRoulette");
-const numberOfSpins = getComputedStyle(teamRoulette).getPropertyValue("--spin-amount").trim();
+const numberOfSpins = Number(getComputedStyle(teamRoulette).getPropertyValue("--spin-amount").trim());
 const rollButton = document.getElementById("rollButton");
 let teamsArray = [];
 
@@ -38,43 +38,52 @@ async function generateRoulette() {
 		teamsArray.forEach((item, _) => {
 			let team = document.createElement("div");
 			team.classList.add("roulette-team");
-			team.appendChild(Object.assign(document.createElement("img"), { src: `./assets/teams/${item}.png` }));
+			let img = Object.assign(document.createElement("img"), { src: `./assets/teams/${item}.svg` });
+			img.width = 250;
+			team.appendChild(img);
 			teamRoulette.appendChild(team);
 		});
 
 		teams = document.querySelectorAll(".roulette-team");
 		teams.forEach((item: HTMLElement, index) => {
-			item.style.marginTop = `calc(${index} * -75%)`;
+			item.style.marginTop = `calc(${index} * -100%)`;
 		});
 	}
 }
 
 rollButton.addEventListener("click", () => {
-	const numberOfSpins = Number(getComputedStyle(teamRoulette).getPropertyValue("--spin-amount").trim());
-
-	generateRoulette();
-
-	// Start animation
-	teams.forEach((item: HTMLElement, _) => {
-		item.style.animation = `spin ${2.3}s forwards ease-in`;
-	});
-
-	// End animation
+	rollButton.classList.add("disabled");
+	(teamRoulette as HTMLElement).style.opacity = "0";
 	setTimeout(() => {
-		teams.forEach((item, _) => {
-			(item as unknown as HTMLElement).style.animation = `end-spin ${1.7}s cubic-bezier(.14,.18,.73,1.32) forwards`;
-		});
-		let selectedTeam = teamsArray[numberOfSpins % teamsArray.length];
-		teamsArray.splice(numberOfSpins % teamsArray.length, 1);
-		// TODO - Save the team-class-group combination into the database
-		console.log(selectedTeam);
-	}, 2300);
+		generateRoulette();
+		(teamRoulette as HTMLElement).style.opacity = "1";
 
-	shuffleArray(teamsArray);
+		// Start animation
+		teams.forEach((item: HTMLElement, _) => {
+			item.style.animation = `spin ${2.3}s forwards ease-in`;
+		});
+
+		let selectedTeam = teamsArray[numberOfSpins % teamsArray.length];
+		console.log(selectedTeam);
+		// TODO - Save the team-class-group combination into the database
+
+		// End animation
+		setTimeout(() => {
+			teams.forEach((item, _) => {
+				(item as unknown as HTMLElement).style.animation = `end-spin ${1.7}s cubic-bezier(.14,.18,.73,1.32) forwards`;
+			});
+			teamsArray.splice(numberOfSpins % teamsArray.length, 1);
+			setTimeout(() => {
+				rollButton.classList.remove("disabled");
+				shuffleArray(teamsArray);
+			}, 2000);
+		}, 2300);
+	}, 450);
 });
 
 async function init() {
 	await getUnselectedTeams();
+	console.log(teamsArray);
 	generateRoulette();
 }
 

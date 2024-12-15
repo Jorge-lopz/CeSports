@@ -32,7 +32,6 @@ body {
 
 .roulette-view-container {
 	width: 50vw;
-	padding-left: 20%;
 	height: 80vh;
 	display: flex;
 	flex-direction: column;
@@ -40,24 +39,25 @@ body {
 	align-items: center;
 
 	.roulette-container {
-		margin-top: 8vw;
 		width: 40vh;
-		height: 40vh;
+		height: 50vh;
+		mask-image: linear-gradient(to bottom, transparent 0%, transparent 20%, black 28%, black 95%, transparent 100%);
+		transition: opacity 0.5s ease-in-out;
 		overflow: hidden;
 		position: relative;
-		--spin-amount: 10;
-		--spin-size: 75%;
+		--spin-amount: 15;
+		--spin-size: 50%;
 		--spin-translation: calc(var(--spin-size) * var(--spin-amount));
 
 		.roulette-team {
-			width: 50%;
-			height: 50%;
+			width: 80%;
+			height: 80%;
 			display: flex;
 			justify-content: center;
 			align-items: center;
 			font-size: 2rem;
 			position: absolute;
-			top: 25%;
+			top: 20%;
 			left: 25%;
 		}
 	}
@@ -73,6 +73,12 @@ body {
 	border-radius: 4px;
 	background-color: #fff;
 	cursor: pointer;
+
+	&.disabled {
+		opacity: 0.5;
+		pointer-events: none;
+		cursor: not-allowed;
+	}
 }
 
 @keyframes spin {

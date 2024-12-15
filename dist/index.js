@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const db = supabase.createClient(`https://${DB}.supabase.co`, DB_ANON_KEY, { db: { schema: "public" } });
 const teamRoulette = document.getElementById("teamRoulette");
 const classRoulette = document.getElementById("classRoulette");
-const numberOfSpins = getComputedStyle(teamRoulette).getPropertyValue("--spin-amount").trim();
+const numberOfSpins = Number(getComputedStyle(teamRoulette).getPropertyValue("--spin-amount").trim());
 const rollButton = document.getElementById("rollButton");
 let teamsArray = [];
 function getUnselectedTeams() {
@@ -43,38 +43,48 @@ function generateRoulette() {
             teamsArray.forEach((item, _) => {
                 let team = document.createElement("div");
                 team.classList.add("roulette-team");
-                team.appendChild(Object.assign(document.createElement("img"), { src: `./assets/teams/${item}.png` }));
+                let img = Object.assign(document.createElement("img"), { src: `./assets/teams/${item}.svg` });
+                img.width = 250;
+                team.appendChild(img);
                 teamRoulette.appendChild(team);
             });
             teams = document.querySelectorAll(".roulette-team");
             teams.forEach((item, index) => {
-                item.style.marginTop = `calc(${index} * -75%)`;
+                item.style.marginTop = `calc(${index} * -100%)`;
             });
         }
     });
 }
 rollButton.addEventListener("click", () => {
-    const numberOfSpins = Number(getComputedStyle(teamRoulette).getPropertyValue("--spin-amount").trim());
-    generateRoulette();
-    // Start animation
-    teams.forEach((item, _) => {
-        item.style.animation = `spin ${2.3}s forwards ease-in`;
-    });
-    // End animation
+    rollButton.classList.add("disabled");
+    teamRoulette.style.opacity = "0";
     setTimeout(() => {
+        generateRoulette();
+        teamRoulette.style.opacity = "1";
+        // Start animation
         teams.forEach((item, _) => {
-            item.style.animation = `end-spin ${1.7}s cubic-bezier(.14,.18,.73,1.32) forwards`;
+            item.style.animation = `spin ${2.3}s forwards ease-in`;
         });
         let selectedTeam = teamsArray[numberOfSpins % teamsArray.length];
-        teamsArray.splice(numberOfSpins % teamsArray.length, 1);
-        // TODO - Save the team-class-group combination into the database
         console.log(selectedTeam);
-    }, 2300);
-    shuffleArray(teamsArray);
+        // TODO - Save the team-class-group combination into the database
+        // End animation
+        setTimeout(() => {
+            teams.forEach((item, _) => {
+                item.style.animation = `end-spin ${1.7}s cubic-bezier(.14,.18,.73,1.32) forwards`;
+            });
+            teamsArray.splice(numberOfSpins % teamsArray.length, 1);
+            setTimeout(() => {
+                rollButton.classList.remove("disabled");
+                shuffleArray(teamsArray);
+            }, 2000);
+        }, 2300);
+    }, 450);
 });
 function init() {
     return __awaiter(this, void 0, void 0, function* () {
         yield getUnselectedTeams();
+        console.log(teamsArray);
         generateRoulette();
     });
 }

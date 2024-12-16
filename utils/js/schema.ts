@@ -5,6 +5,7 @@ const DB_ANON_KEY =
 
 // TABLES TODO - Assign to the real tables
 const DB_TEAMS = "teams_duplicate";
+const DB_CLASSES = "classes_duplicate";
 const DB_MATCHES = "matches_duplicate";
 const DB_VOTES = "votes_duplicate";
 

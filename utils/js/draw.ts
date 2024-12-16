@@ -8,7 +8,7 @@ const classRoulette = document.getElementById("classRoulette");
 const numberOfSpins = Number(getComputedStyle(teamRoulette).getPropertyValue("--spin-amount").trim());
 const rollButton = document.getElementById("rollButton");
 let teamsArray = [];
-let classesArray = ["DAM 1", "DAM 2", "EDI 1", "EDI 2", "TSEAS 1", "TSEAS 2"];
+let classesArray = [];
 
 async function getUnselectedTeams() {
 	let { data, error } = await db.from(DB_TEAMS).select().is("class", null);
@@ -16,7 +16,17 @@ async function getUnselectedTeams() {
 	if (error) {
 		console.error(error);
 	} else {
-		teamsArray = data.map((team: any) => team.team);
+		teamsArray = data.map((row: any) => row.team);
+	}
+}
+
+async function getUnselectedClasses() {
+	let { data, error } = await db.from(DB_CLASSES).select();
+
+	if (error) {
+		console.error(error);
+	} else {
+		classesArray = data.map((row: any) => row.class);
 	}
 }
 
@@ -75,7 +85,15 @@ async function generateRoulettes() {
 	}
 }
 
-async function saveTeamsClass(teams: string, classes: string) {}
+async function saveTeamsClass(teamName: string, className: string): Promise<boolean> {
+	let { _, error } = await db.from(DB_TEAMS).update({ class: className }).eq("team", teamName);
+	if (error) {
+		console.error(error);
+		return false;
+	} else {
+		return true;
+	}
+}
 
 rollButton.addEventListener("click", () => {
 	if (teamsArray.length == 1) {
@@ -112,9 +130,15 @@ rollButton.addEventListener("click", () => {
 
 		let selectedTeam = teamsArray[numberOfSpins % teamsArray.length];
 		let selectedClass = classesArray[numberOfSpins % classesArray.length];
-		console.log(selectedTeam, " -> ", selectedClass);
 
-		// TODO - Save the team-class-group combination into the database
+		console.log(selectedTeam, " -> ", selectedClass);
+		let saved = saveTeamsClass(selectedTeam, selectedClass);
+
+		if (saved) {
+			console.log("Team-class combination saved");
+			getUnselectedTeams();
+			getUnselectedClasses();
+		}
 
 		// End animation
 		// TEAM ROULETTE
@@ -123,19 +147,15 @@ rollButton.addEventListener("click", () => {
 			teams.forEach((item, _) => {
 				(item as unknown as HTMLElement).style.animation = `end-spin ${1.7}s cubic-bezier(.14,.18,.73,1.32) forwards`;
 			});
-			teamsArray.splice(numberOfSpins % teamsArray.length, 1);
-			setTimeout(() => {
-				shuffleArray(teamsArray);
-			}, 2000);
+			shuffleArray(teamsArray);
 		}, animationDuration * 1000);
 		// CLASS ROULETTE
 		setTimeout(() => {
 			classes.forEach((item, _) => {
 				(item as unknown as HTMLElement).style.animation = `end-spin ${1.7 * classRouletteDelay}s cubic-bezier(.14,.18,.73,1.32) forwards`;
 			});
-			classesArray.splice(numberOfSpins % classesArray.length, 1);
+			shuffleArray(classesArray);
 			setTimeout(() => {
-				shuffleArray(classesArray);
 				rollButton.classList.remove("disabled");
 			}, 2000 * classRouletteDelay);
 		}, animationDuration * 1000 * classRouletteDelay);
@@ -147,8 +167,9 @@ async function initAdminDraw() {
 }
 
 async function initDraw() {
-	rollButton.classList.add("disabled");
+	// rollButton.classList.add("disabled"); // TODO - Uncomment
 	await getUnselectedTeams();
+	await getUnselectedClasses();
 	shuffleArray(teamsArray);
 	shuffleArray(classesArray);
 	console.log(teamsArray);

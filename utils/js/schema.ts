@@ -3,10 +3,10 @@ const DB = "rvseyuxbfpmolvyxfspq";
 const DB_ANON_KEY =
 	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ2c2V5dXhiZnBtb2x2eXhmc3BxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5MTI0NjcsImV4cCI6MjA0OTQ4ODQ2N30.nEnVsu7epQDuBuAi5-ByYEckOzJoKPV1yYbETLxBxZk";
 
-// TABLES
-const DB_TEAMS = "teams";
-const DB_MATCHES = "matches";
-const DB_VOTES = "votes";
+// TABLES TODO - Assign to the real tables
+const DB_TEAMS = "teams_duplicate";
+const DB_MATCHES = "matches_duplicate";
+const DB_VOTES = "votes_duplicate";
 
 // COLUMNS
 

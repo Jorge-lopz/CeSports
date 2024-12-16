@@ -11,7 +11,7 @@ let teamsArray = [];
 let classesArray = ["DAM 1", "DAM 2", "EDI 1", "EDI 2", "TSEAS 1", "TSEAS 2"];
 
 async function getUnselectedTeams() {
-	let { data, error } = await db.from("teams").select().is("class", null);
+	let { data, error } = await db.from(DB_TEAMS).select().is("class", null);
 
 	if (error) {
 		console.error(error);
@@ -75,6 +75,8 @@ async function generateRoulettes() {
 	}
 }
 
+async function saveTeamsClass(teams: string, classes: string) {}
+
 rollButton.addEventListener("click", () => {
 	if (teamsArray.length == 1) {
 		rollButton.classList.add("disabled");
@@ -111,6 +113,7 @@ rollButton.addEventListener("click", () => {
 		let selectedTeam = teamsArray[numberOfSpins % teamsArray.length];
 		let selectedClass = classesArray[numberOfSpins % classesArray.length];
 		console.log(selectedTeam, " -> ", selectedClass);
+
 		// TODO - Save the team-class-group combination into the database
 
 		// End animation

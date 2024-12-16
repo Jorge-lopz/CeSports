@@ -17,7 +17,7 @@ let teamsArray = [];
 let classesArray = ["DAM 1", "DAM 2", "EDI 1", "EDI 2", "TSEAS 1", "TSEAS 2"];
 function getUnselectedTeams() {
     return __awaiter(this, void 0, void 0, function* () {
-        let { data, error } = yield db.from("teams").select().is("class", null);
+        let { data, error } = yield db.from(DB_TEAMS).select().is("class", null);
         if (error) {
             console.error(error);
         }
@@ -77,6 +77,9 @@ function generateRoulettes() {
             });
         }
     });
+}
+function saveTeamsClass(teams, classes) {
+    return __awaiter(this, void 0, void 0, function* () { });
 }
 rollButton.addEventListener("click", () => {
     if (teamsArray.length == 1) {

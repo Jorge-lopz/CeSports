@@ -391,6 +391,9 @@ body {
 	}
 }
 
+@media (width < 1400px) {
+}
+
 .tools-icon {
 	position: absolute;
 	top: 94vh;

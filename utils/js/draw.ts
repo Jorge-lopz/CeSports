@@ -153,7 +153,7 @@ async function initDraw() {
 	generateRoulettes();
 }
 
-init();
+initDraw();
 
 const homeIcon = document.getElementById("home-icon");
 var adminIcon = document.getElementById("admin-icon");
@@ -179,7 +179,7 @@ adminIcon.addEventListener("click", () => {
 					console.log("DB Authentication failed");
 				} else {
 					console.log("Acceso concedido");
-					initAdmin();
+					initAdminDraw();
 				}
 			}
 		}

@@ -153,7 +153,7 @@ function initDraw() {
         generateRoulettes();
     });
 }
-init();
+initDraw();
 const homeIcon = document.getElementById("home-icon");
 var adminIcon = document.getElementById("admin-icon");
 homeIcon.addEventListener("click", () => {
@@ -180,7 +180,7 @@ adminIcon.addEventListener("click", () => {
                     }
                     else {
                         console.log("Acceso concedido");
-                        initAdmin();
+                        initAdminDraw();
                     }
                 }
             }

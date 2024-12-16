@@ -18,7 +18,7 @@ body {
   background-size: cover;
 }
 
-.match-pop-up{
+.match-pop-up {
   z-index: 100;
   width: 100%;
   height: 100%;
@@ -30,14 +30,17 @@ body {
   backdrop-filter: blur(1px);
   color: white;
 
-  .container{
-    padding-top: 10vh;
+  .container {
+    display: flex;
+    flex-direction: column;
+    padding: 10vh 7vw;
     border-radius: 20px;
     width: 60%;
     height: 75%;
     gap: 20px;
     background-color: #121212;
     border: solid 4px #fbfbfb12;
+    gap: 5vh;
 
     .logos-container {
       display: flex;
@@ -45,9 +48,9 @@ body {
       width: 100%;
 
       .versus-icon {
-        width: 20%;
+        width: 30%;
       }
-      .team{
+      .team {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -57,9 +60,7 @@ body {
           max-width: 100%;
         }
 
-
-
-        .team-name{
+        .team-name {
           text-align: center;
           font-weight: bold;
           font-size: 2rem;
@@ -68,7 +69,51 @@ body {
       }
     }
 
+    .vote-bar {
+      display: flex;
+      position: relative;
+      margin: auto;
+      /* border: solid 2px #232323; */
+      border-radius: 10px;
+      overflow: hidden;
+      width: 100%;
+      min-height: 54px;
 
+      .team {
+        /* box-shadow: inset 0px 0px 10px rgb(0, 0, 0); */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+
+      }
+
+      #team-1-bar {
+        color: rgba(255, 0, 0);
+        width: 60%;
+        background-color: rgba(255, 0, 0, 0.24);
+      }
+
+      #team-2-bar {
+        color: rgb(19 157 234);
+        width: calc(100% - 60%);
+        background-color: rgb(17 146 218 / 24%);
+      }
+
+    }
+
+    .vote-buttons-container {
+      display: flex;
+      justify-content: space-between;
+      .vote-team-btn{
+        width: 20%;
+        border-radius: 15px;
+        height: 5vh;
+      }
+    }
 
   }
 }
@@ -85,7 +130,7 @@ body {
 
   #group-b {
     rotate: 180deg;
-    *:is(.match){
+    *:is(.match) {
       transform: rotate(180deg);
     }
   }
@@ -154,7 +199,6 @@ body {
         }
       }
 
-
       .single-match {
         display: flex;
         align-items: center;
@@ -162,8 +206,6 @@ body {
         height: var(--match-pair-height);
       }
     }
-
-
   }
   .match {
     display: flex;
@@ -223,14 +265,12 @@ body {
     }
 
     .match {
-      .final-text{
+      .final-text {
         color: white;
         text-align: center;
         font-size: 1.5rem;
         font-weight: bold;
       }
     }
-
-
   }
 }

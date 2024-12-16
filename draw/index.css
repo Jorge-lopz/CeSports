@@ -21,9 +21,11 @@ body {
 	align-items: center;
 	background-size: cover;
 	background-image: url("../assets/bg.png");
+	padding: 2rem;
 }
 
 #bg-overlay {
+	inset: 0;
 	width: 100vw;
 	height: 150vh;
 	z-index: -1;
@@ -32,7 +34,7 @@ body {
 }
 
 .title {
-	margin-top: 8vh;
+	margin-top: 2vh;
 	color: white;
 	font-size: 2rem;
 	font-weight: bold;
@@ -47,7 +49,7 @@ body {
 .roulette-view-container {
 	width: 50vw;
 	display: flex;
-	margin-top: 5vh;
+	margin-top: 0vh;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
@@ -298,7 +300,6 @@ body {
 	}
 }
 
-#home-icon{
+#home-icon {
 	left: 25px;
 }
-

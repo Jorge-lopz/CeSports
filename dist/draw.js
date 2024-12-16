@@ -157,8 +157,30 @@ homeIcon.addEventListener("click", () => {
 });
 adminIcon.addEventListener("click", () => {
     /* TODO poner contraseña */
-    if (prompt("Estás intentando entrar al modo admin, inserte contraseña:", "contraseña") == "hola") {
-        console.log("Acceso concedido");
-        rollButton.classList.remove("disabled");
+    login(prompt("Inserte contraseña:", "Contraseña"));
+    function login(password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let { data, err } = yield db.rpc("check_admin_pass", { pass: password });
+            if (err) {
+                console.error(err);
+            }
+            else {
+                console.log("Logging in");
+                if (data) {
+                    console.log("Logged in");
+                    let { _, error } = yield db.auth.signInWithPassword({
+                        email: "cesports@cesjuanpablosegundo.es",
+                        password: password,
+                    });
+                    if (error) {
+                        console.log("DB Authentication failed");
+                    }
+                    else {
+                        console.log("Acceso concedido");
+                        rollButton.classList.remove("disabled");
+                    }
+                }
+            }
+        });
     }
 });

@@ -3,30 +3,40 @@ declare const supabase: any;
 // Create the database connection
 var db = supabase.createClient(`https://${DB}.supabase.co`, DB_ANON_KEY, { db: { schema: "public" } });
 
+type ClassMap = {
+	name: string;
+	initials: string;
+};
+
 const teamRoulette = document.getElementById("teamRoulette");
 const classRoulette = document.getElementById("classRoulette");
 const numberOfSpins = Number(getComputedStyle(teamRoulette).getPropertyValue("--spin-amount").trim());
 const rollButton = document.getElementById("rollButton");
 let teamsArray = [];
+let classesMap: ClassMap[] = [];
 let classesArray = [];
 
 async function getUnselectedTeams() {
-	let { data, error } = await db.from(DB_TEAMS).select().is("class", null);
+	var { data, error } = await db.from(DB_TEAMS).select().is(DB_TEAM_CLASS, null);
 
 	if (error) {
 		console.error(error);
 	} else {
-		teamsArray = data.map((row: any) => row.team);
+		teamsArray = data.map((team: any) => team[DB_TEAM_NAME]);
 	}
 }
 
 async function getUnselectedClasses() {
-	let { data, error } = await db.from(DB_CLASSES).select();
+	var { data, error } = await db.from(DB_CLASSES).select().is(DB_CLASS_SELECTED, false);
 
 	if (error) {
 		console.error(error);
 	} else {
-		classesArray = data.map((row: any) => row.class);
+		classesMap = data.map((clas: any) => ({
+			name: clas[DB_CLASS_NAME],
+			initials: clas[DB_CLASS_INITIALS],
+		}));
+		classesArray = classesMap.map((clas: any) => clas[DB_CLASS_INITIALS]);
 	}
 }
 
@@ -71,9 +81,9 @@ async function generateRoulettes() {
 		classesArray.forEach((item, _) => {
 			let clas = document.createElement("div");
 			clas.classList.add("roulette-class");
-			let p = Object.assign(document.createElement("p"), { innerText: item });
+			let p = Object.assign(document.createElement("p"), { innerText: classesMap.find((row) => row.initials == item)?.name });
 			p.style.userSelect = "none";
-			p.style.fontSize = "50px";
+			p.style.fontSize = "clamp(2rem, 3vw, 2.2rem)";
 			clas.appendChild(p);
 			classRoulette.appendChild(clas);
 		});
@@ -85,14 +95,18 @@ async function generateRoulettes() {
 	}
 }
 
-async function saveTeamsClass(teamName: string, className: string): Promise<boolean> {
-	let { _, error } = await db.from(DB_TEAMS).update({ class: className }).eq("team", teamName);
+async function saveTeamsClass(teamName: string, classInitials: string): Promise<boolean> {
+	var { _, error } = await db.from(DB_CLASSES).update({ selected: true }).eq(DB_CLASS_INITIALS, classInitials);
 	if (error) {
 		console.error(error);
 		return false;
-	} else {
-		return true;
 	}
+	var { _, error } = await db.from(DB_TEAMS).update({ class: classInitials }).eq(DB_TEAM_NAME, teamName);
+	if (error) {
+		console.error(error);
+		return false;
+	}
+	return true;
 }
 
 rollButton.addEventListener("click", () => {
@@ -135,7 +149,6 @@ rollButton.addEventListener("click", () => {
 		let saved = saveTeamsClass(selectedTeam, selectedClass);
 
 		if (saved) {
-			console.log("Team-class combination saved");
 			getUnselectedTeams();
 			getUnselectedClasses();
 		}
@@ -167,14 +180,14 @@ async function initAdminDraw() {
 }
 
 async function initDraw() {
-	// rollButton.classList.add("disabled"); // TODO - Uncomment
+	//rollButton.classList.add("disabled"); // TODO - Uncomment
 	await getUnselectedTeams();
 	await getUnselectedClasses();
 	shuffleArray(teamsArray);
 	shuffleArray(classesArray);
+	generateRoulettes();
 	console.log(teamsArray);
 	console.log(classesArray);
-	generateRoulettes();
 }
 
 initDraw();
@@ -186,7 +199,7 @@ homeIcon.addEventListener("click", () => {
 	window.location.href = "/index.html";
 });
 adminIcon.addEventListener("click", () => {
-	login(prompt("Inserte contraseña:", "Contraseña"));
+	login(prompt("Inserte contraseña:", "iLUgJ3UMB35H")); // TODO -> Remove password
 	async function login(password: string) {
 		let { data, err } = await db.rpc("check_admin_pass", { pass: password });
 		if (err) {

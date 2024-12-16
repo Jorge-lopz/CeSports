@@ -4,17 +4,22 @@ const DB_ANON_KEY =
 	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ2c2V5dXhiZnBtb2x2eXhmc3BxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5MTI0NjcsImV4cCI6MjA0OTQ4ODQ2N30.nEnVsu7epQDuBuAi5-ByYEckOzJoKPV1yYbETLxBxZk";
 
 // TABLES TODO - Assign to the real tables
-const DB_TEAMS = "teams_duplicate";
-const DB_CLASSES = "classes_duplicate";
-const DB_MATCHES = "matches_duplicate";
-const DB_VOTES = "votes_duplicate";
+const DB_TEAMS = "teams";
+const DB_CLASSES = "classes";
+const DB_MATCHES = "matches";
+const DB_VOTES = "votes";
 
 // COLUMNS
 
+// Classes
+const DB_CLASS_ID = "id";
+const DB_CLASS_NAME = "name";
+const DB_CLASS_INITIALS = "initials";
+const DB_CLASS_SELECTED = "selected";
 // Teams
 const DB_TEAM_ID = "id";
+const DB_TEAM_NAME = "name";
 const DB_TEAM_CLASS = "class";
-const DB_TEAM_TEAM = "team";
 const DB_TEAM_GROUP = "group";
 // Matches
 const DB_MATCH_ID = "id";

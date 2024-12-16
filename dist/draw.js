@@ -8,14 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 // Create the database connection
-const db = supabase.createClient(`https://${DB}.supabase.co`, DB_ANON_KEY, { db: { schema: "public" } });
+var db = supabase.createClient(`https://${DB}.supabase.co`, DB_ANON_KEY, { db: { schema: "public" } });
 const teamRoulette = document.getElementById("teamRoulette");
 const classRoulette = document.getElementById("classRoulette");
 const numberOfSpins = Number(getComputedStyle(teamRoulette).getPropertyValue("--spin-amount").trim());
 const rollButton = document.getElementById("rollButton");
 let teamsArray = [];
 let classesArray = ["DAM 1", "DAM 2", "EDI 1", "EDI 2", "TSEAS 1", "TSEAS 2"];
-var admin = false;
 function getUnselectedTeams() {
     return __awaiter(this, void 0, void 0, function* () {
         let { data, error } = yield db.from("teams").select().is("class", null);
@@ -138,7 +137,12 @@ rollButton.addEventListener("click", () => {
         }, animationDuration * 1000 * classRouletteDelay);
     }, 450);
 });
-function init() {
+function initAdminDraw() {
+    return __awaiter(this, void 0, void 0, function* () {
+        rollButton.classList.remove("disabled");
+    });
+}
+function initDraw() {
     return __awaiter(this, void 0, void 0, function* () {
         rollButton.classList.add("disabled");
         yield getUnselectedTeams();
@@ -151,7 +155,7 @@ function init() {
 }
 init();
 const homeIcon = document.getElementById("home-icon");
-const adminIcon = document.getElementById("admin-icon");
+var adminIcon = document.getElementById("admin-icon");
 homeIcon.addEventListener("click", () => {
     window.location.href = "/index.html";
 });
@@ -176,7 +180,7 @@ adminIcon.addEventListener("click", () => {
                     }
                     else {
                         console.log("Acceso concedido");
-                        rollButton.classList.remove("disabled");
+                        initAdmin();
                     }
                 }
             }

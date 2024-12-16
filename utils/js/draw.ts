@@ -1,7 +1,7 @@
 declare const supabase: any;
 
 // Create the database connection
-const db = supabase.createClient(`https://${DB}.supabase.co`, DB_ANON_KEY, { db: { schema: "public" } });
+var db = supabase.createClient(`https://${DB}.supabase.co`, DB_ANON_KEY, { db: { schema: "public" } });
 
 const teamRoulette = document.getElementById("teamRoulette");
 const classRoulette = document.getElementById("classRoulette");
@@ -9,7 +9,6 @@ const numberOfSpins = Number(getComputedStyle(teamRoulette).getPropertyValue("--
 const rollButton = document.getElementById("rollButton");
 let teamsArray = [];
 let classesArray = ["DAM 1", "DAM 2", "EDI 1", "EDI 2", "TSEAS 1", "TSEAS 2"];
-var admin = false;
 
 async function getUnselectedTeams() {
 	let { data, error } = await db.from("teams").select().is("class", null);
@@ -140,7 +139,11 @@ rollButton.addEventListener("click", () => {
 	}, 450);
 });
 
-async function init() {
+async function initAdminDraw() {
+	rollButton.classList.remove("disabled");
+}
+
+async function initDraw() {
 	rollButton.classList.add("disabled");
 	await getUnselectedTeams();
 	shuffleArray(teamsArray);
@@ -153,7 +156,7 @@ async function init() {
 init();
 
 const homeIcon = document.getElementById("home-icon");
-const adminIcon = document.getElementById("admin-icon");
+var adminIcon = document.getElementById("admin-icon");
 
 homeIcon.addEventListener("click", () => {
 	window.location.href = "/index.html";
@@ -176,7 +179,7 @@ adminIcon.addEventListener("click", () => {
 					console.log("DB Authentication failed");
 				} else {
 					console.log("Acceso concedido");
-					rollButton.classList.remove("disabled");
+					initAdmin();
 				}
 			}
 		}

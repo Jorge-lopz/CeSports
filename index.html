@@ -2,25 +2,252 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="dark light" />
-    <link rel="stylesheet" href="utils/css/index.css">
-    <script src="dist/schema.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.min.js"></script>
-    <script type="module" src="dist/index.js"></script>
-    <link rel="icon" type="image/png" href="assets/icons/favicon.png">
-    <title>CeSports | Draw</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark light" />
+  <link rel="stylesheet" href="./index.css" />
+  <script type="module" src="./dist/index.js" defer></script>
+  <script src="../dist/schema.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.min.js"></script>
+  <link rel="icon" type="image/png" href="./assets/icons/favicon.png" />
+  <title>CeSports | Tournament</title>
 </head>
 
 <body>
-    <div class="roulettes">
-        <div class="roulette-view-container" style="padding-left: 10%;">
-            <div id="teamRoulette" class="roulette-container"></div>
+  <div class="match-pop-up show">
+    <div class="match-pop-up-bg"></div>
+    <div class="container">
+      <div class="logos-container">
+        <div class="team">
+          <img src="./assets/teams/Real Madrid.svg" class="team-logo" />
+          <p class="team-name">DAM2</p>
         </div>
-        <div class="roulette-view-container" style="padding-right: 20%;">
-            <div id="classRoulette" class="roulette-container"></div>
+        <img class="versus-icon" src="./assets/icons/versus.svg" alt="" />
+        <div class="team">
+          <img src="./assets/teams/AC Milan.svg" class="team-logo" />
+          <p class="team-name">DAM2</p>
         </div>
+      </div>
+      <div class="score-container">
+        <p id="match-score">0 : 5</p>
+      </div>
+      <div class="vote-bar">
+        <div id="team-1-bar" class="team" data-percentage="50"></div>
+        <div id="separator" class=""> VOTA </div> <!-- TODO - Add class disable when voted -->
+        <div id="team-2-bar" class="team" data-percentage="50"></div>
+      </div>
+      <!-- <div class="vote-buttons-container">
+          <button id="vote-team-1" class="vote-team-btn"></button>
+          <button id="vote-team-2" class="vote-team-btn"></button>
+        </div> -->
     </div>
-    <button id="rollButton">TIRAR</button>
+  </div>
+  <div id="tournament">
+    <div id="group-a" class="group">
+      <div id="round-1" class="round">
+        <div id="matches-pair-1" class="matches-pair">
+          <div class="matches-container">
+            <div id="match-1" class="match">
+              <div id="team-1" class="team">
+                <img src="./assets/teams/AC Milan.svg" class="team-logo" />
+                <p class="team-name">DAM2</p>
+              </div>
+              <div id="team-2" class="team">
+                <img src="./assets/teams/Real Madrid.svg" class="team-logo" />
+                <p class="team-name">Imagen y diagnóstico</p>
+              </div>
+            </div>
+            <div id="match-1" class="match">
+              <div id="team-1" class="team">
+                <img src="./assets/teams/AC Milan.svg" class="team-logo" />
+                <p class="team-name">DAM2</p>
+              </div>
+              <div id="team-2" class="team">
+                <img src="./assets/teams/Real Madrid.svg" class="team-logo" />
+                <p class="team-name">Imagen y diagnóstico</p>
+              </div>
+            </div>
+          </div>
+          <div class="match-bracket"></div>
+        </div>
+        <div id="matches-pair-2" class="matches-pair">
+          <div class="matches-container">
+            <div id="match-1" class="match">
+              <div id="team-1" class="team">
+                <img src="./assets/teams/AC Milan.svg" alt="Camioneta" class="team-logo" />
+                <p class="team-name">DAM2</p>
+              </div>
+              <div id="team-2" class="team">
+                <img src="./assets/teams/Real Madrid.svg" alt="Camioneta" class="team-logo" />
+                <p class="team-name">Imagen y diagnóstico</p>
+              </div>
+            </div>
+            <div id="match-1" class="match">
+              <div id="team-1" class="team">
+                <img src="./assets/teams/AC Milan.svg" alt="Camioneta" class="team-logo" />
+                <p class="team-name">DAM2</p>
+              </div>
+              <div id="team-2" class="team">
+                <img src="./assets/teams/Real Madrid.svg" alt="Camioneta" class="team-logo" />
+                <p class="team-name">Imagen y diagnóstico</p>
+              </div>
+            </div>
+          </div>
+          <div class="match-bracket"></div>
+        </div>
+      </div>
+
+      <div id="round-2" class="round">
+        <div id="matches-pair-2" class="matches-pair">
+          <div class="matches-container">
+            <div id="match-1" class="match">
+              <div id="team-1" class="team">
+                <img src="./assets/teams/AC Milan.svg" alt="Camioneta" class="team-logo" />
+                <p class="team-name">DAM2</p>
+              </div>
+              <div id="team-2" class="team">
+                <img src="./assets/teams/Real Madrid.svg" alt="Camioneta" class="team-logo" />
+                <p class="team-name">Imagen y diagnóstico</p>
+              </div>
+            </div>
+            <div id="match-2" class="match">
+              <div id="team-1" class="team">
+                <img src="./assets/teams/AC Milan.svg" alt="Camioneta" class="team-logo" />
+                <p class="team-name">DAM2</p>
+              </div>
+              <div id="team-2" class="team">
+                <img src="../assets/teams/Real Madrid.svg" alt="Camioneta" class="team-logo" />
+                <p class="team-name">Imagen y diagnóstico</p>
+              </div>
+            </div>
+          </div>
+          <div class="match-bracket"></div>
+        </div>
+      </div>
+
+      <div id="round-3" class="round" style="gap: 1.5%">
+        <div id="match-1" class="match">
+          <div id="team-1" class="team">
+            <img src="./assets/teams/AC Milan.svg" alt="Camioneta" class="team-logo" />
+            <p class="team-name">DAM2</p>
+          </div>
+          <div id="team-2" class="team">
+            <img src="./assets/teams/Real Madrid.svg" class="team-logo" />
+            <p class="team-name">Imagen y diagnóstico</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="final-round">
+      <img class="trophy-image" src="./assets/icons/trophy.png" class="team-logo" />
+      <div id="match-1" class="match">
+        <p class="final-text">FINAL</p>
+        <div id="team-1" class="team">
+          <img src="./assets/teams/AC Milan.svg" class="team-logo" />
+          <p class="team-name">DAM2</p>
+        </div>
+        <div id="team-2" class="team">
+          <img src="./assets/teams/Real Madrid.svg" class="team-logo" />
+          <p class="team-name">Imagen y diagnóstico</p>
+        </div>
+      </div>
+    </div>
+    <div id="group-b" class="group">
+      <div id="round-1" class="round">
+        <div id="matches-pair-1" class="matches-pair">
+          <div class="matches-container">
+            <div id="match-1" class="match">
+              <div id="team-1" class="team">
+                <img src="./assets/teams/AC Milan.svg" alt="Camioneta" class="team-logo" />
+                <p class="team-name">DAM2</p>
+              </div>
+              <div id="team-2" class="team">
+                <img src="../assets/teams/Real Madrid.svg" alt="Camioneta" class="team-logo" />
+                <p class="team-name">Imagen y diagnóstico</p>
+              </div>
+            </div>
+            <div id="match-1" class="match">
+              <div id="team-1" class="team">
+                <img src="./assets/teams/AC Milan.svg" alt="Camioneta" class="team-logo" />
+                <p class="team-name">DAM2</p>
+              </div>
+              <div id="team-2" class="team">
+                <img src="./assets/teams/Real Madrid.svg" alt="Camioneta" class="team-logo" />
+                <p class="team-name">Imagen y diagnóstico</p>
+              </div>
+            </div>
+          </div>
+          <div class="match-bracket"></div>
+        </div>
+        <div id="matches-pair-2" class="matches-pair">
+          <div class="matches-container">
+            <div id="match-1" class="match">
+              <div id="team-1" class="team">
+                <img src="./assets/teams/AC Milan.svg" alt="Camioneta" class="team-logo" />
+                <p class="team-name">DAM2</p>
+              </div>
+              <div id="team-2" class="team">
+                <img src="./assets/teams/Real Madrid.svg" alt="Camioneta" class="team-logo" />
+                <p class="team-name">Imagen y diagnóstico</p>
+              </div>
+            </div>
+            <div id="match-2" class="match">
+              <div id="team-1" class="team">
+                <img src="./assets/teams/AC Milan.svg" alt="Camioneta" class="team-logo" />
+                <p class="team-name">DAM2</p>
+              </div>
+              <div id="team-2" class="team">
+                <img src="./assets/teams/Real Madrid.svg" alt="Camioneta" class="team-logo" />
+                <p class="team-name">Imagen y diagnóstico</p>
+              </div>
+            </div>
+          </div>
+          <div class="match-bracket"></div>
+        </div>
+      </div>
+
+      <div id="round-2" class="round">
+        <div id="matches-pair-2" class="matches-pair">
+          <div class="matches-container">
+            <div id="match-1" class="match">
+              <div id="team-1" class="team">
+                <img src="./assets/teams/AC Milan.svg" alt="Camioneta" class="team-logo" />
+                <p class="team-name">DAM2</p>
+              </div>
+              <div id="team-2" class="team">
+                <img src="./assets/teams/Real Madrid.svg" alt="Camioneta" class="team-logo" />
+                <p class="team-name">Imagen y diagnóstico</p>
+              </div>
+            </div>
+            <div id="match-2" class="match">
+              <div id="team-1" class="team">
+                <img src="./assets/teams/AC Milan.svg" alt="Camioneta" class="team-logo" />
+                <p class="team-name">DAM2</p>
+              </div>
+              <div id="team-2" class="team">
+                <img src="./assets/teams/Real Madrid.svg" alt="Camioneta" class="team-logo" />
+                <p class="team-name">Imagen y diagnóstico</p>
+              </div>
+            </div>
+          </div>
+          <div class="match-bracket"></div>
+        </div>
+      </div>
+
+      <div id="round-3" class="round">
+        <div id="match-1" class="match">
+          <div id="team-1" class="team">
+            <img src="./assets/teams/AC Milan.svg" alt="Camioneta" class="team-logo" />
+            <p class="team-name">DAM2</p>
+          </div>
+          <div id="team-2" class="team">
+            <img src="./assets/teams/Real Madrid.svg" alt="Camioneta" class="team-logo" />
+            <p class="team-name">Imagen y diagnóstico</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
+
+</html>

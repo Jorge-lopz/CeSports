@@ -1,0 +1,270 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap");
+
+* {
+	&,
+	&::before,
+	&::after {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		font-family: Lexend, Courier, monospace;
+	}
+}
+
+body {
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-size: cover;
+	background-image: url("../assets/bg.png");
+}
+
+#bg-overlay {
+	width: 100vw;
+	height: 150vh;
+	z-index: 0;
+	position: absolute;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.title {
+	color: white;
+	font-size: 2rem;
+	font-weight: bold;
+}
+
+.roulettes {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.roulette-view-container {
+	width: 50vw;
+	height: min(535px, 75vh);
+	display: flex;
+	margin-top: 5vh;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	.roulette-container {
+		width: 40vh;
+		height: 50vh;
+		mask-image: linear-gradient(to bottom, transparent 0%, transparent 5%, black 7%, black 95%, transparent 100%);
+		transition: opacity 0.5s ease-in-out;
+		overflow: hidden;
+		position: relative;
+		--spin-amount: 15;
+		--spin-size: 75%;
+		--spin-translation: calc(var(--spin-size) * var(--spin-amount));
+
+		.roulette-team,
+		.roulette-class {
+			width: 80%;
+			height: 80%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 2rem;
+			position: absolute;
+			top: 11%;
+			left: 10%;
+		}
+	}
+}
+
+@media (min-width: 1520px) {
+	.roulette-view-container {
+		margin-top: 13vh;
+	}
+	.roulette-container {
+		mask-image: linear-gradient(to bottom, transparent 0%, transparent 10%, black 15%, black 95%, transparent 100%);
+	}
+}
+
+.toggle-container {
+	--knob-size: 1.85em;
+	display: flex;
+	justify-content: center;
+	position: relative;
+	transition: filter, opacity 0.3s ease-in-out;
+	--opacity: 0;
+
+	&:has(.disabled) {
+		filter: grayscale(1);
+		opacity: 0.8;
+	}
+
+	&::after {
+		content: "TIRAR";
+		position: absolute;
+		transition: opacity 0.3s 0.3s ease-out;
+		opacity: var(--opacity);
+		color: #ffffffaa;
+		top: 160%;
+		left: 5%;
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+	}
+
+	&:hover {
+		--opacity: 1;
+	}
+
+	.toggle-input {
+		position: absolute;
+		z-index: 2;
+		bottom: 132.5%;
+		border-radius: 50%;
+		transform: rotate(-25deg);
+		transform-origin: 50% 4.75em;
+		width: var(--knob-size);
+		height: var(--knob-size);
+		opacity: 0;
+		font: inherit;
+		transition: transform 0.24s cubic-bezier(0.65, 1.35, 0.5, 1);
+		cursor: pointer;
+
+		&.disabled {
+			pointer-events: none;
+		}
+	}
+
+	.toggle-input:checked {
+		transform: rotate(25deg);
+	}
+
+	.toggle-handle-wrapper {
+		position: absolute;
+		z-index: 1;
+		bottom: -135%;
+		-webkit-mask-image: linear-gradient(to bottom, #000 62.125%, transparent 50%);
+		mask-image: linear-gradient(to bottom, #000 62.125%, transparent 50%);
+		width: 200%;
+		overflow: hidden;
+	}
+
+	.toggle-handle {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		transform: rotate(-25deg);
+		transform-origin: bottom center;
+		transition: transform 0.24s cubic-bezier(0.65, 1.35, 0.5, 1);
+	}
+
+	.toggle-input:checked + .toggle-handle-wrapper > .toggle-handle {
+		transform: rotate(25deg);
+	}
+
+	.toggle-handle-knob {
+		position: relative;
+		z-index: 1;
+		border-radius: 50%;
+		width: var(--knob-size);
+		height: var(--knob-size);
+		background-image: radial-gradient(farthest-corner at 70% 30%, #fedee2 4%, #d63534 12% 24%, #a81a1a 50% 65%, #d63534 75%);
+		transition: transform 0.24s cubic-bezier(0.65, 1.35, 0.5, 1);
+	}
+
+	.toggle-input:checked + .toggle-handle-wrapper .toggle-handle-knob {
+		transform: rotate(-90deg);
+	}
+
+	.toggle-handle-knob::after {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		border-radius: inherit;
+		width: 100%;
+		height: 100%;
+		box-shadow: inset 0 0 8px 2px rgb(255 255 255 / 0.4);
+		opacity: 0;
+		transition: opacity 0.2s;
+	}
+
+	.toggle-handle-bar-wrapper {
+		position: relative;
+		width: 0.5em;
+		height: 3em;
+	}
+
+	.toggle-handle-bar {
+		position: absolute;
+		top: calc(var(--knob-size) / 2 * -1);
+		left: 0;
+		width: 100%;
+		height: calc(100% + var(--knob-size) / 2);
+		background-image: linear-gradient(to right, #777475, #a4a4a4, #fff 45% 55%, #a4a4a4, #777475);
+		background-position-x: 0.06125em;
+		transition: background-position-x 0.24s cubic-bezier(0.65, 1.35, 0.5, 1);
+		box-shadow: inset 0 1em 0.25em rgb(0 0 0 / 0.4);
+	}
+
+	.toggle-input:checked + .toggle-handle-wrapper .toggle-handle-bar {
+		background-position-x: -0.06125em;
+	}
+
+	.toggle-base {
+		position: relative;
+		border-radius: 3.125em;
+		padding: 0.25em;
+		width: 3.5em;
+		height: 1.125em;
+		background-color: #fff;
+		/* background-image: linear-gradient(to bottom, #fff, #d7d7d7); */
+	}
+
+	.toggle-base-inside {
+		position: relative;
+		border-radius: inherit;
+		width: 100%;
+		height: 99.5%;
+		background-image: linear-gradient(to bottom, #9e9e9e, #7d7d7d);
+		box-shadow: inset 0 0.0625em rgb(255 255 255 / 0.2), inset 0 -0.03125em rgb(255 255 255 / 1), inset 0 -0.0625em 0.25em rgb(0 0 0 / 0.1);
+	}
+
+	.toggle-base-inside::after {
+		content: "";
+		position: absolute;
+		border-radius: inherit;
+		width: 100%;
+		height: 100%;
+		background-image: linear-gradient(to bottom, #1997c9, #158ebe);
+		box-shadow: inherit;
+		opacity: 0;
+		transition: opacity 0.24s cubic-bezier(0.65, 1.35, 0.5, 1);
+	}
+
+	.toggle-input:checked ~ .toggle-base .toggle-base-inside::after {
+		opacity: 1;
+	}
+}
+
+@media (hover: hover) {
+	.toggle-input:hover + .toggle-handle-wrapper .toggle-handle-knob::after,
+	.toggle-input:focus-visible + .toggle-handle-wrapper .toggle-handle-knob::after {
+		opacity: 1;
+	}
+}
+
+@keyframes spin {
+	100% {
+		transform: translateY(var(--spin-translation));
+	}
+}
+
+@keyframes end-spin {
+	0% {
+		transform: translateY(var(--spin-translation));
+	}
+
+	100% {
+		transform: translateY(calc(var(--spin-translation) * 2));
+	}
+}

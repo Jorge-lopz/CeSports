@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark light" />
+    <script src="../dist/schema.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.min.js"></script>
+    <script type="module" src="../dist/draw.js"></script>
+    <link rel="stylesheet" href="index.css">
+    <link rel="icon" type="image/png" href="../assets/icons/favicon.png">
+    <title>CeSports | Draw</title>
+</head>
+
+<body>
+    <div id="bg-overlay"></div>
+    <div class="title">
+        <h1>SORTEO EQUIPOS</h1>
+    </div>
+    <div class="roulettes">
+        <div class="roulette-view-container" style="padding-left: 10%;">
+            <div id="teamRoulette" class="roulette-container"></div>
+        </div>
+        <div class="roulette-view-container" style="padding-right: 20%;">
+            <div id="classRoulette" class="roulette-container"></div>
+        </div>
+    </div>
+    <div class="toggle-container">
+        <input class="toggle-input" type="checkbox" id="rollButton">
+        <div class="toggle-handle-wrapper">
+            <div class="toggle-handle">
+                <div class="toggle-handle-knob"></div>
+                <div class="toggle-handle-bar-wrapper">
+                    <div class="toggle-handle-bar"></div>
+                </div>
+            </div>
+        </div>
+        <div class="toggle-base">
+            <div class="toggle-base-inside"></div>
+        </div>
+    </div>
+</body>

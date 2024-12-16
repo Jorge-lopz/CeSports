@@ -141,6 +141,7 @@ rollButton.addEventListener("click", () => {
 });
 
 async function init() {
+	rollButton.classList.add("disabled");
 	await getUnselectedTeams();
 	shuffleArray(teamsArray);
 	shuffleArray(classesArray);
@@ -159,9 +160,9 @@ homeIcon.addEventListener("click", () => {
 	window.location.href = "/index.html";
 });
 adminIcon.addEventListener("click", () => {
-	if (prompt("Estás intentando entrar al modo admin, inserte contraseña:") == "hola"){
+	/* TODO poner contraseña */
+	if (prompt("Estás intentando entrar al modo admin, inserte contraseña:", "contraseña") == "hola"){
 		console.log("Acceso concedido");
-
+		rollButton.classList.remove("disabled");
 	}
-
 });

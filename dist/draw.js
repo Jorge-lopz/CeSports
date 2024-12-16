@@ -15,6 +15,7 @@ const numberOfSpins = Number(getComputedStyle(teamRoulette).getPropertyValue("--
 const rollButton = document.getElementById("rollButton");
 let teamsArray = [];
 let classesArray = ["DAM 1", "DAM 2", "EDI 1", "EDI 2", "TSEAS 1", "TSEAS 2"];
+var admin = false;
 function getUnselectedTeams() {
     return __awaiter(this, void 0, void 0, function* () {
         let { data, error } = yield db.from("teams").select().is("class", null);
@@ -148,3 +149,13 @@ function init() {
     });
 }
 init();
+const homeIcon = document.getElementById("home-icon");
+const adminIcon = document.getElementById("admin-icon");
+homeIcon.addEventListener("click", () => {
+    window.location.href = "/index.html";
+});
+adminIcon.addEventListener("click", () => {
+    if (prompt("Estás intentando entrar al modo admin, inserte contraseña:") == "hola") {
+        console.log("Acceso concedido");
+    }
+});

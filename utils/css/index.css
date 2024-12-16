@@ -32,8 +32,9 @@ body {
 
 .roulette-view-container {
 	width: 50vw;
-	height: 80vh;
+	height: min(535px, 75vh);
 	display: flex;
+	margin-top: 5vh;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
@@ -41,15 +42,16 @@ body {
 	.roulette-container {
 		width: 40vh;
 		height: 50vh;
-		mask-image: linear-gradient(to bottom, transparent 0%, transparent 20%, black 28%, black 95%, transparent 100%);
+		mask-image: linear-gradient(to bottom, transparent 0%, transparent 5%, black 7%, black 95%, transparent 100%);
 		transition: opacity 0.5s ease-in-out;
 		overflow: hidden;
 		position: relative;
 		--spin-amount: 15;
-		--spin-size: 50%;
+		--spin-size: 75%;
 		--spin-translation: calc(var(--spin-size) * var(--spin-amount));
 
-		.roulette-team {
+		.roulette-team,
+		.roulette-class {
 			width: 80%;
 			height: 80%;
 			display: flex;
@@ -57,9 +59,18 @@ body {
 			align-items: center;
 			font-size: 2rem;
 			position: absolute;
-			top: 20%;
-			left: 25%;
+			top: 11%;
+			left: 10%;
 		}
+	}
+}
+
+@media (min-width: 1520px) {
+	.roulette-view-container {
+		margin-top: 13vh;
+	}
+	.roulette-container {
+		mask-image: linear-gradient(to bottom, transparent 0%, transparent 10%, black 15%, black 95%, transparent 100%);
 	}
 }
 

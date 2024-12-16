@@ -12,9 +12,30 @@ var db = supabase.createClient(`https://${DB}.supabase.co`, DB_ANON_KEY, { db: {
 const matches = document.querySelectorAll(".match");
 const popupBg = document.querySelector(".match-pop-up-bg");
 const popup = document.querySelector(".match-pop-up");
+const logosContainer = document.querySelector(".logos-container");
+const score1 = document.getElementById("team-1-score");
+let score1Text = "";
+const score2 = document.getElementById("team-2-score");
+let score2Text = "";
 matches.forEach((match) => {
     match.addEventListener("click", () => {
         popup.classList.add("show");
+        const elImages = logosContainer.querySelectorAll(".team-logo");
+        const matchImages = match.querySelectorAll(".team-logo");
+        const elNames = logosContainer.querySelectorAll(".team-name");
+        const matchNames = match.querySelectorAll(".team-name");
+        elImages.forEach((element, idx) => {
+            var _a, _b, _c;
+            const teamImage = (_a = matchImages[idx]) === null || _a === void 0 ? void 0 : _a.getAttribute("src").trim();
+            const teamName = (_c = (_b = matchNames[idx]) === null || _b === void 0 ? void 0 : _b.textContent) === null || _c === void 0 ? void 0 : _c.trim();
+            if (teamImage && teamName) {
+                element.setAttribute("src", `${teamImage}`);
+                elNames[idx].textContent = `${teamName}`;
+            }
+            else {
+                console.error(`No se encontró texto para el índice ${idx}`);
+            }
+        });
     });
 });
 popupBg.addEventListener("click", () => {
@@ -24,7 +45,21 @@ function init() {
     return __awaiter(this, void 0, void 0, function* () { });
 }
 function initAdmin() {
-    return __awaiter(this, void 0, void 0, function* () { });
+    return __awaiter(this, void 0, void 0, function* () {
+        score1.setAttribute("content-editable", "true");
+        score2.setAttribute("content-editable", "true");
+        score1.addEventListener("change", () => {
+            if (/^\d+$/.test(score1.textContent.trim())) {
+                score1Text = score1.textContent.trim();
+            }
+            else {
+                score1.textContent = score1Text;
+            }
+        });
+        score2.addEventListener("input", () => {
+            score2.setAttribute("content-editable", "false");
+        });
+    });
 }
 var adminIcon = document.getElementById("admin-icon");
 adminIcon.addEventListener("click", () => {
@@ -56,3 +91,4 @@ adminIcon.addEventListener("click", () => {
     }
 });
 init();
+initAdmin();

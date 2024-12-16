@@ -31,16 +31,16 @@ body {
 	position: absolute;
 	transform: translateY(-100vh);
 	color: white;
-	transition: transform 0.3s 0.35s ease-in-out;
+	transition: transform 0.2s 0.35s ease-in-out;
 
 	&.show {
 		opacity: 1;
 		transform: none;
-		transition: transform 0.3s ease-in-out;
+		transition: transform 0.2s ease-in-out;
 
 		.match-pop-up-bg {
 			opacity: 1;
-			transition: transform 0.3s ease-in-out, opacity 0.5s 0.15s ease-in;
+			transition: transform 0.2s ease-in-out, opacity 0.5s 0.15s ease-in;
 		}
 	}
 
@@ -64,7 +64,7 @@ body {
 		opacity: 0;
 		background-color: rgba(0, 0, 0, 0.562);
 		backdrop-filter: blur(1px);
-		transition: transform 0.3s 0.35s ease-in-out, opacity 0.4s ease-in;
+		transition: transform 0.2s 0.35s ease-in-out, opacity 0.4s ease-in;
 	}
 
 	.container {

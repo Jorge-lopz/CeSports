@@ -156,7 +156,6 @@ homeIcon.addEventListener("click", () => {
     window.location.href = "/index.html";
 });
 adminIcon.addEventListener("click", () => {
-    /* TODO poner contraseña */
     login(prompt("Inserte contraseña:", "Contraseña"));
     function login(password) {
         return __awaiter(this, void 0, void 0, function* () {

@@ -159,7 +159,6 @@ homeIcon.addEventListener("click", () => {
 	window.location.href = "/index.html";
 });
 adminIcon.addEventListener("click", () => {
-	/* TODO poner contraseña */
 	login(prompt("Inserte contraseña:", "Contraseña"));
 	async function login(password: string) {
 		let { data, err } = await db.rpc("check_admin_pass", { pass: password });

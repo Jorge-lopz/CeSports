@@ -288,9 +288,14 @@ body {
 		aspect-ratio: 1/1;
 		opacity: 0.3;
 	}
+
+	&:hover {
+		img {
+			opacity: 0.8;
+		}
+	}
 }
 
-#home-icon{
+#home-icon {
 	left: 25px;
 }
-

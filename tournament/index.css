@@ -42,7 +42,11 @@ body {
     .logos-container {
       display: flex;
       justify-content: space-between;
-      
+      width: 100%;
+
+      .versus-icon {
+        width: 20%;
+      }
       .team{
         display: flex;
         flex-direction: column;
@@ -52,6 +56,8 @@ body {
           max-height: 30vh;
           max-width: 100%;
         }
+
+
 
         .team-name{
           text-align: center;

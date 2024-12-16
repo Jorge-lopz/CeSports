@@ -4,8 +4,9 @@
 	&::after {
 		margin: 0;
 		padding: 0;
+		user-select: none;
 		box-sizing: border-box;
-		font-family: Lexend, Courier, monospace;
+		font-family: JetBrains Mono, Courier, monospace;
 	}
 }
 
@@ -29,15 +30,16 @@ body {
 	position: absolute;
 	transform: translateY(-100vh);
 	color: white;
-	transition: transform 0.3s ease-in-out;
+	transition: transform 0.3s 0.35s ease-in-out;
 
 	&.show {
 		opacity: 1;
 		transform: none;
+		transition: transform 0.3s ease-in-out;
 
 		.match-pop-up-bg {
 			opacity: 1;
-			transition: opacity 0.6s 0.15s ease-in-out;
+			transition: transform 0.3s ease-in-out, opacity 0.5s 0.15s ease-in;
 		}
 	}
 
@@ -45,11 +47,11 @@ body {
 		content: "✕";
 		position: absolute;
 		top: 4vh;
+		opacity: 0.8;
+		pointer-events: none;
 		right: 3vw;
-		opacity: 0.6;
 		font-size: 1.8rem;
 		font-weight: 800;
-		cursor: pointer;
 	}
 
 	.match-pop-up-bg {
@@ -61,7 +63,7 @@ body {
 		opacity: 0;
 		background-color: rgba(0, 0, 0, 0.562);
 		backdrop-filter: blur(1px);
-		transition: opacity 0.5s ease-in-out;
+		transition: transform 0.3s 0.35s ease-in-out, opacity 0.4s ease-in;
 	}
 
 	.container {
@@ -228,13 +230,15 @@ body {
 	padding-inline: 30px;
 	padding: 40px;
 	flex-direction: row;
-	gap: 10px;
 	--bracket-color: #aaaaaa80;
 
 	#group-b {
 		rotate: 180deg;
 		*:is(.match) {
 			transform: rotate(180deg);
+		}
+		.match-bracket {
+			margin-left: -3px;
 		}
 	}
 
@@ -247,12 +251,12 @@ body {
 		}
 
 		.round {
-			width: 11vw;
+			width: 12.3vw;
 			display: flex;
 			flex-direction: row;
 			flex-direction: column;
 			justify-content: center;
-			margin-right: 20px;
+			margin-right: 12px;
 			gap: 10%;
 			--match-pair-height: 30vh;
 
@@ -281,9 +285,9 @@ body {
 				.match-bracket {
 					position: relative;
 					margin-top: 5vh;
-					margin-left: 6px;
+					margin-left: 10px;
 					height: calc(100% - 10vh);
-					width: min(30px, 20%);
+					width: min(25px, 20%);
 					border-radius: 0px 8px 8px 0px;
 					border-top: solid var(--bracket-color) 2px;
 					border-right: solid var(--bracket-color) 2px;
@@ -294,19 +298,12 @@ body {
 					content: "";
 					position: absolute;
 					top: 50%;
-					left: calc(100% + 2px);
+					left: calc(100% + 1px);
 					width: 20px;
-					height: 2px;
+					height: 1.8px;
 					background-color: var(--bracket-color);
 					display: block;
 				}
-			}
-
-			.single-match {
-				display: flex;
-				align-items: center;
-				width: 11vw;
-				height: var(--match-pair-height);
 			}
 		}
 	}
@@ -320,9 +317,6 @@ body {
 		border-radius: 6px;
 		cursor: pointer;
 		white-space: nowrap;
-		/* background: #ffffff40; */
-		/* backdrop-filter: blur(20px); */
-		/* transition: background 0.2s ease-in-out; */
 
 		.team {
 			display: flex;
@@ -330,45 +324,61 @@ body {
 			align-items: center;
 
 			img {
-				background-color: white;
+				/* background-color: #ffffffdd; */
 				padding: 2px;
-				height: 32px;
+				margin-right: 1px;
+				height: 38px;
 				aspect-ratio: 1/1;
+				filter: drop-shadow(0px 0px 2px #00000050);
 			}
 
 			.team-name {
 				width: 100%;
+				backdrop-filter: blur(20px);
+				background: #ffffff15;
+				transition: background 0.3s ease-in-out;
 				box-sizing: border-box;
-				border: solid 2px white;
-				font-family: Lexend, Courier, monospace;
-				font-size: 1rem;
+				border: solid 1.8px #ffffffdd;
+				font-size: clamp(0.6rem, 1.2vw, 1.4rem);
 				font-weight: bold;
 				text-shadow: 0px 0px 2px #000000;
 				color: #ffffff;
 				overflow: hidden;
 				text-overflow: ellipsis;
-				padding: 5px;
+				padding: 4px 8px;
 			}
 		}
 
 		&:hover {
-			background: #ffffff60;
+			.team-name {
+				background: #ffffff40;
+			}
 		}
 	}
 
 	.final-round {
-		margin-top: 15vh;
+		margin-top: 25vh;
 		display: flex;
+		align-items: center;
 		flex-direction: column;
 		width: 100%;
-		gap: 5vh;
+		gap: 6.5vh;
 
 		.trophy-image {
 			width: 100%;
 		}
 
 		.match {
+			margin-top: 2.5rem;
+			padding-bottom: 2.2rem;
+			margin-right: 2rem;
+			.team-name {
+				text-align: center;
+				font-size: 1.2rem;
+			}
 			.final-text {
+				padding-left: 2.5rem;
+				padding-bottom: 0.5rem;
 				color: white;
 				text-align: center;
 				font-size: 1.5rem;

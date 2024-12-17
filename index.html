@@ -1,276 +1,282 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="dark light" />
-    <link rel="stylesheet" href="./index.css" />
-    <script src="./dist/schema.js" defer></script>
-    <script type="module" src="./dist/index.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.min.js"></script>
-    <link rel="icon" type="image/png" href="./assets/icons/favicon.png" />
-    <title>CeSports | Tournament</title>
-  </head>
 
-  <body>
-    <div id="admin-icon" class="tools-icon">
-      <img src="./assets/icons/admin.png" alt="" />
-    </div>
-    <div class="match-pop-up">
-      <div class="match-pop-up-bg"></div>
-      <div class="container">
-        <div class="logos-container">
-          <div class="team">
-            <img
-              src="./assets/teams/Real Madrid.svg"
-              class="team-logo"
-              draggable="false"
-            />
-            <p class="team-name">2 DAM</p>
-          </div>
-          <img
-            class="versus-icon"
-            src="./assets/icons/versus.svg"
-            draggable="false"
-          />
-          <div class="team">
-            <img
-              src="./assets/teams/AC Milan.svg"
-              class="team-logo"
-              draggable="false"
-            />
-            <p class="team-name">2 DAM</p>
-          </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark light" />
+  <link rel="stylesheet" href="./index.css" />
+  <script src="./dist/schema.js" defer></script>
+  <script type="module" src="./dist/index.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.min.js"></script>
+  <link rel="icon" type="image/png" href="./assets/icons/favicon.png" />
+  <title>CeSports | Tournament</title>
+</head>
+
+<body>
+  <div id="admin-icon" class="tools-icon">
+    <img src="./assets/icons/admin.png" alt="" />
+  </div>
+  <div class="match-pop-up">
+    <div class="match-pop-up-bg"></div>
+    <div class="container">
+      <div class="logos-container">
+        <div class="team">
+          <img src="./assets/teams/Real Madrid.svg" class="team-logo" draggable="false" />
+          <p class="team-name">2 DAM</p>
         </div>
-        <div class="score-container">
-          <p id="match-score">
-            <span id="team-1-score" contenteditable="true">0</span> :
-            <span id="team-2-score" contenteditable="true">5</span>
-          </p>
+        <img class="versus-icon" src="./assets/icons/versus.svg" draggable="false" />
+        <div class="team">
+          <img src="./assets/teams/AC Milan.svg" class="team-logo" draggable="false" />
+          <p class="team-name">2 DAM</p>
         </div>
-        <div class="vote-bar">
-          <div id="team-1-bar" class="team" data-percentage="50"></div>
-          <div id="separator" class="">VOTA</div>
-          <!-- TODO - Add class disable when voted -->
-          <div id="team-2-bar" class="team" data-percentage="50"></div>
-        </div>
+      </div>
+      <div class="score-container">
+        <p id="match-score">
+          <span id="team-1-score" contenteditable="true">0</span> :
+          <span id="team-2-score" contenteditable="true">5</span>
+        </p>
+      </div>
+      <div class="vote-bar">
+        <div id="team-1-bar" class="team" data-percentage="50"></div>
+        <div id="separator" class="">VOTA</div>
+        <!-- TODO - Add class disable when voted -->
+        <div id="team-2-bar" class="team" data-percentage="50"></div>
       </div>
     </div>
-    <div id="tournament">
-      <div id="group-a" class="group">
-        <div id="round-1" class="round">
-          <div id="matches-pair-1" class="matches-pair">
-            <div class="matches-container">
-              <div id="match-1" class="match">
-                <div id="team-1" class="team">
-                  <img src="./assets/teams/Arsenal.svg" class="team-logo" />
-                  <p class="team-name">2 DAM</p>
-                </div>
-                <div id="team-2" class="team">
-                  <img src="./assets/teams/Real Madrid.svg" class="team-logo" />
-                  <p class="team-name">2 CAMIONETACAMIONETA</p>
-                </div>
-              </div>
-              <div id="match-1" class="match">
-                <div id="team-1" class="team">
-                  <img src="./assets/teams/AC Milan.svg" class="team-logo" />
-                  <p class="team-name">2 DAM</p>
-                </div>
-                <div id="team-2" class="team">
-                  <img src="./assets/teams/Real Madrid.svg" class="team-logo" />
-                  <p class="team-name">2 TSEAS</p>
-                </div>
-              </div>
-            </div>
-            <div class="match-bracket"></div>
-          </div>
-          <div id="matches-pair-2" class="matches-pair">
-            <div class="matches-container">
-              <div id="match-1" class="match">
-                <div id="team-1" class="team">
-                  <img src="./assets/teams/AC Milan.svg" class="team-logo" />
-                  <p class="team-name">2 DAM</p>
-                </div>
-                <div id="team-2" class="team">
-                  <img src="./assets/teams/Real Madrid.svg" class="team-logo" />
-                  <p class="team-name">2 TSEAS</p>
-                </div>
-              </div>
-              <div id="match-1" class="match">
-                <div id="team-1" class="team">
-                  <img src="./assets/teams/AC Milan.svg" class="team-logo" />
-                  <p class="team-name">2 DAM</p>
-                </div>
-                <div id="team-2" class="team">
-                  <img src="./assets/teams/Real Madrid.svg" class="team-logo" />
-                  <p class="team-name">2 TSEAS</p>
-                </div>
-              </div>
-            </div>
-            <div class="match-bracket"></div>
-          </div>
-        </div>
+  </div>
+  <div id="tournament">
 
-        <div id="round-2" class="round">
-          <div id="matches-pair-2" class="matches-pair">
-            <div class="matches-container">
-              <div id="match-1" class="match">
-                <div id="team-1" class="team">
-                  <img src="./assets/teams/AC Milan.svg" class="team-logo" />
-                  <p class="team-name">2 DAM</p>
-                </div>
-                <div id="team-2" class="team">
-                  <img src="./assets/teams/Real Madrid.svg" class="team-logo" />
-                  <p class="team-name">2 TSEAS</p>
-                </div>
+    <!-- Group A -->
+    <div id="group-a" class="group">
+      <!-- Round 1 -->
+      <div class="round">
+        <div class="matches-pair">
+          <div class="matches-container">
+            <!-- Match 1 -->
+            <div id="A-1-match-1" class="match">
+              <div id="A-1-1-team-1" class="team">
+                <img src="./assets/teams/Borussia Dortmund.svg" class="team-logo" />
+                <p class="team-name">2 DAM</p>
               </div>
-              <div id="match-2" class="match">
-                <div id="team-1" class="team">
-                  <img src="./assets/teams/AC Milan.svg" class="team-logo" />
-                  <p class="team-name">2 DAM</p>
-                </div>
-                <div id="team-2" class="team">
-                  <img
-                    src="../assets/teams/Real Madrid.svg"
-                    class="team-logo"
-                  />
-                  <p class="team-name">2 TSEAS</p>
-                </div>
+              <div id="A-1-1-team-2" class="team">
+                <img src="./assets/teams/Bayern Munich.svg" class="team-logo" />
+                <p class="team-name">2 CAMIONETACAMIONETA</p>
               </div>
             </div>
-            <div class="match-bracket"></div>
+            <!-- Match 2 -->
+            <div id="A-1-match-2" class="match">
+              <div id="A-1-2-team-1" class="team">
+                <img src="./assets/teams/Barcelona.svg" class="team-logo" />
+                <p class="team-name">2 DAM</p>
+              </div>
+              <div id="A-1-2-team-2" class="team">
+                <img src="./assets/teams/Atlético Madrid.svg" class="team-logo" />
+                <p class="team-name">2 TSEAS</p>
+              </div>
+            </div>
           </div>
+          <div class="match-bracket"></div>
         </div>
-
-        <div id="round-3" class="round" style="gap: 1.5%">
-          <div id="match-1" class="match">
-            <div id="team-1" class="team">
-              <img src="./assets/teams/AC Milan.svg" class="team-logo" />
-              <p class="team-name">2 DAM</p>
+        <div class="matches-pair">
+          <div class="matches-container">
+            <!-- Match 3 -->
+            <div id="A-1-match-3" class="match">
+              <div id="A-1-3-team-1" class="team">
+                <img src="./assets/teams/AC Milan.svg" class="team-logo" />
+                <p class="team-name">2 DAM</p>
+              </div>
+              <div id="A-1-3-team-2" class="team">
+                <img src="./assets/teams/Liverpool.svg" class="team-logo" />
+                <p class="team-name">2 TSEAS</p>
+              </div>
             </div>
-            <div id="team-2" class="team">
-              <img src="./assets/teams/Real Madrid.svg" class="team-logo" />
-              <p class="team-name">2 TSEAS</p>
+            <!-- Match 4 -->
+            <div id="A-1-match-4" class="match">
+              <div id="A-1-4-team-1" class="team">
+                <img src="./assets/teams/Bayer Leverkusen.svg" class="team-logo" />
+                <p class="team-name">2 DAM</p>
+              </div>
+              <div id="A-1-4-team-2" class="team">
+                <img src="./assets/teams/Real Madrid.svg" class="team-logo" />
+                <p class="team-name">2 TSEAS</p>
+              </div>
             </div>
           </div>
+          <div class="match-bracket"></div>
         </div>
       </div>
-      <div class="final-round">
-        <img
-          class="trophy-image"
-          src="./assets/icons/trophy.png"
-          draggable="false"
-        />
-        <div id="match-1" class="match">
-          <p class="final-text">FINAL</p>
-          <div id="team-1" class="team">
-            <img src="./assets/teams/AC Milan.svg" class="team-logo" />
-            <p class="team-name">2 DAM</p>
+
+      <!-- Round 2 -->
+      <div class="round">
+        <div class="matches-pair">
+          <div class="matches-container">
+            <!-- Match 1 -->
+            <div id="A-2-match-1" class="match">
+              <div id="A-2-1-team-1" class="team">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/1d/No_image.svg" class="team-logo" />
+                <p class="team-name">.</p>
+              </div>
+              <div id="A-2-1-team-2" class="team">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/1d/No_image.svg" class="team-logo" />
+                <p class="team-name">.</p>
+              </div>
+            </div>
+            <!-- Match 2 -->
+            <div id="A-2-match-2" class="match">
+              <div id="A-2-2-team-1" class="team">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/1d/No_image.svg" class="team-logo" />
+                <p class="team-name">.</p>
+              </div>
+              <div id="A-2-2-team-2" class="team">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/1d/No_image.svg" class="team-logo" />
+                <p class="team-name">.</p>
+              </div>
+            </div>
           </div>
-          <div id="team-2" class="team">
-            <img src="./assets/teams/Real Madrid.svg" class="team-logo" />
-            <p class="team-name">2 TSEAS</p>
-          </div>
+          <div class="match-bracket"></div>
         </div>
       </div>
-      <div id="group-b" class="group">
-        <div id="round-1" class="round">
-          <div id="matches-pair-1" class="matches-pair">
-            <div class="matches-container">
-              <div id="match-1" class="match">
-                <div id="team-1" class="team">
-                  <img src="./assets/teams/AC Milan.svg" class="team-logo" />
-                  <p class="team-name">2 DAM</p>
-                </div>
-                <div id="team-2" class="team">
-                  <img
-                    src="../assets/teams/Real Madrid.svg"
-                    class="team-logo"
-                  />
-                  <p class="team-name">2 TSEAS</p>
-                </div>
-              </div>
-              <div id="match-1" class="match">
-                <div id="team-1" class="team">
-                  <img src="./assets/teams/AC Milan.svg" class="team-logo" />
-                  <p class="team-name">2 DAM</p>
-                </div>
-                <div id="team-2" class="team">
-                  <img src="./assets/teams/Real Madrid.svg" class="team-logo" />
-                  <p class="team-name">2 TSEAS</p>
-                </div>
-              </div>
-            </div>
-            <div class="match-bracket"></div>
-          </div>
-          <div id="matches-pair-2" class="matches-pair">
-            <div class="matches-container">
-              <div id="match-1" class="match">
-                <div id="team-1" class="team">
-                  <img src="./assets/teams/AC Milan.svg" class="team-logo" />
-                  <p class="team-name">2 DAM</p>
-                </div>
-                <div id="team-2" class="team">
-                  <img src="./assets/teams/Real Madrid.svg" class="team-logo" />
-                  <p class="team-name">2 TSEAS</p>
-                </div>
-              </div>
-              <div id="match-2" class="match">
-                <div id="team-1" class="team">
-                  <img src="./assets/teams/AC Milan.svg" class="team-logo" />
-                  <p class="team-name">2 DAM</p>
-                </div>
-                <div id="team-2" class="team">
-                  <img src="./assets/teams/Real Madrid.svg" class="team-logo" />
-                  <p class="team-name">2 TSEAS</p>
-                </div>
-              </div>
-            </div>
-            <div class="match-bracket"></div>
-          </div>
-        </div>
 
-        <div id="round-2" class="round">
-          <div id="matches-pair-2" class="matches-pair">
-            <div class="matches-container">
-              <div id="match-1" class="match">
-                <div id="team-1" class="team">
-                  <img src="./assets/teams/AC Milan.svg" class="team-logo" />
-                  <p class="team-name">2 DAM</p>
-                </div>
-                <div id="team-2" class="team">
-                  <img src="./assets/teams/Real Madrid.svg" class="team-logo" />
-                  <p class="team-name">2 TSEAS</p>
-                </div>
-              </div>
-              <div id="match-2" class="match">
-                <div id="team-1" class="team">
-                  <img src="./assets/teams/AC Milan.svg" class="team-logo" />
-                  <p class="team-name">2 DAM</p>
-                </div>
-                <div id="team-2" class="team">
-                  <img src="./assets/teams/Real Madrid.svg" class="team-logo" />
-                  <p class="team-name">2 TSEAS</p>
-                </div>
-              </div>
-            </div>
-            <div class="match-bracket"></div>
+      <!-- Round 3 -->
+      <div class="round" style="gap: 1.5%">
+        <!-- Match 1 -->
+        <div id="A-3-match-1" class="match">
+          <div id="A-3-1-team-1" class="team">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/1/1d/No_image.svg" class="team-logo" />
+            <p class="team-name">.</p>
           </div>
-        </div>
-
-        <div id="round-3" class="round">
-          <div id="match-1" class="match">
-            <div id="team-1" class="team">
-              <img src="./assets/teams/AC Milan.svg" class="team-logo" />
-              <p class="team-name">2 DAM</p>
-            </div>
-            <div id="team-2" class="team">
-              <img src="./assets/teams/Real Madrid.svg" class="team-logo" />
-              <p class="team-name">2 TSEAS</p>
-            </div>
+          <div id="A-3-1-team-2" class="team">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/1/1d/No_image.svg" class="team-logo" />
+            <p class="team-name">.</p>
           </div>
         </div>
       </div>
     </div>
-  </body>
+
+    <!-- Final -->
+    <div id="final-round" class="final-round">
+      <img class="trophy-image" src="./assets/icons/trophy.png" draggable="false" />
+      <div id="final-match" class="match">
+        <p class="final-text">FINAL</p>
+        <div id="team-1" class="team">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/1/1d/No_image.svg" class="team-logo" />
+          <p class="team-name">.</p>
+        </div>
+        <div id="team-2" class="team">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/1/1d/No_image.svg" class="team-logo" />
+          <p class="team-name">.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group B -->
+    <div id="group-b" class="group">
+      <!-- Round 1 -->
+      <div class="round">
+        <div class="matches-pair">
+          <div class="matches-container">
+            <!-- Match 4 -->
+            <div id="B-1-match-4" class="match">
+              <div id="B-1-4-team-1" class="team">
+                <img src="./assets/teams/Inter Milan.svg" class="team-logo" />
+                <p class="team-name">2 DAM</p>
+              </div>
+              <div id="B-1-4-team-2" class="team">
+                <img src="../assets/teams/Arsenal.svg" class="team-logo" />
+                <p class="team-name">2 TSEAS</p>
+              </div>
+            </div>
+            <!-- Match 3 -->
+            <div id="B-1-match-3" class="match">
+              <div id="B-1-3-team-1" class="team">
+                <img src="./assets/teams/Chelsea.svg" class="team-logo" />
+                <p class="team-name">2 DAM</p>
+              </div>
+              <div id="B-1-3-team-2" class="team">
+                <img src="./assets/teams/Paris Saint-Germain.svg" class="team-logo" />
+                <p class="team-name">2 TSEAS</p>
+              </div>
+            </div>
+          </div>
+          <div class="match-bracket"></div>
+        </div>
+        <div class="matches-pair">
+          <div class="matches-container">
+            <!-- Match 2 -->
+            <div id="B-1-match-2" class="match">
+              <div id="B-1-2-team-1" class="team">
+                <img src="./assets/teams/Manchester United.svg" class="team-logo" />
+                <p class="team-name">2 DAM</p>
+              </div>
+              <div id="B-1-2-team-2" class="team">
+                <img src="./assets/teams/Juventus.svg" class="team-logo" />
+                <p class="team-name">2 TSEAS</p>
+              </div>
+            </div>
+            <!-- Match 1 -->
+            <div id="B-1-match-1" class="match">
+              <div id="B-1-1-team-1" class="team">
+                <img src="./assets/teams/Tottenham Hotspur.svg" class="team-logo" />
+                <p class="team-name">2 DAM</p>
+              </div>
+              <div id="B-1-1-team-2" class="team">
+                <img src="./assets/teams/Manchester City.svg" class="team-logo" />
+                <p class="team-name">2 TSEAS</p>
+              </div>
+            </div>
+          </div>
+          <div class="match-bracket"></div>
+        </div>
+      </div>
+
+      <!-- Round 2 -->
+      <div class="round">
+        <div class="matches-pair">
+          <div class="matches-container">
+            <!-- Match 2 -->
+            <div id="B-2-match-2" class="match">
+              <div id="B-2-2-team-1" class="team">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/1d/No_image.svg" class="team-logo" />
+                <p class="team-name">.</p>
+              </div>
+              <div id="B-2-2-team-2" class="team">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/1d/No_image.svg" class="team-logo" />
+                <p class="team-name">.</p>
+              </div>
+            </div>
+            <!-- Match 1 -->
+            <div id="B-2-match-1" class="match">
+              <div id="B-2-1-team-1" class="team">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/1d/No_image.svg" class="team-logo" />
+                <p class="team-name">.</p>
+              </div>
+              <div id="B-2-1-team-2" class="team">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/1d/No_image.svg" class="team-logo" />
+                <p class="team-name">.</p>
+              </div>
+            </div>
+          </div>
+          <div class="match-bracket"></div>
+        </div>
+      </div>
+
+      <!-- Round 3 -->
+      <div class="round">
+        <!-- Match 1 -->
+        <div id="B-3-match-1" class="match">
+          <div id="B-3-1-team-1" class="team">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/1/1d/No_image.svg" class="team-logo" />
+            <p class="team-name">.</p>
+          </div>
+          <div id="B-3-1-team-2" class="team">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/1/1d/No_image.svg" class="team-logo" />
+            <p class="team-name">.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
 </html>

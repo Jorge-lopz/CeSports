@@ -6,6 +6,7 @@
 
 ## TODO
 
+- [ ] Turn team SVGs into same size PNGs
 - [ ] Admin acces and features
 - [ ] Two-way semifinals
 - [ ] Roulette sounds on /draw

@@ -190,7 +190,7 @@ initDraw();
 const homeIcon = document.getElementById("home-icon");
 var adminIcon = document.getElementById("admin-icon");
 homeIcon.addEventListener("click", () => {
-    window.location.href = "/index.html";
+    window.location.href = "/";
 });
 adminIcon.addEventListener("click", () => {
     login(prompt("Inserte contraseña:", "iLUgJ3UMB35H")); // TODO -> Remove password

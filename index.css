@@ -586,7 +586,7 @@ body {
 					white-space: normal;
 					font-size: clamp(0.8rem, 2.5vw, 1.3rem);
 					max-height: 80%;
-					font-weight: 600;
+					font-weight: 500;
 				}
 			}
 

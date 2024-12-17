@@ -15,8 +15,27 @@ const rollButton = document.getElementById("rollButton");
 let teamsArray = [];
 let classesMap: ClassMap[] = [];
 let classesArray = [];
+let groups = {};
 
-async function getUnselectedTeams() {
+async function getAvailableGroups() {
+	var { data, error } = await db.from(DB_TEAMS).select(DB_TEAM_GROUP);
+	if (error) {
+		console.error(error);
+	} else {
+		let group = data.reduce(
+			(acc: any, item: any) => {
+				if (item.group === "A") acc.A += 1;
+				if (item.group === "B") acc.B += 1;
+				return acc;
+			},
+			{ A: 0, B: 0 }
+		);
+
+		groups = { A: 8 - group.A, B: 8 - group.B };
+	}
+}
+
+async function getAvailableTeams() {
 	var { data, error } = await db.from(DB_TEAMS).select().is(DB_TEAM_CLASS, null);
 
 	if (error) {
@@ -26,7 +45,7 @@ async function getUnselectedTeams() {
 	}
 }
 
-async function getUnselectedClasses() {
+async function getAvailebleClasses() {
 	var { data, error } = await db.from(DB_CLASSES).select().is(DB_CLASS_SELECTED, false);
 
 	if (error) {
@@ -95,20 +114,47 @@ async function generateRoulettes() {
 	}
 }
 
-async function saveTeamsClass(teamName: string, classInitials: string): Promise<boolean> {
+async function saveTeamsClass(teamName: string, classInitials: string) {
+	let group = groups["A"] > 0 && groups["B"] > 0 ? (Math.random() < 0.5 ? "A" : "B") : groups["A"] > 0 ? "A" : groups["B"] > 0 ? "B" : null;
+
 	var { _, error } = await db.from(DB_CLASSES).update({ selected: true }).eq(DB_CLASS_INITIALS, classInitials);
-	if (error) {
-		console.error(error);
-		return false;
+	if (error) console.error(error);
+
+	var { _, error } = await db.from(DB_TEAMS).update({ class: classInitials, group: group }).eq(DB_TEAM_NAME, teamName);
+	if (error) console.error(error);
+
+	// Save the selected team-class on an available initial position
+	var { data, error } = await db
+		.from(DB_MATCHES)
+		.select(`${DB_MATCH_INDEX}, ${DB_MATCH_TEAM1}, ${DB_MATCH_TEAM2}`)
+		.or(`${DB_MATCH_TEAM1}.is.null,${DB_MATCH_TEAM2}.is.null`)
+		.eq(DB_MATCH_GROUP, group)
+		.eq(DB_MATCH_ROUND, 1);
+	if (error) console.error(error);
+	else {
+		let match = data[Math.floor(Math.random() * data.length)];
+		let index = match[DB_MATCH_INDEX];
+		let team = match[DB_MATCH_TEAM1] === null ? 1 : 2;
+		if (team == 1) {
+			var { _, error } = await db
+				.from(DB_MATCHES)
+				.update({ team1: teamName })
+				.eq(DB_MATCH_GROUP, group)
+				.eq(DB_MATCH_ROUND, 1)
+				.eq(DB_MATCH_INDEX, index);
+		} else {
+			var { _, error } = await db
+				.from(DB_MATCHES)
+				.update({ team2: teamName })
+				.eq(DB_MATCH_GROUP, group)
+				.eq(DB_MATCH_ROUND, 1)
+				.eq(DB_MATCH_INDEX, index);
+			if (error) console.error(error);
+		}
 	}
-	var { _, error } = await db.from(DB_TEAMS).update({ class: classInitials }).eq(DB_TEAM_NAME, teamName);
-	if (error) {
-		console.error(error);
-		return false;
-	}
-	console.log("SAVED");
-	getUnselectedTeams();
-	getUnselectedClasses();
+	getAvailableGroups();
+	getAvailableTeams();
+	getAvailebleClasses();
 }
 
 rollButton.addEventListener("click", () => {
@@ -179,9 +225,10 @@ async function initAdminDraw() {
 }
 
 async function initDraw() {
-	rollButton.classList.add("disabled");
-	await getUnselectedTeams();
-	await getUnselectedClasses();
+	//rollButton.classList.add("disabled"); // TODO - Uncomment
+	await getAvailableGroups();
+	await getAvailableTeams();
+	await getAvailebleClasses();
 	shuffleArray(teamsArray);
 	shuffleArray(classesArray);
 	generateRoulettes();

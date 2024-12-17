@@ -79,7 +79,7 @@ body {
 		background-color: #111111;
 		border: solid 2px #fbfbfb12;
 		gap: 1.5rem;
-		--match-state: "Not started";
+		--match-state: ;
 		--state-color: #ffffff20;
 
 		&::after {
@@ -403,11 +403,19 @@ body {
 		display: flex;
 		align-items: center;
 		flex-direction: column;
+		pointer-events: painted;
 		width: 100%;
 		gap: 6.5vh;
 
 		.trophy-image {
 			width: 100%;
+			transform: scale(1);
+			transition: transform 0.4s ease-in-out;
+
+			&:hover {
+				transform: scale(1.1);
+				transition: transform 0.2s ease-in-out;
+			}
 		}
 
 		.match {
@@ -421,6 +429,7 @@ body {
 			.final-text {
 				padding-left: 2.5rem;
 				padding-bottom: 0.5rem;
+				pointer-events: none;
 				color: white;
 				text-align: center;
 				font-size: 1.5rem;

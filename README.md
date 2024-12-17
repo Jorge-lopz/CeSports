@@ -13,9 +13,11 @@
 - [ ] Tournament bracket page DB connection
 - [ ] Voting system to make predictions for every game
 - [ ] Hacer el formato lista del torneo
-- [ ] Que no se pueda votar si no se saben los equipos
+- [x] Que no se pueda votar si no se saben los equipos
 - [ ] sacar la votación de la base de datos y mostrarlo en los equipos
 - [ ] hacer una animación de victoria
+- [ ] avisar cuando eres admin / desactivas el botón
+- [ ] Podríamos poner que la puntuacion del equpo ganador tenga un efecto diferente
 
 Final Checks
 

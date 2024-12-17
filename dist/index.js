@@ -9,7 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 // Create the database connection
 var db = supabase.createClient(`https://${DB}.supabase.co`, DB_ANON_KEY, { db: { schema: "public" } });
-const matches = document.querySelectorAll(".match");
+let tournament = document.getElementById("tournament");
+// Tournament elements
+let matches;
+function getTournamentElements() {
+    matches = tournament.querySelectorAll(".match");
+}
+// Popup elements
 const popupBg = document.querySelector(".match-pop-up-bg");
 const popup = document.querySelector(".match-pop-up");
 const container = document.querySelector(".container");
@@ -28,27 +34,26 @@ matches.forEach((match) => {
 });
 function loadPopup(match) {
     return __awaiter(this, void 0, void 0, function* () {
-        // TODO volver a poner
-        // let matchId = match.id.split("-");
-        // var { state, error } = await db
-        // 	.from(DB_MATCHES)
-        // 	.select(DB_MATCH_STATE)
-        // 	.eq(DB_MATCH_GROUP, matchId[0])
-        // 	.eq(DB_MATCH_ROUND, Number(matchId[1]))
-        // 	.eq(DB_MATCH_INDEX, Number(matchId[3]));
-        // if (error) {
-        // 	console.log("Ha habido un error:" + error);
-        // } else {
-        // 	console.log("El estado es:" + state);
-        // 	if (state != null) {
-        // 		// Configure the popup to the  right match
-        // 		popup.setAttribute("data-match", match.id);
-        // 		// Fill the popup data
-        // 		await updatePopup();
-        // 		// Finally show the popup
-        // 		popup.classList.add("show");
-        // 	}
-        // }
+        let matchId = match.id.split("-");
+        var { data, error } = yield db
+            .from(DB_MATCHES)
+            .select(DB_MATCH_STATE)
+            .eq(DB_MATCH_GROUP, matchId[0])
+            .eq(DB_MATCH_ROUND, Number(matchId[1]))
+            .eq(DB_MATCH_INDEX, Number(matchId[3]));
+        if (error) {
+            console.log(error);
+        }
+        else {
+            if (data[0].state != null) {
+                // Configure the popup to the  right match
+                popup.setAttribute("data-match", match.id);
+                // Fill the popup data
+                yield updatePopup();
+                // Finally show the popup
+                popup.classList.add("show");
+            }
+        }
         popup.classList.add("show");
     });
 }
@@ -106,17 +111,39 @@ function updatePopup() {
 popupBg.addEventListener("click", () => {
     popup.classList.remove("show");
 });
+const getWindowSize = () => ({
+    width: window.innerWidth,
+    height: window.innerHeight,
+});
+function detectResize() {
+    let size = getWindowSize();
+    if (size.width < 1400)
+        tournament = document.getElementById("tournament-mobile");
+    else
+        tournament = document.getElementById("tournament");
+    getTournamentElements(); // Update tournament elements
+    window.addEventListener("resize", () => {
+        size = getWindowSize();
+        // Same as CSS Breakpoint
+        if (size.width < 1400)
+            tournament = document.getElementById("tournament-mobile");
+        else
+            tournament = document.getElementById("tournament");
+        getTournamentElements(); // Update tournament elements
+    });
+}
 function init() {
-    return __awaiter(this, void 0, void 0, function* () { });
+    return __awaiter(this, void 0, void 0, function* () {
+        detectResize();
+    });
 }
 function initAdmin() {
     return __awaiter(this, void 0, void 0, function* () {
-        score1.setAttribute("content-editable", "true");
-        score2.setAttribute("content-editable", "true");
+        score1.setAttribute("contenteditable", "true");
+        score2.setAttribute("contenteditable", "true");
         score1.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-                e.preventDefault(); // Evita que se inserte un salto de línea
-            }
+            if (e.key === "Enter")
+                e.preventDefault(); // Prevents newline insertion
         });
         score1.addEventListener("input", () => {
             const filteredText = score1.textContent.replace(/[^0-9]/g, "");

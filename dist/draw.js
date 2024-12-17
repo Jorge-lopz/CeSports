@@ -69,7 +69,7 @@ function shuffleArray(array) {
         array[j] = temp;
     }
 }
-let teams;
+let teamsDraw;
 let classes;
 function generateRoulettes() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -87,8 +87,8 @@ function generateRoulettes() {
                 team.appendChild(img);
                 teamRoulette.appendChild(team);
             });
-            teams = document.querySelectorAll(".roulette-team");
-            teams.forEach((item, index) => {
+            teamsDraw = document.querySelectorAll(".roulette-team");
+            teamsDraw.forEach((item, index) => {
                 item.style.marginTop = `calc(${index} * -150%)`;
             });
         }
@@ -160,6 +160,13 @@ function saveTeamsClass(teamName, classInitials) {
         getAvailebleClasses();
     });
 }
+function setInitialMatchesState() {
+    return __awaiter(this, void 0, void 0, function* () {
+        var { _, error } = yield db.from(DB_MATCHES).update({ state: "set" }).eq(DB_MATCH_ROUND, 1);
+        if (error)
+            console.error(error);
+    });
+}
 rollButton.addEventListener("click", () => {
     if (teamsArray.length == 1) {
         rollButton.classList.add("disabled");
@@ -172,6 +179,7 @@ rollButton.addEventListener("click", () => {
             teamRoulette.style.opacity = "1";
             classRoulette.style.opacity = "1";
         }, 450);
+        setInitialMatchesState();
         return;
     }
     setTimeout(() => {
@@ -186,7 +194,7 @@ rollButton.addEventListener("click", () => {
         classRoulette.style.opacity = "1";
         let animationDuration = 2.3;
         // Start animation
-        teams.forEach((item, _) => {
+        teamsDraw.forEach((item, _) => {
             item.style.animation = `spin ${animationDuration}s forwards ease-in`;
         });
         classes.forEach((item, _) => {
@@ -200,7 +208,7 @@ rollButton.addEventListener("click", () => {
         // TEAM ROULETTE
         let classRouletteDelay = 1.4;
         setTimeout(() => {
-            teams.forEach((item, _) => {
+            teamsDraw.forEach((item, _) => {
                 item.style.animation = `end-spin ${1.7}s cubic-bezier(.14,.18,.73,1.32) forwards`;
             });
             shuffleArray(teamsArray);

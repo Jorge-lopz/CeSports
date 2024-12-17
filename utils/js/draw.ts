@@ -68,7 +68,7 @@ function shuffleArray(array: string[]) {
 	}
 }
 
-let teams: NodeListOf<HTMLElement>;
+let teamsDraw: NodeListOf<HTMLElement>;
 let classes: NodeListOf<HTMLElement>;
 
 async function generateRoulettes() {
@@ -87,8 +87,8 @@ async function generateRoulettes() {
 			teamRoulette.appendChild(team);
 		});
 
-		teams = document.querySelectorAll(".roulette-team");
-		teams.forEach((item: HTMLElement, index) => {
+		teamsDraw = document.querySelectorAll(".roulette-team");
+		teamsDraw.forEach((item: HTMLElement, index) => {
 			item.style.marginTop = `calc(${index} * -150%)`;
 		});
 	}
@@ -157,6 +157,11 @@ async function saveTeamsClass(teamName: string, classInitials: string) {
 	getAvailebleClasses();
 }
 
+async function setInitialMatchesState() {
+	var { _, error } = await db.from(DB_MATCHES).update({ state: "set" }).eq(DB_MATCH_ROUND, 1);
+	if (error) console.error(error);
+}
+
 rollButton.addEventListener("click", () => {
 	if (teamsArray.length == 1) {
 		rollButton.classList.add("disabled");
@@ -169,6 +174,7 @@ rollButton.addEventListener("click", () => {
 			(teamRoulette as HTMLElement).style.opacity = "1";
 			(classRoulette as HTMLElement).style.opacity = "1";
 		}, 450);
+		setInitialMatchesState();
 		return;
 	}
 	setTimeout(() => {
@@ -185,7 +191,7 @@ rollButton.addEventListener("click", () => {
 		let animationDuration = 2.3;
 
 		// Start animation
-		teams.forEach((item: HTMLElement, _) => {
+		teamsDraw.forEach((item: HTMLElement, _) => {
 			item.style.animation = `spin ${animationDuration}s forwards ease-in`;
 		});
 		classes.forEach((item: HTMLElement, _) => {
@@ -202,7 +208,7 @@ rollButton.addEventListener("click", () => {
 		// TEAM ROULETTE
 		let classRouletteDelay = 1.4;
 		setTimeout(() => {
-			teams.forEach((item, _) => {
+			teamsDraw.forEach((item, _) => {
 				(item as unknown as HTMLElement).style.animation = `end-spin ${1.7}s cubic-bezier(.14,.18,.73,1.32) forwards`;
 			});
 			shuffleArray(teamsArray);

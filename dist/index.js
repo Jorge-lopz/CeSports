@@ -17,6 +17,7 @@ function getTournamentElements() {
     matches.forEach((match) => {
         match.addEventListener("click", () => loadPopup(match));
     });
+    loadBrackets();
 }
 // Popup elements
 const popupBg = document.querySelector(".match-pop-up-bg");
@@ -32,6 +33,7 @@ const score1 = document.getElementById("team-1-score");
 let score1Text = "";
 const score2 = document.getElementById("team-2-score");
 let score2Text = "";
+let teams = [];
 function loadPopup(match) {
     return __awaiter(this, void 0, void 0, function* () {
         let matchId = match.id.split("-");
@@ -132,9 +134,48 @@ function detectResize() {
         getTournamentElements(); // Update tournament elements
     });
 }
+function getTeams() {
+    return __awaiter(this, void 0, void 0, function* () {
+        var { data, error } = yield db.from(DB_TEAMS).select(`${DB_TEAM_NAME}, ${DB_TEAM_CLASS}`);
+        if (error)
+            console.error(error);
+        else
+            return data;
+    });
+}
+function loadMatch(match) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let team1 = tournament.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-${match[DB_MATCH_INDEX]}-team-1`);
+        team1.querySelector(".team-logo").setAttribute("src", `./assets/teams/${match[DB_MATCH_TEAM1]}.svg`); // TODO -> To PNG
+        team1.querySelector(".team-name").textContent = `${teams.find((team) => team.name === match[DB_MATCH_TEAM1]).class}`;
+        let team2 = tournament.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-${match[DB_MATCH_INDEX]}-team-2`);
+        team2.querySelector(".team-logo").setAttribute("src", `./assets/teams/${match[DB_MATCH_TEAM2]}.svg`); // TODO -> To PNG
+        team2.querySelector(".team-name").textContent = `${teams.find((team) => team.name === match[DB_MATCH_TEAM2]).class}`;
+    });
+}
+function loadBrackets() {
+    return __awaiter(this, void 0, void 0, function* () {
+        teams = yield getTeams();
+        var { data, error } = yield db
+            .from(DB_MATCHES)
+            .select(`${DB_MATCH_GROUP}, ${DB_MATCH_ROUND}, ${DB_MATCH_INDEX}, ${DB_MATCH_TEAM1}, ${DB_MATCH_TEAM2}`);
+        if (error)
+            console.error(error);
+        else {
+            if (error)
+                console.error(error);
+            for (let i = 0; i < data.length; i++) {
+                let match = data[i];
+                if (match[DB_MATCH_TEAM1] != null || match[DB_MATCH_TEAM2] != null)
+                    loadMatch(match);
+            }
+        }
+    });
+}
 function init() {
     return __awaiter(this, void 0, void 0, function* () {
         detectResize();
+        loadBrackets();
     });
 }
 function initAdmin() {

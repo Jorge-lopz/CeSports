@@ -7,6 +7,9 @@ let tournament = document.getElementById("tournament");
 let matches: NodeListOf<HTMLElement>;
 function getTournamentElements() {
 	matches = tournament.querySelectorAll(".match");
+	matches.forEach((match) => {
+		match.addEventListener("click", () => loadPopup(match));
+	});
 }
 
 // Popup elements
@@ -23,10 +26,6 @@ const score1 = document.getElementById("team-1-score");
 let score1Text = "";
 const score2 = document.getElementById("team-2-score");
 let score2Text = "";
-
-matches.forEach((match) => {
-	match.addEventListener("click", () => loadPopup(match));
-});
 
 async function loadPopup(match: Element) {
 	let matchId = match.id.split("-");
@@ -48,7 +47,7 @@ async function loadPopup(match: Element) {
 			popup.classList.add("show");
 		}
 	}
-	popup.classList.add("show");
+	popup.classList.add("show"); // TODO - Remove
 }
 
 async function updatePopup() {
@@ -129,25 +128,20 @@ async function init() {
 }
 
 async function initAdmin() {
-	score1.setAttribute("contenteditable", "true");
-	score2.setAttribute("contenteditable", "true");
-
-	score1.addEventListener("keydown", (e) => {
-		if (e.key === "Enter") e.preventDefault(); // Prevents newline insertion
-	});
-	score1.addEventListener("input", () => {
-		const filteredText = score1.textContent.replace(/[^0-9]/g, "");
-		if (score1.textContent !== filteredText) {
-			score1.textContent = filteredText;
-		}
-	});
-
-	score2.addEventListener("input", () => {
-		const filteredText = score2.textContent.replace(/[^0-9]/g, "");
-		if (score2.textContent !== filteredText) {
-			score2.textContent = filteredText;
-		}
-	});
+	// Prevent newline and non-number characters insertion on the score inputs on the popup
+	function handleInput(scoreElement: any) {
+		scoreElement.setAttribute("contenteditable", "true");
+		scoreElement.addEventListener("keydown", (e: any) => {
+			if (e.key === "Enter") e.preventDefault();
+		});
+		scoreElement.addEventListener("input", () => {
+			let filteredText = scoreElement.textContent.replace(/[^0-9]/g, ""); // Keep only numbers
+			if (scoreElement.textContent !== filteredText) scoreElement.textContent = filteredText;
+			if (scoreElement.textContent.length > 3) scoreElement.textContent = scoreElement.textContent.slice(0, 3); // Max length = 3
+		});
+	}
+	handleInput(score1);
+	handleInput(score2);
 }
 
 var adminIcon = document.getElementById("admin-icon");

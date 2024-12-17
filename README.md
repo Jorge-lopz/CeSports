@@ -7,17 +7,17 @@
 ## TODO
 
 - [ ] Turn team SVGs into same size PNGs
-- [ ] Admin acces and features
+- [ ] Admin access and features
 - [ ] Two-way semifinals
 - [ ] Roulette sounds on /draw
 - [ ] Tournament bracket page DB connection
 - [ ] Voting system to make predictions for every game
-- [ ] Hacer el formato lista del torneo
-- [x] Que no se pueda votar si no se saben los equipos
-- [ ] sacar la votación de la base de datos y mostrarlo en los equipos
-- [ ] hacer una animación de victoria
-- [ ] avisar cuando eres admin / desactivas el botón
-- [ ] Podríamos poner que la puntuacion del equpo ganador tenga un efecto diferente
+- [ ] Tournament narrow screen list format
+- [x] Prevent voting if game hasn't started yet
+- [ ] Show realtime votes on matches popups
+- [ ] Winning animation
+- [ ] Notifing of correct admin access and disable admin button afterwards
+- [ ] Winning team score on a diffferent color
 
 Final Checks
 

@@ -139,6 +139,14 @@ body {
 			#match-score {
 				font-size: 1.8rem;
 				font-weight: 600;
+
+				#team-1-score,
+				#team-2-score {
+					padding-inline: 8px;
+					overflow: hidden;
+					text-wrap: nowrap;
+					text-overflow: ellipsis;
+				}
 			}
 		}
 

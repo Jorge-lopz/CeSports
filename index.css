@@ -28,7 +28,7 @@ body {
 	justify-content: center;
 	align-items: center;
 	position: absolute;
-	transform: translateY(-100vh);
+	transform: translateY(-85vh);
 	color: white;
 	transition: transform 0.2s 0.35s ease-in-out;
 
@@ -39,7 +39,7 @@ body {
 
 		.match-pop-up-bg {
 			opacity: 1;
-			transition: transform 0.2s ease-in-out, opacity 0.5s 0.15s ease-in;
+			transition: transform 0.2s ease-in-out, opacity 0.3s 0.15s ease-in;
 		}
 	}
 
@@ -62,8 +62,7 @@ body {
 		height: 100vh;
 		opacity: 0;
 		background-color: rgba(0, 0, 0, 0.562);
-		backdrop-filter: blur(1px);
-		transition: transform 0.2s 0.35s ease-in-out, opacity 0.4s ease-in;
+		transition: transform 0.2s 0.35s ease-in-out, opacity 0.3s ease-in;
 	}
 
 	.container {
@@ -75,8 +74,9 @@ body {
 		width: 50%;
 		min-width: 380px;
 		height: 65%;
-		background-color: #111111;
+		background-color: #11111180;
 		border: solid 2px #fbfbfb12;
+		backdrop-filter: blur(20px);
 		gap: 1.5rem;
 		--match-state: ;
 		--state-color: #ffffff20;
@@ -124,7 +124,7 @@ body {
 					text-align: center;
 					font-weight: 400;
 					font-size: 1.3rem;
-					margin-top: 10px;
+					margin-top: 1rem;
 					overflow: hidden;
 					text-overflow: ellipsis;
 					white-space: nowrap;
@@ -266,6 +266,34 @@ body {
 				width: 20%;
 				border-radius: 15px;
 				height: 5vh;
+			}
+		}
+
+		.admin-buttons {
+			display: flex;
+			gap: 9vw;
+			justify-content: space-around;
+			padding-inline: 5vh;
+
+			button {
+				padding: 10px 16px;
+				border-radius: 6px;
+				border: none;
+				background-color: #ffffff20;
+				color: white;
+				font-weight: 600;
+				cursor: pointer;
+				transition: background-color 0.2s ease-in-out;
+
+				&:hover {
+					background-color: #02bd5342;
+				}
+			}
+
+			#start {
+			}
+
+			#win-team-1 {
 			}
 		}
 	}
@@ -452,6 +480,7 @@ body {
 
 @media (width < 1400px) {
 	body {
+		background-repeat: no-repeat;
 		background-image: url("./assets/bg-vertical.png");
 	}
 
@@ -460,7 +489,7 @@ body {
 	}
 
 	#tournament-mobile {
-		overflow: scroll;
+		overflow-y: scroll;
 		display: flex !important;
 		flex-direction: column;
 
@@ -469,7 +498,7 @@ body {
 			display: flex;
 			flex-direction: column;
 			width: 100%;
-			margin-top: 5.5vh;
+			margin-top: 4vh;
 
 			.round {
 				position: relative;
@@ -555,7 +584,7 @@ body {
 					border: none;
 					background: none;
 					white-space: normal;
-					font-size: clamp(1rem, 2.5vw, 1.3rem);
+					font-size: clamp(0.8rem, 2.5vw, 1.3rem);
 					max-height: 80%;
 					font-weight: 500;
 				}
@@ -575,33 +604,70 @@ body {
 		}
 
 		.final-round {
+			margin-top: 0;
+			position: relative;
+			margin-bottom: -1rem;
+
+			&::before {
+				content: "Final";
+				position: absolute;
+				top: -5vh;
+				width: 100%;
+				text-align: center;
+				font-size: 1.2rem;
+				font-weight: 900;
+			}
+
 			.trophy-image {
 				display: none;
 			}
 
 			.match {
 				margin: 0;
+				padding: 0;
+
+				.team {
+				}
 
 				.team-name {
 				}
-				.final-text {
+				.team-logo {
 				}
 			}
 		}
 	}
+
+	.social-icons {
+		flex-direction: column;
+		bottom: 3.5rem !important;
+		right: 1.5rem !important;
+	}
 }
 
-@media (width < 1110px) {
+@media (width < 1200px) {
+	body {
+		display: block;
+	}
 	.matches-container {
 		flex-direction: column !important;
 		gap: 0 !important;
 	}
 }
 
-.tools-icon {
+@media (width < 620px) {
+	.tools-icons {
+		display: none !important;
+	}
+
+	.social-icons {
+		display: none !important;
+	}
+}
+
+.tools-icons {
 	position: absolute;
-	top: 94vh;
-	left: 25px;
+	bottom: 1.3rem;
+	left: 1.5rem;
 	width: 25px;
 	height: 25px;
 	display: flex;
@@ -615,10 +681,29 @@ body {
 		aspect-ratio: 1/1;
 		opacity: 0.3;
 		transition: opacity 0.3s ease-in-out;
-	}
 
-	&:hover {
-		img {
+		&:hover {
+			opacity: 0.8;
+		}
+	}
+}
+
+.social-icons {
+	position: absolute;
+	display: flex;
+	bottom: 1.3rem;
+	right: 4rem;
+	gap: 1rem;
+	width: 25px;
+	height: 25px;
+
+	img {
+		height: 100%;
+		aspect-ratio: 1/1;
+		opacity: 0.3;
+		transition: opacity 0.3s ease-in-out;
+
+		&:hover {
 			opacity: 0.8;
 		}
 	}

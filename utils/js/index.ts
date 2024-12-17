@@ -42,7 +42,7 @@ async function loadPopup(match: Element) {
 		console.log(error);
 	} else {
 		if (data[0].state != null) {
-			// Configure the popup to the  right match
+			// Configure the popup to the right match
 			popup.setAttribute("data-match", match.id);
 			// Fill the popup data
 			await updatePopup();
@@ -50,7 +50,6 @@ async function loadPopup(match: Element) {
 			popup.classList.add("show");
 		}
 	}
-	popup.classList.add("show"); // TODO - Remove
 }
 
 async function updatePopup() {
@@ -176,6 +175,9 @@ async function initAdmin() {
 	}
 	handleInput(score1);
 	handleInput(score2);
+
+	// Remove votes from the popup and add win buttons instead
+	(document.querySelector(".vote-bar") as HTMLElement).style.display = "none";
 }
 
 var adminIcon = document.getElementById("admin-icon");

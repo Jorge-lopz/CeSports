@@ -48,7 +48,7 @@ function loadPopup(match) {
         }
         else {
             if (data[0].state != null) {
-                // Configure the popup to the  right match
+                // Configure the popup to the right match
                 popup.setAttribute("data-match", match.id);
                 // Fill the popup data
                 yield updatePopup();
@@ -56,7 +56,6 @@ function loadPopup(match) {
                 popup.classList.add("show");
             }
         }
-        popup.classList.add("show"); // TODO - Remove
     });
 }
 function updatePopup() {
@@ -197,6 +196,8 @@ function initAdmin() {
         }
         handleInput(score1);
         handleInput(score2);
+        // Remove votes from the popup and add win buttons instead
+        document.querySelector(".vote-bar").style.display = "none";
     });
 }
 var adminIcon = document.getElementById("admin-icon");

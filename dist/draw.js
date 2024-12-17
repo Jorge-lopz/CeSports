@@ -107,7 +107,9 @@ function saveTeamsClass(teamName, classInitials) {
             console.error(error);
             return false;
         }
-        return true;
+        console.log("SAVED");
+        getUnselectedTeams();
+        getUnselectedClasses();
     });
 }
 rollButton.addEventListener("click", () => {
@@ -143,11 +145,7 @@ rollButton.addEventListener("click", () => {
         let selectedTeam = teamsArray[numberOfSpins % teamsArray.length];
         let selectedClass = classesArray[numberOfSpins % classesArray.length];
         console.log(selectedTeam, " -> ", selectedClass);
-        let saved = saveTeamsClass(selectedTeam, selectedClass);
-        if (saved) {
-            getUnselectedTeams();
-            getUnselectedClasses();
-        }
+        saveTeamsClass(selectedTeam, selectedClass);
         // End animation
         // TEAM ROULETTE
         let classRouletteDelay = 1.4;

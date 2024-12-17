@@ -106,7 +106,9 @@ async function saveTeamsClass(teamName: string, classInitials: string): Promise<
 		console.error(error);
 		return false;
 	}
-	return true;
+	console.log("SAVED");
+	getUnselectedTeams();
+	getUnselectedClasses();
 }
 
 rollButton.addEventListener("click", () => {
@@ -146,12 +148,7 @@ rollButton.addEventListener("click", () => {
 		let selectedClass = classesArray[numberOfSpins % classesArray.length];
 
 		console.log(selectedTeam, " -> ", selectedClass);
-		let saved = saveTeamsClass(selectedTeam, selectedClass);
-
-		if (saved) {
-			getUnselectedTeams();
-			getUnselectedClasses();
-		}
+		saveTeamsClass(selectedTeam, selectedClass);
 
 		// End animation
 		// TEAM ROULETTE

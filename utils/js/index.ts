@@ -8,6 +8,7 @@ const logosContainer = document.querySelector(".logos-container");
 const elNames = logosContainer.querySelectorAll(".team-name");
 const elImages = logosContainer.querySelectorAll(".team-logo");
 const team1Vote = document.getElementById("team-1-bar");
+const separator = document.getElementById("separator");
 const team2Vote = document.getElementById("team-2-bar");
 const score1 = document.getElementById("team-1-score");
 let score1Text = "";
@@ -17,42 +18,51 @@ let score2Text = "";
 matches.forEach((match) => {
 	match.addEventListener("click", () => {
 		popup.setAttribute("data-match", match.id);
-		// Remove the voted class from both teams
-		if (document.getElementById(`team-1-bar`).classList.contains("voted")) {
-			document.getElementById(`team-1-bar`).classList.remove("voted");
-		} else if (document.getElementById(`team-2-bar`).classList.contains("voted"))
-			document.getElementById(`team-2-bar`).classList.remove("voted");
-		// See if the user already voted for this match
-		if (localStorage.getItem(`voted-${match.id}`) != null) {
-			// Add the voted class to the team that was voted, if any
-			document.getElementById(`team-${localStorage.getItem(`voted-${match.id}`)}-bar`).classList.add("voted");
-			document.getElementById("separator").classList.add("disabled");
-		} else if (document.getElementById("separator").classList.contains("disabled"))
-			document.getElementById("separator").classList.remove("disabled");
-
-		// Update the logos on the popup
-		const matchImages = match.querySelectorAll(".team-logo");
-		const matchNames = match.querySelectorAll(".team-name");
-		elImages.forEach((element, idx) => {
-			const teamImage = matchImages[idx]?.getAttribute("src").trim();
-			const teamName = matchNames[idx]?.textContent?.trim();
-
-			if (teamImage && teamName) {
-				element.setAttribute("src", `${teamImage}`);
-				elNames[idx].textContent = `${teamName}`;
-			} else {
-				console.error(`No se encontró texto para el índice ${idx}`);
-			}
-		});
-
-		// TODO - Update the score based on DB and data properties on the match HTML element (on realtime)
-
-		// TODO - Update the match status based on DB and data properties on the match HTML element (on realtime)
+		updatePopup();
 
 		// Finally show the popup
 		popup.classList.add("show");
 	});
 });
+
+function updatePopup() {
+	let matchId = popup.getAttribute("data-match");
+	let match = document.getElementById(matchId);
+	// Remove the voted class from both teams
+	if (document.getElementById(`team-1-bar`).classList.contains("voted")) {
+		document.getElementById(`team-1-bar`).classList.remove("voted");
+	} else if (document.getElementById(`team-2-bar`).classList.contains("voted"))
+		document.getElementById(`team-2-bar`).classList.remove("voted");
+	// See if the user already voted for this match
+	if (localStorage.getItem(`voted-${matchId}`) != null) {
+		// Add the voted class to the team that was voted, if any
+		document.getElementById(`team-${localStorage.getItem(`voted-${matchId}`)}-bar`).classList.add("voted");
+		separator.classList.add("disabled");
+		separator.innerHTML = "";
+	} else if (document.getElementById("separator").classList.contains("disabled")) {
+		separator.innerHTML = "VOTA";
+		separator.classList.remove("disabled");
+	}
+
+	// Update the logos on the popup
+	const matchImages = match.querySelectorAll(".team-logo");
+	const matchNames = match.querySelectorAll(".team-name");
+	elImages.forEach((element, idx) => {
+		const teamImage = matchImages[idx]?.getAttribute("src").trim();
+		const teamName = matchNames[idx]?.textContent?.trim();
+
+		if (teamImage && teamName) {
+			element.setAttribute("src", `${teamImage}`);
+			elNames[idx].textContent = `${teamName}`;
+		} else {
+			console.error(`No se encontró texto para el índice ${idx}`);
+		}
+	});
+
+	// TODO - Update the score based on DB and data properties on the match HTML element (on realtime)
+
+	// TODO - Update the match status based on DB and data properties on the match HTML element (on realtime)
+}
 
 popupBg.addEventListener("click", () => {
 	popup.classList.remove("show");
@@ -129,6 +139,7 @@ team1Vote.addEventListener("click", () => {
 	let voted = vote();
 	if (voted) {
 		localStorage.setItem(`voted-${popup.getAttribute("data-match")}`, "1");
+		updatePopup();
 	}
 });
 team2Vote.addEventListener("click", () => {
@@ -136,6 +147,7 @@ team2Vote.addEventListener("click", () => {
 	let voted = vote();
 	if (voted) {
 		localStorage.setItem(`voted-${popup.getAttribute("data-match")}`, "2");
+		updatePopup();
 	}
 });
 

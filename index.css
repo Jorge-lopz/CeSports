@@ -147,17 +147,18 @@ body {
 				height: 100%;
 				border-radius: 4px;
 				text-align: center;
-				font-weight: bold;
+				font-weight: 400;
 				font-size: 1.2rem;
 				cursor: pointer;
 				position: relative;
-				transition: background-color 0.2s ease-in-out;
+				transition: background-color 0.2s ease-in-out, font-weight 0.2s ease-in-out;
 			}
 
 			#team-1-bar {
 				margin-right: 2px;
 				width: 50%; /* TODO - Change on load with JS based on data-percentage */
 				background-color: rgba(255, 0, 0, 0.24);
+				color: rgb(206, 41, 41);
 
 				&:hover {
 					background-color: rgba(255, 0, 0, 0.35);
@@ -165,13 +166,14 @@ body {
 
 				&.voted {
 					pointer-events: none;
-					background-color: rgba(255, 0, 0, 0.4);
+					color: rgb(255, 255, 255, 0.7);
+					font-weight: 400;
+					background-color: rgba(255, 0, 0, 0.585);
 				}
 
 				&::after {
 					content: attr(data-percentage) "%";
 					position: absolute;
-					color: rgb(206, 41, 41);
 					top: 50%;
 					left: 50%;
 					transform: translate(-50%, -50%);

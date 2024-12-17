@@ -28,27 +28,28 @@ matches.forEach((match) => {
 });
 function loadPopup(match) {
     return __awaiter(this, void 0, void 0, function* () {
-        let matchId = match.id.split("-");
-        var { state, error } = yield db
-            .from(DB_MATCHES)
-            .select(DB_MATCH_STATE)
-            .eq(DB_MATCH_GROUP, matchId[0])
-            .eq(DB_MATCH_ROUND, Number(matchId[1]))
-            .eq(DB_MATCH_INDEX, Number(matchId[3]));
-        if (error) {
-            console.log(error);
-        }
-        else {
-            console.log(state);
-            if (state != null) {
-                // Configure the popup to the  right match
-                popup.setAttribute("data-match", match.id);
-                // Fill the popup data
-                yield updatePopup();
-                // Finally show the popup
-                popup.classList.add("show");
-            }
-        }
+        // TODO volver a poner
+        // let matchId = match.id.split("-");
+        // var { state, error } = await db
+        // 	.from(DB_MATCHES)
+        // 	.select(DB_MATCH_STATE)
+        // 	.eq(DB_MATCH_GROUP, matchId[0])
+        // 	.eq(DB_MATCH_ROUND, Number(matchId[1]))
+        // 	.eq(DB_MATCH_INDEX, Number(matchId[3]));
+        // if (error) {
+        // 	console.log("Ha habido un error:" + error);
+        // } else {
+        // 	console.log("El estado es:" + state);
+        // 	if (state != null) {
+        // 		// Configure the popup to the  right match
+        // 		popup.setAttribute("data-match", match.id);
+        // 		// Fill the popup data
+        // 		await updatePopup();
+        // 		// Finally show the popup
+        // 		popup.classList.add("show");
+        // 	}
+        // }
+        popup.classList.add("show");
     });
 }
 function updatePopup() {
@@ -112,16 +113,22 @@ function initAdmin() {
     return __awaiter(this, void 0, void 0, function* () {
         score1.setAttribute("content-editable", "true");
         score2.setAttribute("content-editable", "true");
-        score1.addEventListener("change", () => {
-            if (/^\d+$/.test(score1.textContent.trim())) {
-                score1Text = score1.textContent.trim();
+        score1.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault(); // Evita que se inserte un salto de línea
             }
-            else {
-                score1.textContent = score1Text;
+        });
+        score1.addEventListener("input", () => {
+            const filteredText = score1.textContent.replace(/[^0-9]/g, "");
+            if (score1.textContent !== filteredText) {
+                score1.textContent = filteredText;
             }
         });
         score2.addEventListener("input", () => {
-            score2.setAttribute("content-editable", "false");
+            const filteredText = score2.textContent.replace(/[^0-9]/g, "");
+            if (score2.textContent !== filteredText) {
+                score2.textContent = filteredText;
+            }
         });
     });
 }

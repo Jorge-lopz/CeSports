@@ -36,5 +36,5 @@ const DB_VOTES_MATCH = "match";
 const DB_VOTES_TEAM = "team";
 
 // Consts
-const GROUP = ["A", "B"];
+const GROUP = ["A", "B", "FINAL"];
 const STATES = ["set", "started", "finished"];

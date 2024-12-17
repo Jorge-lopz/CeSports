@@ -17,17 +17,35 @@ const score2 = document.getElementById("team-2-score");
 let score2Text = "";
 
 matches.forEach((match) => {
-	match.addEventListener("click", () => {
-		popup.setAttribute("data-match", match.id);
-		updatePopup();
-		// Finally show the popup
-		popup.classList.add("show");
-	});
+	match.addEventListener("click", () => loadPopup(match));
 });
 
+async function loadPopup(match: Element) {
+	let matchId = match.id.split("-");
+	var { state, error } = await db
+		.from(DB_MATCHES)
+		.select(DB_MATCH_STATE)
+		.eq(DB_MATCH_GROUP, matchId[0])
+		.eq(DB_MATCH_ROUND, Number(matchId[1]))
+		.eq(DB_MATCH_INDEX, Number(matchId[3]));
+	if (error) {
+		console.log(error);
+	} else {
+		console.log(state);
+		if (state != null) {
+			// Configure the popup to the  right match
+			popup.setAttribute("data-match", match.id);
+			// Fill the popup data
+			await updatePopup();
+			// Finally show the popup
+			popup.classList.add("show");
+		}
+	}
+}
+
 async function updatePopup() {
-	let matchId = popup.getAttribute("data-match");
-	let match = document.getElementById(matchId);
+	let matchId = popup.getAttribute("data-match").split("-");
+	let match = document.getElementById(matchId.join("-"));
 	// Remove the voted class from both teams
 	if (document.getElementById(`team-1-bar`).classList.contains("voted")) {
 		document.getElementById(`team-1-bar`).classList.remove("voted");
@@ -56,8 +74,13 @@ async function updatePopup() {
 	});
 
 	// Update based on the db
-	let { dbMatch, error } = await db.from(DB_MATCHES).select();
-	let state: string;
+
+	let { state, error } = await db
+		.from(DB_MATCHES)
+		.select(DB_MATCH_STATE)
+		.eq(DB_MATCH_GROUP, matchId[0])
+		.eq(DB_MATCH_ROUND, matchId[1])
+		.eq(DB_MATCH_INDEX, matchId[3]);
 	if (error) {
 		console.error(error);
 	} else {

@@ -4,6 +4,7 @@ var db = supabase.createClient(`https://${DB}.supabase.co`, DB_ANON_KEY, { db: {
 const matches = document.querySelectorAll(".match");
 const popupBg = document.querySelector(".match-pop-up-bg");
 const popup = document.querySelector(".match-pop-up");
+const container = document.querySelector(".container");
 const logosContainer = document.querySelector(".logos-container");
 const elNames = logosContainer.querySelectorAll(".team-name");
 const elImages = logosContainer.querySelectorAll(".team-logo");
@@ -19,13 +20,12 @@ matches.forEach((match) => {
 	match.addEventListener("click", () => {
 		popup.setAttribute("data-match", match.id);
 		updatePopup();
-
 		// Finally show the popup
 		popup.classList.add("show");
 	});
 });
 
-function updatePopup() {
+async function updatePopup() {
 	let matchId = popup.getAttribute("data-match");
 	let match = document.getElementById(matchId);
 	// Remove the voted class from both teams
@@ -48,20 +48,26 @@ function updatePopup() {
 	const matchImages = match.querySelectorAll(".team-logo");
 	const matchNames = match.querySelectorAll(".team-name");
 	elImages.forEach((element, idx) => {
-		const teamImage = matchImages[idx]?.getAttribute("src").trim();
-		const teamName = matchNames[idx]?.textContent?.trim();
+		let teamImage = matchImages[idx]?.getAttribute("src").trim();
+		let teamName = matchNames[idx]?.textContent?.trim();
 
-		if (teamImage && teamName) {
-			element.setAttribute("src", `${teamImage}`);
-			elNames[idx].textContent = `${teamName}`;
-		} else {
-			console.error(`No se encontró texto para el índice ${idx}`);
-		}
+		element.setAttribute("src", `${teamImage}`);
+		elNames[idx].textContent = `${teamName}`;
 	});
 
-	// TODO - Update the score based on DB and data properties on the match HTML element (on realtime)
-
-	// TODO - Update the match status based on DB and data properties on the match HTML element (on realtime)
+	// Update based on the db
+	let { dbMatch, error } = await db.from(DB_MATCHES).select();
+	let state: string;
+	if (error) {
+		console.error(error);
+	} else {
+		// TODO - Update the score based on DB and data properties on the match HTML element (on realtime)
+		// TODO - Update the match state based on DB and data properties on the match HTML element (on realtime)
+		let stateText = ["Programado", "En juego", "Finalizado"];
+		let stateColors = ["#ffffff20", "#34ac3a35", "#ffd9035"];
+		(container as HTMLElement).style.setProperty("--match-state", stateText[STATES.indexOf(state)]);
+		(container as HTMLElement).style.setProperty("--state-color", stateColors[STATES.indexOf(state)]);
+	}
 }
 
 popupBg.addEventListener("click", () => {

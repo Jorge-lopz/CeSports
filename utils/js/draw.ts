@@ -179,7 +179,7 @@ async function initAdminDraw() {
 }
 
 async function initDraw() {
-	//rollButton.classList.add("disabled"); // TODO - Uncomment
+	rollButton.classList.add("disabled");
 	await getUnselectedTeams();
 	await getUnselectedClasses();
 	shuffleArray(teamsArray);
@@ -198,7 +198,7 @@ homeIcon.addEventListener("click", () => {
 	window.location.href = "/";
 });
 adminIcon.addEventListener("click", () => {
-	login(prompt("Inserte contraseña:", "iLUgJ3UMB35H")); // TODO -> Remove password
+	login(prompt("Inserte contraseña:", "Password"));
 	async function login(password: string) {
 		let { data, err } = await db.rpc("check_admin_pass", { pass: password });
 		if (err) {

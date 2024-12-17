@@ -68,6 +68,7 @@ body {
 	}
 
 	.container {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		padding: 6vh 5vw;
@@ -79,9 +80,21 @@ body {
 		border: solid 2px #fbfbfb12;
 		gap: 1.5rem;
 		--match-state: "Not started";
+		--state-color: #ffffff20;
 
 		&::after {
-			content: var(--match-state);
+			content: var(--match-state, "");
+			position: absolute;
+			font-size: 1.1rem;
+			font-weight: 400;
+			border-radius: 20px;
+			padding: 4px 14px;
+			background-color: var(--state-color);
+			border: solid 2px #fbfbfb12;
+			backdrop-filter: blur(20px);
+			top: 0;
+			left: 50%;
+			transform: translate(-50%, -50%);
 		}
 
 		.logos-container {
@@ -199,7 +212,6 @@ body {
 				font-weight: 600;
 				border-radius: 4px;
 				margin: 2px;
-				/* TODO - Disable the prompt on JS after voting */
 
 				&.disabled {
 					position: relative;
@@ -217,6 +229,7 @@ body {
 				margin-left: 2px;
 				width: 50%; /* TODO - Change on load with JS based on data-percentage */
 				background-color: rgb(17, 146, 218, 0.24);
+				color: rgba(16, 160, 237, 0.8);
 
 				&:hover {
 					background-color: rgba(17, 146, 218, 0.35);
@@ -224,13 +237,14 @@ body {
 
 				&.voted {
 					pointer-events: none;
-					background-color: rgba(17, 146, 218, 0.4);
+					color: rgba(255, 255, 255, 0.7);
+					font-weight: 400;
+					background-color: rgba(17, 146, 218, 0.585);
 				}
 
 				&::after {
 					content: attr(data-percentage) "%";
 					position: absolute;
-					color: rgb(42, 135, 216);
 					top: 50%;
 					left: 50%;
 					transform: translate(-50%, -50%);

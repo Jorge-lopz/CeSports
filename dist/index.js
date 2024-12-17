@@ -12,6 +12,7 @@ var db = supabase.createClient(`https://${DB}.supabase.co`, DB_ANON_KEY, { db: {
 const matches = document.querySelectorAll(".match");
 const popupBg = document.querySelector(".match-pop-up-bg");
 const popup = document.querySelector(".match-pop-up");
+const container = document.querySelector(".container");
 const logosContainer = document.querySelector(".logos-container");
 const elNames = logosContainer.querySelectorAll(".team-name");
 const elImages = logosContainer.querySelectorAll(".team-logo");
@@ -31,42 +32,51 @@ matches.forEach((match) => {
     });
 });
 function updatePopup() {
-    let matchId = popup.getAttribute("data-match");
-    let match = document.getElementById(matchId);
-    // Remove the voted class from both teams
-    if (document.getElementById(`team-1-bar`).classList.contains("voted")) {
-        document.getElementById(`team-1-bar`).classList.remove("voted");
-    }
-    else if (document.getElementById(`team-2-bar`).classList.contains("voted"))
-        document.getElementById(`team-2-bar`).classList.remove("voted");
-    // See if the user already voted for this match
-    if (localStorage.getItem(`voted-${matchId}`) != null) {
-        // Add the voted class to the team that was voted, if any
-        document.getElementById(`team-${localStorage.getItem(`voted-${matchId}`)}-bar`).classList.add("voted");
-        separator.classList.add("disabled");
-        separator.innerHTML = "";
-    }
-    else if (document.getElementById("separator").classList.contains("disabled")) {
-        separator.innerHTML = "VOTA";
-        separator.classList.remove("disabled");
-    }
-    // Update the logos on the popup
-    const matchImages = match.querySelectorAll(".team-logo");
-    const matchNames = match.querySelectorAll(".team-name");
-    elImages.forEach((element, idx) => {
-        var _a, _b, _c;
-        const teamImage = (_a = matchImages[idx]) === null || _a === void 0 ? void 0 : _a.getAttribute("src").trim();
-        const teamName = (_c = (_b = matchNames[idx]) === null || _b === void 0 ? void 0 : _b.textContent) === null || _c === void 0 ? void 0 : _c.trim();
-        if (teamImage && teamName) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let matchId = popup.getAttribute("data-match");
+        let match = document.getElementById(matchId);
+        // Remove the voted class from both teams
+        if (document.getElementById(`team-1-bar`).classList.contains("voted")) {
+            document.getElementById(`team-1-bar`).classList.remove("voted");
+        }
+        else if (document.getElementById(`team-2-bar`).classList.contains("voted"))
+            document.getElementById(`team-2-bar`).classList.remove("voted");
+        // See if the user already voted for this match
+        if (localStorage.getItem(`voted-${matchId}`) != null) {
+            // Add the voted class to the team that was voted, if any
+            document.getElementById(`team-${localStorage.getItem(`voted-${matchId}`)}-bar`).classList.add("voted");
+            separator.classList.add("disabled");
+            separator.innerHTML = "";
+        }
+        else if (document.getElementById("separator").classList.contains("disabled")) {
+            separator.innerHTML = "VOTA";
+            separator.classList.remove("disabled");
+        }
+        // Update the logos on the popup
+        const matchImages = match.querySelectorAll(".team-logo");
+        const matchNames = match.querySelectorAll(".team-name");
+        elImages.forEach((element, idx) => {
+            var _a, _b, _c;
+            let teamImage = (_a = matchImages[idx]) === null || _a === void 0 ? void 0 : _a.getAttribute("src").trim();
+            let teamName = (_c = (_b = matchNames[idx]) === null || _b === void 0 ? void 0 : _b.textContent) === null || _c === void 0 ? void 0 : _c.trim();
             element.setAttribute("src", `${teamImage}`);
             elNames[idx].textContent = `${teamName}`;
+        });
+        // Update based on the db
+        let { dbMatch, error } = yield db.from(DB_MATCHES).select();
+        let state;
+        if (error) {
+            console.error(error);
         }
         else {
-            console.error(`No se encontró texto para el índice ${idx}`);
+            // TODO - Update the score based on DB and data properties on the match HTML element (on realtime)
+            // TODO - Update the match state based on DB and data properties on the match HTML element (on realtime)
+            let stateText = ["Programado", "En juego", "Finalizado"];
+            let stateColors = ["#ffffff20", "#34ac3a35", "#ffd9035"];
+            container.style.setProperty("--match-state", stateText[STATES.indexOf(state)]);
+            container.style.setProperty("--state-color", stateColors[STATES.indexOf(state)]);
         }
     });
-    // TODO - Update the score based on DB and data properties on the match HTML element (on realtime)
-    // TODO - Update the match status based on DB and data properties on the match HTML element (on realtime)
 }
 popupBg.addEventListener("click", () => {
     popup.classList.remove("show");

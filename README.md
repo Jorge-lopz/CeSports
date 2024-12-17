@@ -13,7 +13,7 @@
 - [ ] Tournament bracket page DB connection
 - [ ] Voting system to make predictions for every game
 - [ ] Hacer el formato lista del torneo
-- [ ] Que no se pueda votar si no se saben los equipos
+- [x] Que no se pueda votar si no se saben los equipos
 - [ ] sacar la votación de la base de datos y mostrarlo en los equipos
 - [ ] hacer una animación de victoria
 

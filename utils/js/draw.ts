@@ -116,6 +116,8 @@ rollButton.addEventListener("click", () => {
 		rollButton.classList.add("disabled");
 		(teamRoulette as HTMLElement).style.opacity = "0";
 		(classRoulette as HTMLElement).style.opacity = "0";
+		console.log(teamsArray[0], " -> ", classesArray[0]);
+		saveTeamsClass(teamsArray[0], classesArray[0]);
 		setTimeout(() => {
 			generateRoulettes();
 			(teamRoulette as HTMLElement).style.opacity = "1";

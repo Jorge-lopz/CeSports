@@ -204,7 +204,7 @@ body {
 
 			#team-1-bar {
 				margin-right: 2px;
-				width: 50%; /* TODO - Change on load with JS based on data-percentage */
+				width: 50%;
 				background-color: rgba(255, 0, 0, 0.24);
 				color: rgb(206, 41, 41);
 
@@ -396,7 +396,7 @@ body {
 					margin-top: 5vh;
 					margin-left: 10px;
 					height: calc(100% - 10vh);
-					width: min(25px, 20%);
+					width: min(20px, 20%);
 					border-radius: 0px 8px 8px 0px;
 					border-top: solid var(--bracket-color) 2px;
 					border-right: solid var(--bracket-color) 2px;
@@ -408,7 +408,7 @@ body {
 					position: absolute;
 					top: 50%;
 					left: calc(100% + 1px);
-					width: 20px;
+					width: 16px;
 					height: 1.8px;
 					background-color: var(--bracket-color);
 					display: block;
@@ -513,8 +513,7 @@ body {
 	}
 }
 
-/* TODO - 1400px */
-@media (width < 1200px) {
+@media (width < 1400px) {
 	body {
 		overflow-y: none;
 		overscroll-behavior: contain;
@@ -680,7 +679,7 @@ body {
 	}
 }
 
-@media (width < 1200px) {
+@media (width < 1400px) {
 	body {
 		display: block;
 	}
@@ -764,9 +763,21 @@ body {
 		padding: 10px 16px !important;
 		border-radius: 6px !important;
 		border: none !important;
-		background-color: #ffffff20 !important;
+		background-color: #ffffff15 !important;
 		color: white !important;
-		transition: background-color 0.2s ease-in-out !important;
+		transition: background-color 0.3s ease-in-out !important;
+
+		&:hover {
+			background-color: #ffffff25 !important;
+		}
+	}
+
+	.swal2-confirm {
+		background-color: #42ff7e3b !important;
+
+		&:hover {
+			background-color: #39fa7661 !important;
+		}
 	}
 }
 

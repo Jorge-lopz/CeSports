@@ -38,7 +38,7 @@ let teams = [];
 let admin = false;
 function getScore() {
     return __awaiter(this, void 0, void 0, function* () {
-        if (popup.classList.contains("show")) { // TODO - 1400 Breakpoint
+        if (popup.classList.contains("show") && document.activeElement !== score1 && document.activeElement !== score2) {
             let matchId = popup.getAttribute("data-match").split("-");
             var { data, error } = yield db
                 .from(DB_MATCHES)
@@ -53,7 +53,7 @@ function getScore() {
                 score2.textContent = data[0].t2_goals || 0;
             }
         }
-        else if (getWindowSize().width < 1200) { // TODO - 1400 Breakpoint
+        else if (getWindowSize().width < 1400) {
             const matches = tournament.querySelectorAll(".match");
             for (let i = 0; i < matches.length; i++) {
                 let mobileMatchId = matches[i].id.split("-");
@@ -76,10 +76,7 @@ function getVotes() {
     return __awaiter(this, void 0, void 0, function* () {
         let match = popup.getAttribute("data-match");
         if (popup.classList.contains("show")) {
-            var { _, count, error } = yield db
-                .from(DB_VOTES)
-                .select('*', { count: 'exact', head: true })
-                .eq(DB_VOTES_MATCH, match);
+            var { _, count, error } = yield db.from(DB_VOTES).select("*", { count: "exact", head: true }).eq(DB_VOTES_MATCH, match);
             if (error)
                 console.log(error);
             else
@@ -87,7 +84,7 @@ function getVotes() {
             if (totalVotes != 0) {
                 var { _, count, error } = yield db
                     .from(DB_VOTES)
-                    .select('*', { count: 'exact', head: true })
+                    .select("*", { count: "exact", head: true })
                     .eq(DB_VOTES_MATCH, match)
                     .eq(DB_VOTES_TEAM, 1);
                 if (error)
@@ -122,8 +119,6 @@ function getState() {
                 console.error(error);
             }
             else {
-                // TODO - Update the score based on DB and data properties on the match HTML element (on realtime)
-                // TODO - Update the match state based on DB and data properties on the match HTML element (on realtime)
                 let stateText = ["Programado", "En juego", "Finalizado"];
                 let stateColors = ["#ffffff20", "#34ac3a50", "#f2423650"];
                 container.setAttribute("match-state", stateText[STATES.indexOf(data[0].state)]);
@@ -138,12 +133,16 @@ function getState() {
                 else {
                     start.style.opacity = "1";
                     start.style.pointerEvents = "all";
+                    start.innerText = "Iniciar";
                 }
-                if (admin && data[0].state != "started" && data[0].round == 3) {
+                if (admin && data[0].state != "started" && matchId[1] == "3") {
                     start.style.opacity = "1";
                     start.style.pointerEvents = "all";
+                    // If semifinals, change button text
+                    if (data[0].state == "finished" && matchId[1] == "3")
+                        start.innerText = "2ª vuelta";
                 }
-                if (admin && (data[0].state == "set" || (data[0].state != "started" && data[0].round == 3))) {
+                if (admin && data[0].state == "set") {
                     document.getElementById("win-team-1").style.opacity = "0";
                     document.getElementById("win-team-1").style.pointerEvents = "none";
                     document.getElementById("win-team-2").style.opacity = "0";
@@ -164,7 +163,7 @@ function loadPopup(match) {
         let matchId = match.id.split("-");
         var { data, error } = yield db
             .from(DB_MATCHES)
-            .select(`${DB_MATCH_STATE}, ${DB_MATCH_ROUND}`)
+            .select(`${DB_MATCH_STATE}`)
             .eq(DB_MATCH_GROUP, matchId[0])
             .eq(DB_MATCH_ROUND, Number(matchId[1]))
             .eq(DB_MATCH_INDEX, Number(matchId[3]));
@@ -195,12 +194,16 @@ function loadPopup(match) {
                 else {
                     start.style.opacity = "1";
                     start.style.pointerEvents = "all";
+                    start.innerText = "Iniciar";
                 }
-                if (admin && data[0].state != "started" && data[0].round == 3) {
+                if (admin && data[0].state != "started" && matchId[1] == "3") {
                     start.style.opacity = "1";
                     start.style.pointerEvents = "all";
+                    // If semifinals, change button text
+                    if (data[0].state == "finished" && matchId[1] == "3")
+                        start.innerText = "2ª vuelta";
                 }
-                if (admin && (data[0].state == "set" || (data[0].state != "started" && data[0].round == 3))) {
+                if (admin && data[0].state == "set") {
                     document.getElementById("win-team-1").style.opacity = "0";
                     document.getElementById("win-team-1").style.pointerEvents = "none";
                     document.getElementById("win-team-2").style.opacity = "0";
@@ -269,16 +272,16 @@ const getWindowSize = () => ({
 });
 function detectResize() {
     let size = getWindowSize();
-    if (size.width < 1200)
-        tournament = document.getElementById("tournament-mobile"); // TODO - 1400px
+    if (size.width < 1400)
+        tournament = document.getElementById("tournament-mobile");
     else
         tournament = document.getElementById("tournament");
     getTournamentElements(); // Update tournament elements
     window.addEventListener("resize", () => {
         size = getWindowSize();
         // Same as CSS Breakpoint
-        if (size.width < 1200)
-            var temp = document.getElementById("tournament-mobile"); // TODO - 1400px
+        if (size.width < 1400)
+            var temp = document.getElementById("tournament-mobile");
         else
             var temp = document.getElementById("tournament");
         if (temp != tournament) {
@@ -298,12 +301,16 @@ function getTeams() {
 }
 function loadMatch(match) {
     return __awaiter(this, void 0, void 0, function* () {
-        let team1 = tournament.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-${match[DB_MATCH_INDEX]}-team-1`);
-        team1.querySelector(".team-logo").setAttribute("src", `./assets/teams/${match[DB_MATCH_TEAM1]}.png`); // TODO -> To PNG
-        team1.querySelector(".team-name").textContent = `${teams.find((team) => team.name === match[DB_MATCH_TEAM1]).class}`;
-        let team2 = tournament.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-${match[DB_MATCH_INDEX]}-team-2`);
-        team2.querySelector(".team-logo").setAttribute("src", `./assets/teams/${match[DB_MATCH_TEAM2]}.png`); // TODO -> To PNG
-        team2.querySelector(".team-name").textContent = `${teams.find((team) => team.name === match[DB_MATCH_TEAM2]).class}`;
+        if (match[DB_MATCH_TEAM1] != null) {
+            let team1 = tournament.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-${match[DB_MATCH_INDEX]}-team-1`);
+            team1.querySelector(".team-logo").setAttribute("src", `./assets/teams/${match[DB_MATCH_TEAM1]}.png`);
+            team1.querySelector(".team-name").textContent = `${teams.find((team) => team.name === match[DB_MATCH_TEAM1]).class}`;
+        }
+        if (match[DB_MATCH_TEAM2] != null) {
+            let team2 = tournament.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-${match[DB_MATCH_INDEX]}-team-2`);
+            team2.querySelector(".team-logo").setAttribute("src", `./assets/teams/${match[DB_MATCH_TEAM2]}.png`);
+            team2.querySelector(".team-name").textContent = `${teams.find((team) => team.name === match[DB_MATCH_TEAM2]).class}`;
+        }
     });
 }
 function loadBrackets() {
@@ -325,7 +332,9 @@ function loadBrackets() {
                     let elMatch = tournament.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-match-${match[DB_MATCH_INDEX]}`);
                     let loser = elMatch.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-${match[DB_MATCH_INDEX]}-team-${match[DB_MATCH_WINNER] == 2 ? 1 : 2}`);
                     loser.classList.add("loser");
-                    elMatch.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-${match[DB_MATCH_INDEX]}-team-${match[DB_MATCH_WINNER]}`).classList.remove("loser");
+                    elMatch
+                        .querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-${match[DB_MATCH_INDEX]}-team-${match[DB_MATCH_WINNER]}`)
+                        .classList.remove("loser");
                 }
             }
         }
@@ -384,9 +393,9 @@ function initAdmin() {
                 let filteredText = scoreElement.textContent.replace(/[^0-9]/g, ""); // Keep only numbers
                 if (scoreElement.textContent !== filteredText)
                     scoreElement.textContent = filteredText;
-                // Max length = 3
-                if (scoreElement.textContent.length > 3)
-                    scoreElement.textContent = scoreElement.textContent.slice(0, 3);
+                // Max length = 2
+                if (scoreElement.textContent.length > 2)
+                    scoreElement.textContent = scoreElement.textContent.slice(0, 2);
             });
             scoreElement.addEventListener("blur", () => {
                 updateScore(scoreElement);
@@ -405,13 +414,13 @@ adminIcon.addEventListener("click", () => {
         return __awaiter(this, void 0, void 0, function* () {
             var { value: password } = yield Swal.fire({
                 input: "password",
-                inputLabel: "Enter password:iLUgJ3UMB35H", // TODO - Remove password
+                inputLabel: "Enter password:",
                 inputPlaceholder: "Password",
                 inputAttributes: {
                     maxlength: "12",
                     autocapitalize: "off",
-                    autocorrect: "off"
-                }
+                    autocorrect: "off",
+                },
             });
             if (password) {
                 var { data, error } = yield db.rpc("check_admin_pass", { pass: password });
@@ -443,9 +452,7 @@ adminIcon.addEventListener("click", () => {
 function vote(team) {
     return __awaiter(this, void 0, void 0, function* () {
         let match = popup.getAttribute("data-match");
-        var { _, _ } = yield db
-            .from(DB_VOTES)
-            .insert({ match: match, team: team });
+        var { _, _ } = yield db.from(DB_VOTES).insert({ match: match, team: team });
         return true;
     });
 }
@@ -469,22 +476,127 @@ team2Vote.addEventListener("click", () => {
         getVotes();
     }
 });
-function setWinner(winner) {
+function setWinner(winnerIndex) {
     return __awaiter(this, void 0, void 0, function* () {
-        let match = popup.getAttribute("data-match").split("-");
+        let match = popup.getAttribute("data-match");
+        let matchId = match.split("-");
+        // Update the match state on the database
         var { _, error } = yield db
             .from(DB_MATCHES)
-            .update({ winner: winner, state: "finished" })
-            .eq(DB_MATCH_GROUP, match[0])
-            .eq(DB_MATCH_ROUND, Number(match[1]))
-            .eq(DB_MATCH_INDEX, Number(match[3]));
+            .update({ winner: winnerIndex, state: "finished" })
+            .eq(DB_MATCH_GROUP, matchId[0])
+            .eq(DB_MATCH_ROUND, Number(matchId[1]))
+            .eq(DB_MATCH_INDEX, Number(matchId[3]));
         if (error)
             console.log(error);
-        popup.classList.remove("show");
+        else if (Number(matchId[1]) <= 3) {
+            let winner = tournament
+                .querySelector(`#${match}`)
+                .children[winnerIndex - 1].querySelector(".team-logo")
+                .getAttribute("src")
+                .split("/")[3]
+                .split(".")[0];
+            if (Number(matchId[1]) <= 2) {
+                // Also set the winner on the next round match
+                if (Number(matchId[3]) % 2 == 1) {
+                    var { _, error } = yield db
+                        .from(DB_MATCHES)
+                        .update({ team1: winner })
+                        .eq(DB_MATCH_GROUP, matchId[0])
+                        .eq(DB_MATCH_ROUND, Number(matchId[1]) + 1)
+                        .eq(DB_MATCH_INDEX, Math.round(Number(matchId[3]) / 2));
+                }
+                else {
+                    var { _, error } = yield db
+                        .from(DB_MATCHES)
+                        .update({ team2: winner })
+                        .eq(DB_MATCH_GROUP, matchId[0])
+                        .eq(DB_MATCH_ROUND, Number(matchId[1]) + 1)
+                        .eq(DB_MATCH_INDEX, Math.round(Number(matchId[3]) / 2));
+                }
+                if (error)
+                    console.log(error);
+                else {
+                    var { _, error } = yield db
+                        .from(DB_MATCHES)
+                        .update({ state: "set" })
+                        .eq(DB_MATCH_GROUP, matchId[0])
+                        .eq(DB_MATCH_ROUND, Number(matchId[1]) + 1)
+                        .eq(DB_MATCH_INDEX, Math.round(Number(matchId[3]) / 2))
+                        .not(DB_MATCH_TEAM1, "is", null)
+                        .not(DB_MATCH_TEAM2, "is", null);
+                }
+            }
+            else if (Number(matchId[1]) == 3) {
+                // Also set the winner on the final match
+                if (matchId[0] == "A") {
+                    var { _, error } = yield db
+                        .from(DB_MATCHES)
+                        .update({ team1: winner })
+                        .eq(DB_MATCH_GROUP, "FINAL")
+                        .eq(DB_MATCH_ROUND, 1)
+                        .eq(DB_MATCH_INDEX, 1);
+                }
+                else {
+                    var { _, error } = yield db.from(DB_MATCHES).update({ team2: winner }).eq(DB_MATCH_GROUP, "FINAL");
+                }
+                if (error)
+                    console.log(error);
+                else {
+                    var { _, error } = yield db
+                        .from(DB_MATCHES)
+                        .update({ state: "set" })
+                        .eq(DB_MATCH_GROUP, "FINAL")
+                        .not(DB_MATCH_TEAM1, "is", null)
+                        .not(DB_MATCH_TEAM2, "is", null);
+                }
+            }
+        }
+        loadBrackets();
     });
 }
-btnWin1.addEventListener(("click"), (e) => { setWinner(1); });
-btnWin2.addEventListener(("click"), (e) => { setWinner(2); });
+function confirmWinner(winner) {
+    return __awaiter(this, void 0, void 0, function* () {
+        Swal.fire({
+            title: "¿Estás seguro?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Confirmar",
+            confirmButtonColor: "#fff",
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setWinner(winner);
+                popup.classList.remove("show");
+            }
+        });
+    });
+}
+btnWin1.addEventListener("click", (e) => {
+    confirmWinner(1);
+});
+btnWin2.addEventListener("click", (e) => {
+    confirmWinner(2);
+});
+function startMatch() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let match = popup.getAttribute("data-match");
+        let matchId = match.split("-");
+        // Update the match state on the database
+        var { _, error } = yield db
+            .from(DB_MATCHES)
+            .update({ state: "started" })
+            .eq(DB_MATCH_GROUP, matchId[0])
+            .eq(DB_MATCH_ROUND, Number(matchId[1]))
+            .eq(DB_MATCH_INDEX, Number(matchId[3]));
+        if (error)
+            console.log(error);
+        getState();
+    });
+}
+start.addEventListener("click", () => {
+    startMatch();
+});
 document.getElementById("github-icon").addEventListener("click", () => {
     window.open("https://github.com/Jorge-lopz/CeSports", "_github");
 });

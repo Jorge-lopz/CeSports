@@ -270,12 +270,16 @@ async function getTeams() {
 }
 
 async function loadMatch(match: any) {
-	let team1 = tournament.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-${match[DB_MATCH_INDEX]}-team-1`);
-	team1.querySelector(".team-logo").setAttribute("src", `./assets/teams/${match[DB_MATCH_TEAM1]}.png`); // TODO -> To PNG
-	team1.querySelector(".team-name").textContent = `${teams.find((team: any) => team.name === match[DB_MATCH_TEAM1]).class}`;
-	let team2 = tournament.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-${match[DB_MATCH_INDEX]}-team-2`);
-	team2.querySelector(".team-logo").setAttribute("src", `./assets/teams/${match[DB_MATCH_TEAM2]}.png`); // TODO -> To PNG
-	team2.querySelector(".team-name").textContent = `${teams.find((team: any) => team.name === match[DB_MATCH_TEAM2]).class}`;
+	if (match[DB_MATCH_TEAM1] != null) {
+		let team1 = tournament.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-${match[DB_MATCH_INDEX]}-team-1`);
+		team1.querySelector(".team-logo").setAttribute("src", `./assets/teams/${match[DB_MATCH_TEAM1]}.png`); // TODO -> To PNG
+		team1.querySelector(".team-name").textContent = `${teams.find((team: any) => team.name === match[DB_MATCH_TEAM1]).class}`;
+	}
+	if (match[DB_MATCH_TEAM2] != null) {
+		let team2 = tournament.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-${match[DB_MATCH_INDEX]}-team-2`);
+		team2.querySelector(".team-logo").setAttribute("src", `./assets/teams/${match[DB_MATCH_TEAM2]}.png`); // TODO -> To PNG
+		team2.querySelector(".team-name").textContent = `${teams.find((team: any) => team.name === match[DB_MATCH_TEAM2]).class}`;
+	}
 }
 
 async function loadBrackets() {
@@ -346,8 +350,8 @@ async function initAdmin() {
 		scoreElement.addEventListener("input", () => {
 			let filteredText = scoreElement.textContent.replace(/[^0-9]/g, ""); // Keep only numbers
 			if (scoreElement.textContent !== filteredText) scoreElement.textContent = filteredText;
-			// Max length = 3
-			if (scoreElement.textContent.length > 3) scoreElement.textContent = scoreElement.textContent.slice(0, 3); 
+			// Max length = 2
+			if (scoreElement.textContent.length > 2) scoreElement.textContent = scoreElement.textContent.slice(0, 2); 
 		});
 		scoreElement.addEventListener("blur", () => {
 			updateScore(scoreElement);
@@ -426,20 +430,110 @@ team2Vote.addEventListener("click", () => {
 	}
 });
 
-async function setWinner(winner: number) {
-	let match = popup.getAttribute("data-match").split("-");
+async function setWinner(winnerIndex: number){
+	let match = popup.getAttribute("data-match");
+	let matchId = match.split("-");
+	// Update the match state on the database
 	var {_, error } = await db
 	.from(DB_MATCHES)
-	.update({ winner: winner, state: "finished" })
-	.eq(DB_MATCH_GROUP, match[0])
-	.eq(DB_MATCH_ROUND, Number(match[1]))
-	.eq(DB_MATCH_INDEX, Number(match[3]));
+	.update({ winner: winnerIndex, state: "finished" })
+	.eq(DB_MATCH_GROUP, matchId[0])
+	.eq(DB_MATCH_ROUND, Number(matchId[1]))
+	.eq(DB_MATCH_INDEX, Number(matchId[3]));
 	if (error) console.log(error);
-	popup.classList.remove("show");
+	else if (Number(matchId[1]) <= 3) {
+		let winner = tournament.querySelector(`#${match}`).children[winnerIndex - 1].querySelector(".team-logo").getAttribute("src").split("/")[3].split(".")[0];
+		if (Number(matchId[1]) <= 2) {
+			// Also set the winner on the next round match
+			if (Number(matchId[3]) % 2 == 1) {
+				var {_, error } = await db
+				.from(DB_MATCHES)
+				.update({ team1: winner })
+				.eq(DB_MATCH_GROUP, matchId[0])
+				.eq(DB_MATCH_ROUND, Number(matchId[1]) + 1)
+				.eq(DB_MATCH_INDEX, Math.round(Number(matchId[3]) / 2));
+			} else {
+				var {_, error } = await db
+				.from(DB_MATCHES)
+				.update({ team2: winner })
+				.eq(DB_MATCH_GROUP, matchId[0])
+				.eq(DB_MATCH_ROUND, Number(matchId[1]) + 1)
+				.eq(DB_MATCH_INDEX, Math.round(Number(matchId[3]) / 2));
+			}
+			if (error) console.log(error);
+			else {
+				var {_, error } = await db
+				.from(DB_MATCHES)
+				.update({ state: "set" })
+				.eq(DB_MATCH_GROUP, matchId[0])
+				.eq(DB_MATCH_ROUND, Number(matchId[1]) + 1)
+				.eq(DB_MATCH_INDEX, Math.round(Number(matchId[3]) / 2))
+				.not(DB_MATCH_TEAM1, 'is', null)
+				.not(DB_MATCH_TEAM2, 'is', null);
+			}
+		} else if (Number(matchId[1]) == 3) {
+			// Also set the winner on the final match
+			if (matchId[0] == "A") {
+				var {_, error } = await db
+				.from(DB_MATCHES)
+				.update({ team1: winner })
+				.eq(DB_MATCH_GROUP, "FINAL")
+				.eq(DB_MATCH_ROUND, 1)
+				.eq(DB_MATCH_INDEX, 1);
+			} else {
+				var {_, error } = await db
+				.from(DB_MATCHES)
+				.update({ team2: winner })
+				.eq(DB_MATCH_GROUP, "FINAL")
+			}
+			if (error) console.log(error);
+			else {
+				var {_, error } = await db
+				.from(DB_MATCHES)
+				.update({ state: "set" })
+				.eq(DB_MATCH_GROUP, "FINAL")
+				.not(DB_MATCH_TEAM1, 'is', null)
+				.not(DB_MATCH_TEAM2, 'is', null);
+			}
+		}
+	}
+	loadBrackets();
 }
 
-btnWin1.addEventListener(("click"), (e) =>{setWinner(1)});
-btnWin2.addEventListener(("click"), (e) =>{setWinner(2)});
+async function confirmWinner(winner: number) {
+	Swal.fire({
+		title: "¿Estás seguro?",
+		icon: "warning",
+		showCancelButton: true,
+		confirmButtonText: "Confirmar",
+		confirmButtonColor: "#fff",
+		cancelButtonText: "Cancelar"
+	}).then((result: any) => {
+		if (result.isConfirmed) {
+			setWinner(winner);
+			popup.classList.remove("show");
+		}
+	});
+}
+
+btnWin1.addEventListener(("click"), (e) =>{confirmWinner(1)});
+btnWin2.addEventListener(("click"), (e) =>{confirmWinner(2)});
+
+async function startMatch() {
+	let match = popup.getAttribute("data-match");
+	let matchId = match.split("-");
+	// Update the match state on the database
+	var {_, error } = await db
+	.from(DB_MATCHES)
+	.update({ state: "started" })
+	.eq(DB_MATCH_GROUP, matchId[0])
+	.eq(DB_MATCH_ROUND, Number(matchId[1]))
+	.eq(DB_MATCH_INDEX, Number(matchId[3]));
+	if (error) console.log(error);
+	getState();
+}
+
+start.addEventListener("click", () => {startMatch()});
 
 document.getElementById("github-icon").addEventListener("click", () => {
 	window.open("https://github.com/Jorge-lopz/CeSports", "_github");

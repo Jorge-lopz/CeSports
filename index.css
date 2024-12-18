@@ -764,9 +764,21 @@ body {
 		padding: 10px 16px !important;
 		border-radius: 6px !important;
 		border: none !important;
-		background-color: #ffffff20 !important;
+		background-color: #ffffff15 !important;
 		color: white !important;
-		transition: background-color 0.2s ease-in-out !important;
+		transition: background-color 0.3s ease-in-out !important;
+
+		&:hover {
+			background-color: #ffffff25 !important;
+		}
+	}
+
+	.swal2-confirm {
+		background-color: #42ff7e3b !important;
+
+		&:hover {
+			background-color: #39fa7661 !important;
+		}
 	}
 }
 

@@ -608,9 +608,3 @@ window.addEventListener("keydown", (e) => {
     }
 });
 init();
-hello();
-function hello() {
-    return __awaiter(this, void 0, void 0, function* () {
-        var { _, error } = yield db.from(DB_MATCHES).update({ state: "set" }).eq(DB_MATCH_ROUND, 1).neq(DB_MATCH_GROUP, "FINAL");
-    });
-}

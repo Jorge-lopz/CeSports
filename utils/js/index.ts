@@ -557,8 +557,3 @@ window.addEventListener("keydown", (e) => {
 });
 
 init();
-hello();
-
-async function hello() {
-	var { _, error } = await db.from(DB_MATCHES).update({ state: "set" }).eq(DB_MATCH_ROUND, 1).neq(DB_MATCH_GROUP, "FINAL");
-}

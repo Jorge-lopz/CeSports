@@ -482,6 +482,10 @@ body {
 	body {
 		background-repeat: no-repeat;
 		background-image: url("./assets/bg-vertical.png");
+		background-size: cover;
+		background-attachment: fixed;
+		mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 95%, transparent 100%);
+		background-position: 50%;
 	}
 
 	#tournament {

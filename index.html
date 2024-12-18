@@ -9,6 +9,9 @@
   <script src="./dist/schema.js" defer></script>
   <script type="module" src="./dist/index.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
   <link rel="icon" type="image/png" href="./assets/icons/favicon.png" />
   <title>CeSports | Tournament</title>
 </head>
@@ -37,7 +40,7 @@
       </div>
       <div class="score-container">
         <p id="match-score">
-          <span id="team-1-score" contenteditable="true">0</span>:<span id="team-2-score" contenteditable="true">5</span>
+          <span id="team-1-score">0</span>:<span id="team-2-score">5</span>
         </p>
       </div>
       <div class="vote-bar">

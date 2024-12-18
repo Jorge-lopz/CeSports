@@ -1,4 +1,5 @@
 declare const supabase: any;
+declare const Swal: any;
 
 // Create the database connection
 var db = supabase.createClient(`https://${DB}.supabase.co`, DB_ANON_KEY, { db: { schema: "public" } });

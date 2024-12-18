@@ -13,7 +13,7 @@
 - [x] Voting system to make predictions for every game
 - [x] Tournament narrow screen list format
 - [x] Prevent voting if game hasn't started yet
-- [ ] Show realtime votes on matches popups
+- [x] Show realtime votes on matches popups
 - [ ] Winning animation
 - [x] Notifing of correct admin access and disable admin button afterwards
 - [ ] Winning team score on a different color

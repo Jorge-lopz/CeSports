@@ -95,7 +95,7 @@ body {
 		border: solid 2px #fbfbfb12;
 		backdrop-filter: blur(20px);
 		gap: 1.5rem;
-		--match-state: ;
+		--match-state: "Hola";
 		--state-color: #ffffff20;
 
 		&::after {
@@ -251,7 +251,8 @@ body {
 
 			#team-2-bar {
 				margin-left: 2px;
-				width: 50%; /* TODO - Change on load with JS based on data-percentage */
+				width: 50%;
+				transition: width 0.35s ease-in-out;
 				background-color: rgb(17, 146, 218, 0.24);
 				color: rgba(16, 160, 237, 0.8);
 
@@ -287,10 +288,9 @@ body {
 		}
 
 		.admin-buttons {
-			display: flex;
-			gap: 9vw;
+			display: none;
+			gap: 5%;
 			justify-content: space-around;
-			padding-inline: 5vh;
 
 			button {
 				padding: 10px 16px;
@@ -308,6 +308,9 @@ body {
 			}
 
 			#start {
+				&:hover {
+					background-color: #d2d2d242;
+				}
 			}
 
 			#win-team-1 {
@@ -495,7 +498,8 @@ body {
 	}
 }
 
-@media (width < 1400px) {
+/* TODO - 1400px */
+@media (width < 1200px) {
 	body {
 		overflow-y: none;
 		overscroll-behavior: contain;
@@ -503,7 +507,6 @@ body {
 		background-image: url("./assets/bg-vertical.png");
 		background-size: cover;
 		background-attachment: fixed;
-		mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 95%, transparent 100%);
 		background-position: 50%;
 	}
 
@@ -659,12 +662,6 @@ body {
 			}
 		}
 	}
-
-	.social-icons {
-		flex-direction: column;
-		bottom: 3.5rem !important;
-		right: 1.5rem !important;
-	}
 }
 
 @media (width < 1200px) {
@@ -678,16 +675,22 @@ body {
 }
 
 @media (width < 620px) {
-	.tools-icons {
+	.tools-icon {
 		display: none !important;
 	}
 
-	.social-icons {
+	.social-icon {
 		display: none !important;
 	}
 }
 
-.tools-icons {
+@media (width < 245px) {
+	body {
+		mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 95%, transparent 100%);
+	}
+}
+
+.tools-icon {
 	position: absolute;
 	bottom: 1.3rem;
 	left: 1.5rem;
@@ -711,14 +714,14 @@ body {
 	}
 }
 
-.social-icons {
+.social-icon {
 	position: absolute;
 	display: flex;
 	bottom: 1.3rem;
-	right: 4rem;
+	right: 1.5rem;
 	gap: 1rem;
-	width: 25px;
-	height: 25px;
+	width: 26px;
+	height: 26px;
 
 	img {
 		height: 100%;

@@ -244,12 +244,10 @@ function initDraw() {
     });
 }
 initDraw();
-const homeIcon = document.getElementById("home-icon");
-var adminIcon = document.getElementById("admin-icon");
-homeIcon.addEventListener("click", () => {
+document.getElementById("home-icon").addEventListener("click", () => {
     window.location.href = "/";
 });
-adminIcon.addEventListener("click", () => {
+document.getElementById("admin-icon").addEventListener("click", () => {
     login(prompt("Inserte contraseña:", "Password"));
     function login(password) {
         return __awaiter(this, void 0, void 0, function* () {

@@ -33,7 +33,69 @@ const score1 = document.getElementById("team-1-score");
 let score1Text = "";
 const score2 = document.getElementById("team-2-score");
 let score2Text = "";
+const start = document.getElementById("start");
 let teams = [];
+let admin = false;
+function getVotes() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let match = popup.getAttribute("data-match");
+        if (popup.classList.contains("show")) {
+            var { _, count, error } = yield db
+                .from(DB_VOTES)
+                .select('*', { count: 'exact', head: true })
+                .eq(DB_VOTES_MATCH, match);
+            if (error)
+                console.log(error);
+            else
+                var totalVotes = count;
+            if (totalVotes != 0) {
+                var { _, count, error } = yield db
+                    .from(DB_VOTES)
+                    .select('*', { count: 'exact', head: true })
+                    .eq(DB_VOTES_MATCH, match)
+                    .eq(DB_VOTES_TEAM, 1);
+                if (error)
+                    console.log(error);
+                else
+                    var team1Votes = count;
+                if (totalVotes != 0) {
+                    let voted1 = Math.max(((team1Votes / totalVotes) * 100) - 1, 1);
+                    let voted2 = Math.max(((totalVotes - team1Votes) / totalVotes) * 100, 1);
+                    team1Vote.setAttribute("data-percentage", `${voted1}`);
+                    team2Vote.setAttribute("data-percentage", `${voted2}`);
+                    if (localStorage.getItem(`voted-${match}`) != null) {
+                        team1Vote.style.width = `${Math.max(voted1, 7)}%`;
+                        team2Vote.style.width = `${Math.max(voted2, 7)}%`;
+                    }
+                }
+            }
+        }
+    });
+}
+function getState() {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (popup.classList.contains("show")) {
+            let matchId = popup.getAttribute("data-match").split("-");
+            let { data, error } = yield db
+                .from(DB_MATCHES)
+                .select(DB_MATCH_STATE)
+                .eq(DB_MATCH_GROUP, matchId[0])
+                .eq(DB_MATCH_ROUND, matchId[1])
+                .eq(DB_MATCH_INDEX, matchId[3]);
+            if (error) {
+                console.error(error);
+            }
+            else {
+                // TODO - Update the score based on DB and data properties on the match HTML element (on realtime)
+                // TODO - Update the match state based on DB and data properties on the match HTML element (on realtime)
+                let stateText = ["Programado", "En juego", "Finalizado"];
+                let stateColors = ["#ffffff20", "#34ac3a35", "#ffd9035"];
+                container.style.setProperty("--match-state", stateText[STATES.indexOf(data[0].state)]);
+                container.style.setProperty("--state-color", stateColors[STATES.indexOf(data[0].state)]);
+            }
+        }
+    });
+}
 function loadPopup(match) {
     return __awaiter(this, void 0, void 0, function* () {
         let matchId = match.id.split("-");
@@ -52,6 +114,16 @@ function loadPopup(match) {
                 popup.setAttribute("data-match", match.id);
                 // Fill the popup data
                 yield updatePopup();
+                if (admin && data[0].state != "set") {
+                    start.style.opacity = "0";
+                    start.style.pointerEvents = "none";
+                }
+                else {
+                    start.style.opacity = "1";
+                    start.style.pointerEvents = "all";
+                }
+                getState();
+                getVotes();
                 // Finally show the popup
                 popup.classList.add("show");
             }
@@ -60,7 +132,8 @@ function loadPopup(match) {
 }
 function updatePopup() {
     return __awaiter(this, void 0, void 0, function* () {
-        let matchId = popup.getAttribute("data-match").split("-");
+        let matchJoined = popup.getAttribute("data-match");
+        let matchId = matchJoined.split("-");
         let match = document.getElementById(matchId.join("-"));
         // Remove the voted class from both teams
         if (document.getElementById(`team-1-bar`).classList.contains("voted")) {
@@ -69,9 +142,9 @@ function updatePopup() {
         else if (document.getElementById(`team-2-bar`).classList.contains("voted"))
             document.getElementById(`team-2-bar`).classList.remove("voted");
         // See if the user already voted for this match
-        if (localStorage.getItem(`voted-${matchId}`) != null) {
+        if (localStorage.getItem(`voted-${matchJoined}`) != null) {
             // Add the voted class to the team that was voted, if any
-            document.getElementById(`team-${localStorage.getItem(`voted-${matchId}`)}-bar`).classList.add("voted");
+            document.getElementById(`team-${localStorage.getItem(`voted-${matchJoined}`)}-bar`).classList.add("voted");
             separator.classList.add("disabled");
             separator.innerHTML = "";
         }
@@ -79,6 +152,11 @@ function updatePopup() {
             separator.innerHTML = "VOTA";
             separator.classList.remove("disabled");
         }
+        // Reset the votes
+        team1Vote.setAttribute("data-percentage", `50`);
+        team1Vote.style.width = "50%";
+        team2Vote.setAttribute("data-percentage", `50`);
+        team2Vote.style.width = "50%";
         // Update the logos on the popup
         const matchImages = match.querySelectorAll(".team-logo");
         const matchNames = match.querySelectorAll(".team-name");
@@ -89,24 +167,6 @@ function updatePopup() {
             element.setAttribute("src", `${teamImage}`);
             elNames[idx].textContent = `${teamName}`;
         });
-        // Update based on the db
-        let { state, error } = yield db
-            .from(DB_MATCHES)
-            .select(DB_MATCH_STATE)
-            .eq(DB_MATCH_GROUP, matchId[0])
-            .eq(DB_MATCH_ROUND, matchId[1])
-            .eq(DB_MATCH_INDEX, matchId[3]);
-        if (error) {
-            console.error(error);
-        }
-        else {
-            // TODO - Update the score based on DB and data properties on the match HTML element (on realtime)
-            // TODO - Update the match state based on DB and data properties on the match HTML element (on realtime)
-            let stateText = ["Programado", "En juego", "Finalizado"];
-            let stateColors = ["#ffffff20", "#34ac3a35", "#ffd9035"];
-            container.style.setProperty("--match-state", stateText[STATES.indexOf(state)]);
-            container.style.setProperty("--state-color", stateColors[STATES.indexOf(state)]);
-        }
     });
 }
 popupBg.addEventListener("click", () => {
@@ -118,19 +178,22 @@ const getWindowSize = () => ({
 });
 function detectResize() {
     let size = getWindowSize();
-    if (size.width < 1400)
-        tournament = document.getElementById("tournament-mobile");
+    if (size.width < 1200)
+        tournament = document.getElementById("tournament-mobile"); // TODO - 1400px
     else
         tournament = document.getElementById("tournament");
     getTournamentElements(); // Update tournament elements
     window.addEventListener("resize", () => {
         size = getWindowSize();
         // Same as CSS Breakpoint
-        if (size.width < 1400)
-            tournament = document.getElementById("tournament-mobile");
+        if (size.width < 1200)
+            var temp = document.getElementById("tournament-mobile"); // TODO - 1400px
         else
+            var temp = document.getElementById("tournament");
+        if (temp != tournament) {
             tournament = document.getElementById("tournament");
-        getTournamentElements(); // Update tournament elements
+            getTournamentElements(); // Update tournament elements
+        }
     });
 }
 function getTeams() {
@@ -175,10 +238,17 @@ function init() {
     return __awaiter(this, void 0, void 0, function* () {
         detectResize();
         loadBrackets();
+        getTournamentElements();
+        // Configure the vote update every 3 seconds
+        setInterval(() => __awaiter(this, void 0, void 0, function* () {
+            getVotes();
+            getState();
+        }), 3000);
     });
 }
 function initAdmin() {
     return __awaiter(this, void 0, void 0, function* () {
+        admin = true;
         // Prevent newline and non-number characters insertion on the score inputs on the popup
         function handleInput(scoreElement) {
             scoreElement.setAttribute("contenteditable", "true");
@@ -198,6 +268,7 @@ function initAdmin() {
         handleInput(score2);
         // Remove votes from the popup and add win buttons instead
         document.querySelector(".vote-bar").style.display = "none";
+        document.querySelector(".admin-buttons").style.display = "flex";
     });
 }
 var adminIcon = document.getElementById("admin-icon");
@@ -229,36 +300,19 @@ adminIcon.addEventListener("click", () => {
         });
     }
 });
-function vote() {
+function vote(team) {
     return __awaiter(this, void 0, void 0, function* () {
-        // TODO - Use the data info on match to see if it has started (based on DB and realtime)
-        let match = popup.getAttribute("data-match").split("-");
-        var { matchId, error } = yield db
-            .from(DB_MATCHES)
-            .select(DB_MATCH_ID)
-            .eq(DB_MATCH_GROUP, match[0])
-            .eq(DB_MATCH_ROUND, match[1])
-            .eq(DB_MATCH_INDEX, match[3]);
-        console.log(matchId); // TODO - Make the database contain the team order
-        if (error)
-            return false;
-        var { teamId, error } = yield db.from(DB_MATCHES).select(`team${match[3]}`).eq(DB_MATCH_ID, matchId);
-        if (error)
-            return false;
-        var { data, error } = yield db.from(DB_VOTES).insert({
-            match: matchId,
-            team: teamId,
-        });
-        if (error)
-            return false;
-        console.log(data.status == 201);
-        return data.status == 201;
+        // TODO - Use the data info on match to see if it has started (based on DBe)
+        let match = popup.getAttribute("data-match");
+        var { data, error } = yield db
+            .from(DB_VOTES);
+        return true;
     });
 }
 team1Vote.addEventListener("click", () => {
     if (localStorage.getItem(`voted-${popup.getAttribute("data-match")}`) != null)
         return;
-    let voted = vote();
+    let voted = vote(1);
     if (voted) {
         localStorage.setItem(`voted-${popup.getAttribute("data-match")}`, "1");
         updatePopup();
@@ -267,11 +321,14 @@ team1Vote.addEventListener("click", () => {
 team2Vote.addEventListener("click", () => {
     if (localStorage.getItem(`voted-${popup.getAttribute("data-match")}`) != null)
         return;
-    let voted = vote();
+    let voted = vote(2);
     if (voted) {
         localStorage.setItem(`voted-${popup.getAttribute("data-match")}`, "2");
         updatePopup();
     }
 });
+document.getElementById("github-icon").addEventListener("click", () => {
+    window.open("https://github.com/Jorge-lopz/CeSports", "_github");
+});
 init();
-initAdmin();
+//initAdmin();

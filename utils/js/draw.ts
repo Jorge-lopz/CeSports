@@ -244,13 +244,10 @@ async function initDraw() {
 
 initDraw();
 
-const homeIcon = document.getElementById("home-icon");
-var adminIcon = document.getElementById("admin-icon");
-
-homeIcon.addEventListener("click", () => {
+document.getElementById("home-icon").addEventListener("click", () => {
 	window.location.href = "/";
 });
-adminIcon.addEventListener("click", () => {
+document.getElementById("admin-icon").addEventListener("click", () => {
 	login(prompt("Inserte contraseña:", "Password"));
 	async function login(password: string) {
 		let { data, err } = await db.rpc("check_admin_pass", { pass: password });

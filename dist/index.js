@@ -38,7 +38,7 @@ let teams = [];
 let admin = false;
 function getScore() {
     return __awaiter(this, void 0, void 0, function* () {
-        if (popup.classList.contains("show")) { // TODO - 1400 Breakpoint
+        if (popup.classList.contains("show") && (document.activeElement !== score1 && document.activeElement !== score2)) { // TODO - 1400 Breakpoint
             let matchId = popup.getAttribute("data-match").split("-");
             var { data, error } = yield db
                 .from(DB_MATCHES)

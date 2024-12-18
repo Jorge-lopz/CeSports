@@ -59,7 +59,7 @@ async function getScore(){
 			.eq(DB_MATCH_INDEX, mobileMatchId[3]);
 			if (error) console.log(error);
 			else {
-				matches[i].querySelector("score").textContent = `${data[0].t1_goals || 0}:${data[0].t2_goals || 0}`;
+				matches[i].querySelector(".score").textContent = `${data[0].t1_goals || 0}:${data[0].t2_goals || 0}`;
 			}
 		}
 	}

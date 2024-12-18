@@ -24,13 +24,46 @@ const team1Vote = document.getElementById("team-1-bar");
 const separator = document.getElementById("separator");
 const team2Vote = document.getElementById("team-2-bar");
 const score1 = document.getElementById("team-1-score");
-let score1Text = "";
 const score2 = document.getElementById("team-2-score");
-let score2Text = "";
 const start = document.getElementById("start");
+const btnWin1 = document.getElementById("win-team-1");
+const btnWin2 = document.getElementById("win-team-2");
 
 let teams = [];
 let admin = false;
+
+async function getScore(){
+	if (popup.classList.contains("show")) { // TODO - 1400 Breakpoint
+		let matchId = popup.getAttribute("data-match").split("-")
+		var { data, error } = await db
+		.from(DB_MATCHES)
+		.select(`${DB_MATCH_GOALS1}, ${DB_MATCH_GOALS2}`)
+		.eq(DB_MATCH_GROUP, matchId[0])
+		.eq(DB_MATCH_ROUND, matchId[1])
+		.eq(DB_MATCH_INDEX, matchId[3]);
+		if (error) console.log(error);
+		else {
+			score1.textContent = data[0].t1_goals || 0;
+			score2.textContent = data[0].t2_goals || 0;
+		}
+	}
+	else if (getWindowSize().width < 1200) { // TODO - 1400 Breakpoint
+		const matches = tournament.querySelectorAll(".match");
+		for (let i = 0; i < matches.length; i++) {
+			let mobileMatchId = matches[i].id.split("-");
+			var { data, error } = await db
+			.from(DB_MATCHES)
+			.select(`${DB_MATCH_GOALS1}, ${DB_MATCH_GOALS2}`)
+			.eq(DB_MATCH_GROUP, mobileMatchId[0])
+			.eq(DB_MATCH_ROUND, mobileMatchId[1])
+			.eq(DB_MATCH_INDEX, mobileMatchId[3]);
+			if (error) console.log(error);
+			else {
+				matches[i].querySelector("score").textContent = `${data[0].t1_goals || 0}:${data[0].t2_goals || 0}`;
+			}
+		}
+	}
+}
 
 async function getVotes() {
 	let match = popup.getAttribute("data-match")
@@ -81,6 +114,30 @@ async function getState() {
 			let stateColors = ["#ffffff20", "#34ac3a50", "#f2423650"];
 			(container as HTMLElement).setAttribute("match-state", stateText[STATES.indexOf(data[0].state)]);
 			(container as HTMLElement).style.setProperty("--state-color", stateColors[STATES.indexOf(data[0].state)]);
+			// Update buttons after state update
+			if (admin) (document.querySelector(".admin-buttons") as HTMLElement).style.display = "flex";
+			if (admin && data[0].state != "set") {
+				start.style.opacity = "0";
+				start.style.pointerEvents = "none";
+			} else {
+				start.style.opacity = "1";
+				start.style.pointerEvents = "all";
+			}
+			if (admin && data[0].state != "started" && data[0].round == 3) {
+				start.style.opacity = "1";
+				start.style.pointerEvents = "all";
+			}
+			if (admin && (data[0].state == "set" || (data[0].state != "started" && data[0].round == 3))) {
+				document.getElementById("win-team-1").style.opacity = "0";
+				document.getElementById("win-team-1").style.pointerEvents = "none";
+				document.getElementById("win-team-2").style.opacity = "0";
+				document.getElementById("win-team-2").style.pointerEvents = "none";
+			} else  {
+				document.getElementById("win-team-1").style.opacity = "1";
+				document.getElementById("win-team-1").style.pointerEvents = "all";
+				document.getElementById("win-team-2").style.opacity = "1";
+				document.getElementById("win-team-2").style.pointerEvents = "all";
+			}
 		}
 	}
 }
@@ -89,13 +146,12 @@ async function loadPopup(match: Element) {
 	let matchId = match.id.split("-");
 	var { data, error } = await db
 		.from(DB_MATCHES)
-		.select(DB_MATCH_STATE)
+		.select(`${DB_MATCH_STATE}, ${DB_MATCH_ROUND}`)
 		.eq(DB_MATCH_GROUP, matchId[0])
 		.eq(DB_MATCH_ROUND, Number(matchId[1]))
 		.eq(DB_MATCH_INDEX, Number(matchId[3]));
-	if (error) {
-		console.log(error);
-	} else {
+	if (error) console.log(error);
+	else {
 		if (data[0].state != null) {
 			// Configure the popup to the right match
 			popup.setAttribute("data-match", match.id);
@@ -111,8 +167,7 @@ async function loadPopup(match: Element) {
 			});
 			// Fill the popup data
 			await updatePopup();
-			if (admin && data[0].state == "finished") (document.querySelector(".admin-buttons") as HTMLElement).style.display = "none";
-			else if (admin) (document.querySelector(".admin-buttons") as HTMLElement).style.display = "flex";
+			if (admin) (document.querySelector(".admin-buttons") as HTMLElement).style.display = "flex";
 			if (admin && data[0].state != "set") {
 				start.style.opacity = "0";
 				start.style.pointerEvents = "none";
@@ -120,7 +175,11 @@ async function loadPopup(match: Element) {
 				start.style.opacity = "1";
 				start.style.pointerEvents = "all";
 			}
-			if (admin && data[0].state != "started") {
+			if (admin && data[0].state != "started" && data[0].round == 3) {
+				start.style.opacity = "1";
+				start.style.pointerEvents = "all";
+			}
+			if (admin && (data[0].state == "set" || (data[0].state != "started" && data[0].round == 3))) {
 				document.getElementById("win-team-1").style.opacity = "0";
 				document.getElementById("win-team-1").style.pointerEvents = "none";
 				document.getElementById("win-team-2").style.opacity = "0";
@@ -133,6 +192,7 @@ async function loadPopup(match: Element) {
 			}
 			getVotes();
 			getState();
+			getScore();
 			// Finally show the popup
 			popup.classList.add("show");
 		}
@@ -222,13 +282,19 @@ async function loadBrackets() {
 	teams = await getTeams();
 	var { data, error } = await db
 		.from(DB_MATCHES)
-		.select(`${DB_MATCH_GROUP}, ${DB_MATCH_ROUND}, ${DB_MATCH_INDEX}, ${DB_MATCH_TEAM1}, ${DB_MATCH_TEAM2}`);
+		.select(`${DB_MATCH_GROUP}, ${DB_MATCH_ROUND}, ${DB_MATCH_INDEX}, ${DB_MATCH_TEAM1}, ${DB_MATCH_TEAM2}, ${DB_MATCH_WINNER}`);
 	if (error) console.error(error);
 	else {
 		if (error) console.error(error);
 		for (let i = 0; i < data.length; i++) {
 			let match = data[i];
 			if (match[DB_MATCH_TEAM1] != null || match[DB_MATCH_TEAM2] != null) loadMatch(match);
+			if (match[DB_MATCH_WINNER] != null) {
+				let elMatch = tournament.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-match-${match[DB_MATCH_INDEX]}`);
+				let loser = elMatch.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-${match[DB_MATCH_INDEX]}-team-${match[DB_MATCH_WINNER] == 2 ? 1 : 2}`);
+				loser.classList.add("loser");
+				elMatch.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-${match[DB_MATCH_INDEX]}-team-${match[DB_MATCH_WINNER]}`).classList.remove("loser");
+			}
 		}
 	}
 }
@@ -239,9 +305,11 @@ async function init() {
 	getTournamentElements();
 	// Configure the vote update every 3 seconds
 	setInterval(async () => {
+		getScore();
 		getVotes();
 		getState();
-	}, 1500);
+		loadBrackets();
+	}, 2000);
 }
 
 async function updateScore(scoreElement: any) {
@@ -295,7 +363,6 @@ async function initAdmin() {
 
 var adminIcon = document.getElementById("admin-icon");
 adminIcon.addEventListener("click", () => {
-	
 	async function login() {
 		var { value: password } = await Swal.fire({
 			input: "password",
@@ -313,6 +380,8 @@ adminIcon.addEventListener("click", () => {
 			else {
 				if (data) {
 					console.log("Logged in");
+					adminIcon.style.opacity = "0.8";
+					adminIcon.style.pointerEvents = "none";
 					let { _, error } = await db.auth.signInWithPassword({
 						email: "cesports@cesjuanpablosegundo.es",
 						password: password,
@@ -356,6 +425,21 @@ team2Vote.addEventListener("click", () => {
 		getVotes();
 	}
 });
+
+async function setWinner(winner: number) {
+	let match = popup.getAttribute("data-match").split("-");
+	var {_, error } = await db
+	.from(DB_MATCHES)
+	.update({ winner: winner, state: "finished" })
+	.eq(DB_MATCH_GROUP, match[0])
+	.eq(DB_MATCH_ROUND, Number(match[1]))
+	.eq(DB_MATCH_INDEX, Number(match[3]));
+	if (error) console.log(error);
+	popup.classList.remove("show");
+}
+
+btnWin1.addEventListener(("click"), (e) =>{setWinner(1)});
+btnWin2.addEventListener(("click"), (e) =>{setWinner(2)});
 
 document.getElementById("github-icon").addEventListener("click", () => {
 	window.open("https://github.com/Jorge-lopz/CeSports", "_github");

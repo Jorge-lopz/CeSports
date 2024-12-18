@@ -6,13 +6,12 @@
 
 ## TODO
 
-- [ ] Turn team SVGs into same size PNGs
+- [x] Turn team SVGs into same size PNGs
 - [ ] Admin access and features
-- [ ] Two-way semifinals
 - [ ] Roulette sounds on /draw
 - [ ] Tournament bracket page DB connection
 - [ ] Voting system to make predictions for every game
-- [ ] Tournament narrow screen list format
+- [x] Tournament narrow screen list format
 - [x] Prevent voting if game hasn't started yet
 - [ ] Show realtime votes on matches popups
 - [ ] Winning animation

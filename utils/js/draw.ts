@@ -232,15 +232,13 @@ async function initAdminDraw() {
 }
 
 async function initDraw() {
-	//rollButton.classList.add("disabled"); // TODO - Uncomment
+	rollButton.classList.add("disabled");
 	await getAvailableGroups();
 	await getAvailableTeams();
 	await getAvailebleClasses();
 	shuffleArray(teamsArray);
 	shuffleArray(classesArray);
 	generateRoulettes();
-	console.log(teamsArray);
-	console.log(classesArray);
 }
 
 initDraw();
@@ -249,26 +247,38 @@ document.getElementById("home-icon").addEventListener("click", () => {
 	window.location.href = "/";
 });
 document.getElementById("admin-icon").addEventListener("click", () => {
-	login(prompt("Inserte contraseña:", "Password"));
-	async function login(password: string) {
-		let { data, err } = await db.rpc("check_admin_pass", { pass: password });
-		if (err) {
-			console.error(err);
-		} else {
-			console.log("Logging in");
-			if (data) {
-				console.log("Logged in");
-				let { _, error } = await db.auth.signInWithPassword({
-					email: "cesports@cesjuanpablosegundo.es",
-					password: password,
-				});
-				if (error) {
-					console.log("DB Authentication failed");
-				} else {
-					console.log("Acceso concedido");
-					initAdminDraw();
+	async function login() {
+		var { value: password } = await Swal.fire({
+			input: "password",
+			inputLabel: "Enter password:",
+			inputPlaceholder: "Password",
+			inputAttributes: {
+				maxlength: "12",
+				autocapitalize: "off",
+				autocorrect: "off",
+			},
+		});
+		if (password) {
+			var { data, error } = await db.rpc("check_admin_pass", { pass: password });
+			if (error) console.error(error);
+			else {
+				if (data) {
+					console.log("Logged in");
+					document.getElementById("admin-icon").style.opacity = "0.8";
+					document.getElementById("admin-icon").style.pointerEvents = "none";
+					let { _, error } = await db.auth.signInWithPassword({
+						email: "cesports@cesjuanpablosegundo.es",
+						password: password,
+					});
+					if (error) {
+						console.log("DB Authentication failed");
+					} else {
+						console.log("Acceso concedido");
+						initAdmin();
+					}
 				}
 			}
 		}
 	}
+	login();
 });

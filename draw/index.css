@@ -303,3 +303,25 @@ body {
 #home-icon {
 	left: 25px;
 }
+
+.swal2-popup {
+	padding: 2vw 3vw !important;
+	background-color: #111111aa !important;
+	backdrop-filter: blur(20px) !important;
+	border: solid 2px #fbfbfb12 !important;
+	border-radius: 14px !important;
+
+	button {
+		padding: 10px 16px !important;
+		border-radius: 6px !important;
+		border: none !important;
+		background-color: #ffffff20 !important;
+		color: white !important;
+		transition: background-color 0.2s ease-in-out !important;
+	}
+}
+
+.swal2-container {
+	background-color: rgba(0, 0, 0, 0.562) !important;
+	transition: opacity 0.3s ease-in !important;
+}

@@ -30,12 +30,48 @@ const team1Vote = document.getElementById("team-1-bar");
 const separator = document.getElementById("separator");
 const team2Vote = document.getElementById("team-2-bar");
 const score1 = document.getElementById("team-1-score");
-let score1Text = "";
 const score2 = document.getElementById("team-2-score");
-let score2Text = "";
 const start = document.getElementById("start");
+const btnWin1 = document.getElementById("win-team-1");
+const btnWin2 = document.getElementById("win-team-2");
 let teams = [];
 let admin = false;
+function getScore() {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (popup.classList.contains("show")) { // TODO - 1400 Breakpoint
+            let matchId = popup.getAttribute("data-match").split("-");
+            var { data, error } = yield db
+                .from(DB_MATCHES)
+                .select(`${DB_MATCH_GOALS1}, ${DB_MATCH_GOALS2}`)
+                .eq(DB_MATCH_GROUP, matchId[0])
+                .eq(DB_MATCH_ROUND, matchId[1])
+                .eq(DB_MATCH_INDEX, matchId[3]);
+            if (error)
+                console.log(error);
+            else {
+                score1.textContent = data[0].t1_goals || 0;
+                score2.textContent = data[0].t2_goals || 0;
+            }
+        }
+        else if (getWindowSize().width < 1200) { // TODO - 1400 Breakpoint
+            const matches = tournament.querySelectorAll(".match");
+            for (let i = 0; i < matches.length; i++) {
+                let mobileMatchId = matches[i].id.split("-");
+                var { data, error } = yield db
+                    .from(DB_MATCHES)
+                    .select(`${DB_MATCH_GOALS1}, ${DB_MATCH_GOALS2}`)
+                    .eq(DB_MATCH_GROUP, mobileMatchId[0])
+                    .eq(DB_MATCH_ROUND, mobileMatchId[1])
+                    .eq(DB_MATCH_INDEX, mobileMatchId[3]);
+                if (error)
+                    console.log(error);
+                else {
+                    matches[i].querySelector("score").textContent = `${data[0].t1_goals || 0}:${data[0].t2_goals || 0}`;
+                }
+            }
+        }
+    });
+}
 function getVotes() {
     return __awaiter(this, void 0, void 0, function* () {
         let match = popup.getAttribute("data-match");
@@ -92,6 +128,33 @@ function getState() {
                 let stateColors = ["#ffffff20", "#34ac3a50", "#f2423650"];
                 container.setAttribute("match-state", stateText[STATES.indexOf(data[0].state)]);
                 container.style.setProperty("--state-color", stateColors[STATES.indexOf(data[0].state)]);
+                // Update buttons after state update
+                if (admin)
+                    document.querySelector(".admin-buttons").style.display = "flex";
+                if (admin && data[0].state != "set") {
+                    start.style.opacity = "0";
+                    start.style.pointerEvents = "none";
+                }
+                else {
+                    start.style.opacity = "1";
+                    start.style.pointerEvents = "all";
+                }
+                if (admin && data[0].state != "started" && data[0].round == 3) {
+                    start.style.opacity = "1";
+                    start.style.pointerEvents = "all";
+                }
+                if (admin && (data[0].state == "set" || (data[0].state != "started" && data[0].round == 3))) {
+                    document.getElementById("win-team-1").style.opacity = "0";
+                    document.getElementById("win-team-1").style.pointerEvents = "none";
+                    document.getElementById("win-team-2").style.opacity = "0";
+                    document.getElementById("win-team-2").style.pointerEvents = "none";
+                }
+                else {
+                    document.getElementById("win-team-1").style.opacity = "1";
+                    document.getElementById("win-team-1").style.pointerEvents = "all";
+                    document.getElementById("win-team-2").style.opacity = "1";
+                    document.getElementById("win-team-2").style.pointerEvents = "all";
+                }
             }
         }
     });
@@ -101,13 +164,12 @@ function loadPopup(match) {
         let matchId = match.id.split("-");
         var { data, error } = yield db
             .from(DB_MATCHES)
-            .select(DB_MATCH_STATE)
+            .select(`${DB_MATCH_STATE}, ${DB_MATCH_ROUND}`)
             .eq(DB_MATCH_GROUP, matchId[0])
             .eq(DB_MATCH_ROUND, Number(matchId[1]))
             .eq(DB_MATCH_INDEX, Number(matchId[3]));
-        if (error) {
+        if (error)
             console.log(error);
-        }
         else {
             if (data[0].state != null) {
                 // Configure the popup to the right match
@@ -124,9 +186,7 @@ function loadPopup(match) {
                 });
                 // Fill the popup data
                 yield updatePopup();
-                if (admin && data[0].state == "finished")
-                    document.querySelector(".admin-buttons").style.display = "none";
-                else if (admin)
+                if (admin)
                     document.querySelector(".admin-buttons").style.display = "flex";
                 if (admin && data[0].state != "set") {
                     start.style.opacity = "0";
@@ -136,7 +196,11 @@ function loadPopup(match) {
                     start.style.opacity = "1";
                     start.style.pointerEvents = "all";
                 }
-                if (admin && data[0].state != "started") {
+                if (admin && data[0].state != "started" && data[0].round == 3) {
+                    start.style.opacity = "1";
+                    start.style.pointerEvents = "all";
+                }
+                if (admin && (data[0].state == "set" || (data[0].state != "started" && data[0].round == 3))) {
                     document.getElementById("win-team-1").style.opacity = "0";
                     document.getElementById("win-team-1").style.pointerEvents = "none";
                     document.getElementById("win-team-2").style.opacity = "0";
@@ -150,6 +214,7 @@ function loadPopup(match) {
                 }
                 getVotes();
                 getState();
+                getScore();
                 // Finally show the popup
                 popup.classList.add("show");
             }
@@ -246,7 +311,7 @@ function loadBrackets() {
         teams = yield getTeams();
         var { data, error } = yield db
             .from(DB_MATCHES)
-            .select(`${DB_MATCH_GROUP}, ${DB_MATCH_ROUND}, ${DB_MATCH_INDEX}, ${DB_MATCH_TEAM1}, ${DB_MATCH_TEAM2}`);
+            .select(`${DB_MATCH_GROUP}, ${DB_MATCH_ROUND}, ${DB_MATCH_INDEX}, ${DB_MATCH_TEAM1}, ${DB_MATCH_TEAM2}, ${DB_MATCH_WINNER}`);
         if (error)
             console.error(error);
         else {
@@ -256,6 +321,12 @@ function loadBrackets() {
                 let match = data[i];
                 if (match[DB_MATCH_TEAM1] != null || match[DB_MATCH_TEAM2] != null)
                     loadMatch(match);
+                if (match[DB_MATCH_WINNER] != null) {
+                    let elMatch = tournament.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-match-${match[DB_MATCH_INDEX]}`);
+                    let loser = elMatch.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-${match[DB_MATCH_INDEX]}-team-${match[DB_MATCH_WINNER] == 2 ? 1 : 2}`);
+                    loser.classList.add("loser");
+                    elMatch.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-${match[DB_MATCH_INDEX]}-team-${match[DB_MATCH_WINNER]}`).classList.remove("loser");
+                }
             }
         }
     });
@@ -267,9 +338,11 @@ function init() {
         getTournamentElements();
         // Configure the vote update every 3 seconds
         setInterval(() => __awaiter(this, void 0, void 0, function* () {
+            getScore();
             getVotes();
             getState();
-        }), 1500);
+            loadBrackets();
+        }), 2000);
     });
 }
 function updateScore(scoreElement) {
@@ -347,6 +420,8 @@ adminIcon.addEventListener("click", () => {
                 else {
                     if (data) {
                         console.log("Logged in");
+                        adminIcon.style.opacity = "0.8";
+                        adminIcon.style.pointerEvents = "none";
                         let { _, error } = yield db.auth.signInWithPassword({
                             email: "cesports@cesjuanpablosegundo.es",
                             password: password,
@@ -394,6 +469,22 @@ team2Vote.addEventListener("click", () => {
         getVotes();
     }
 });
+function setWinner(winner) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let match = popup.getAttribute("data-match").split("-");
+        var { _, error } = yield db
+            .from(DB_MATCHES)
+            .update({ winner: winner, state: "finished" })
+            .eq(DB_MATCH_GROUP, match[0])
+            .eq(DB_MATCH_ROUND, Number(match[1]))
+            .eq(DB_MATCH_INDEX, Number(match[3]));
+        if (error)
+            console.log(error);
+        popup.classList.remove("show");
+    });
+}
+btnWin1.addEventListener(("click"), (e) => { setWinner(1); });
+btnWin2.addEventListener(("click"), (e) => { setWinner(2); });
 document.getElementById("github-icon").addEventListener("click", () => {
     window.open("https://github.com/Jorge-lopz/CeSports", "_github");
 });

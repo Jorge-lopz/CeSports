@@ -122,12 +122,15 @@ async function getState() {
 			} else {
 				start.style.opacity = "1";
 				start.style.pointerEvents = "all";
+				start.innerText = "Iniciar";
 			}
-			if (admin && data[0].state != "started" && data[0].round == 3) {
+			if (admin && data[0].state != "started" && matchId[1] == "3") {
 				start.style.opacity = "1";
 				start.style.pointerEvents = "all";
+				// If semifinals, change button text
+				if (data[0].state == "finished" && matchId[1] == "3") start.innerText = "2ª vuelta";
 			}
-			if (admin && (data[0].state == "set" || (data[0].state != "started" && data[0].round == 3))) {
+			if (admin && (data[0].state == "set")) {
 				document.getElementById("win-team-1").style.opacity = "0";
 				document.getElementById("win-team-1").style.pointerEvents = "none";
 				document.getElementById("win-team-2").style.opacity = "0";
@@ -146,7 +149,7 @@ async function loadPopup(match: Element) {
 	let matchId = match.id.split("-");
 	var { data, error } = await db
 		.from(DB_MATCHES)
-		.select(`${DB_MATCH_STATE}, ${DB_MATCH_ROUND}`)
+		.select(`${DB_MATCH_STATE}`)
 		.eq(DB_MATCH_GROUP, matchId[0])
 		.eq(DB_MATCH_ROUND, Number(matchId[1]))
 		.eq(DB_MATCH_INDEX, Number(matchId[3]));
@@ -174,12 +177,15 @@ async function loadPopup(match: Element) {
 			} else {
 				start.style.opacity = "1";
 				start.style.pointerEvents = "all";
+				start.innerText = "Iniciar";
 			}
-			if (admin && data[0].state != "started" && data[0].round == 3) {
+			if (admin && data[0].state != "started" && matchId[1] == "3") {
 				start.style.opacity = "1";
 				start.style.pointerEvents = "all";
+				// If semifinals, change button text
+				if (data[0].state == "finished" && matchId[1] == "3") start.innerText = "2ª vuelta";
 			}
-			if (admin && (data[0].state == "set" || (data[0].state != "started" && data[0].round == 3))) {
+			if (admin && (data[0].state == "set")) {
 				document.getElementById("win-team-1").style.opacity = "0";
 				document.getElementById("win-team-1").style.pointerEvents = "none";
 				document.getElementById("win-team-2").style.opacity = "0";
@@ -370,7 +376,7 @@ adminIcon.addEventListener("click", () => {
 	async function login() {
 		var { value: password } = await Swal.fire({
 			input: "password",
-			inputLabel: "Enter password:iLUgJ3UMB35H", // TODO - Remove password
+			inputLabel: "Enter password:", // TODO - Remove password
 			inputPlaceholder: "Password",
 			inputAttributes: {
 			  maxlength: "12",
@@ -548,4 +554,4 @@ window.addEventListener("keydown", (e) => {
 })
 
 init();
-initAdmin();
+initAdmin()

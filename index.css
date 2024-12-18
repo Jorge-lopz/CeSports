@@ -396,7 +396,7 @@ body {
 					margin-top: 5vh;
 					margin-left: 10px;
 					height: calc(100% - 10vh);
-					width: min(25px, 20%);
+					width: min(20px, 20%);
 					border-radius: 0px 8px 8px 0px;
 					border-top: solid var(--bracket-color) 2px;
 					border-right: solid var(--bracket-color) 2px;
@@ -408,7 +408,7 @@ body {
 					position: absolute;
 					top: 50%;
 					left: calc(100% + 1px);
-					width: 20px;
+					width: 16px;
 					height: 1.8px;
 					background-color: var(--bracket-color);
 					display: block;

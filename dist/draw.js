@@ -117,7 +117,7 @@ function generateRoulettes() {
 function saveTeamsClass(teamName, classInitials) {
     return __awaiter(this, void 0, void 0, function* () {
         let group = groups["A"] > 0 && groups["B"] > 0 ? (Math.random() < 0.5 ? "A" : "B") : groups["A"] > 0 ? "A" : groups["B"] > 0 ? "B" : null;
-        console.log(group);
+        console.log(teamsArray[0], " -> ", classesArray[0], "[", group, "]");
         var { _, error } = yield db.from(DB_CLASSES).update({ selected: true }).eq(DB_CLASS_INITIALS, classInitials);
         if (error)
             console.error(error);
@@ -163,7 +163,7 @@ function saveTeamsClass(teamName, classInitials) {
 }
 function setInitialMatchesState() {
     return __awaiter(this, void 0, void 0, function* () {
-        var { _, error } = yield db.from(DB_MATCHES).update({ state: "set" }).eq(DB_MATCH_ROUND, 1);
+        var { _, error } = yield db.from(DB_MATCHES).update({ state: "set" }).eq(DB_MATCH_ROUND, 1).not(DB_MATCH_GROUP, "is", "FINAL");
         if (error)
             console.error(error);
     });
@@ -173,7 +173,6 @@ rollButton.addEventListener("click", () => {
         rollButton.classList.add("disabled");
         teamRoulette.style.opacity = "0";
         classRoulette.style.opacity = "0";
-        console.log(teamsArray[0], " -> ", classesArray[0]);
         saveTeamsClass(teamsArray[0], classesArray[0]);
         setTimeout(() => {
             generateRoulettes();
@@ -265,7 +264,7 @@ document.getElementById("admin-icon").addEventListener("click", () => {
                     console.error(error);
                 else {
                     if (data) {
-                        console.log("Logged in");
+                        console.log("Admin?");
                         document.getElementById("admin-icon").style.opacity = "0.8";
                         document.getElementById("admin-icon").style.pointerEvents = "none";
                         let { _, error } = yield db.auth.signInWithPassword({

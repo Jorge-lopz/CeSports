@@ -387,7 +387,7 @@ adminIcon.addEventListener("click", () => {
 			if (error) console.error(error);
 			else {
 				if (data) {
-					console.log("Logged in");
+					console.log("Admin?");
 					adminIcon.style.opacity = "0.8";
 					adminIcon.style.pointerEvents = "none";
 					let { _, error } = await db.auth.signInWithPassword({
@@ -557,4 +557,8 @@ window.addEventListener("keydown", (e) => {
 });
 
 init();
-initAdmin();
+hello();
+
+async function hello() {
+	var { _, error } = await db.from(DB_MATCHES).update({ state: "set" }).eq(DB_MATCH_ROUND, 1).neq(DB_MATCH_GROUP, "FINAL");
+}

@@ -428,7 +428,7 @@ adminIcon.addEventListener("click", () => {
                     console.error(error);
                 else {
                     if (data) {
-                        console.log("Logged in");
+                        console.log("Admin?");
                         adminIcon.style.opacity = "0.8";
                         adminIcon.style.pointerEvents = "none";
                         let { _, error } = yield db.auth.signInWithPassword({
@@ -608,4 +608,9 @@ window.addEventListener("keydown", (e) => {
     }
 });
 init();
-initAdmin();
+hello();
+function hello() {
+    return __awaiter(this, void 0, void 0, function* () {
+        var { _, error } = yield db.from(DB_MATCHES).update({ state: "set" }).eq(DB_MATCH_ROUND, 1).neq(DB_MATCH_GROUP, "FINAL");
+    });
+}

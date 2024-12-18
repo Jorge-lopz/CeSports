@@ -17,14 +17,21 @@
 	}
 }
 
+html {
+	overflow: hidden;
+	height: 100%;
+}
+
 body {
 	overflow: hidden;
 	width: 100svw;
-	height: 100svh;
+	height: 100%;
 	display: flex;
 	justify-content: center;
 	background-image: url("./assets/bg.png");
 	background-size: cover;
+	scroll-behavior: smooth;
+	scrollbar-gutter: stable;
 }
 
 .match-pop-up {
@@ -35,12 +42,15 @@ body {
 	justify-content: center;
 	align-items: center;
 	position: absolute;
+	opacity: 0;
+	pointer-events: none;
 	transform: translateY(-85vh);
 	color: white;
 	transition: transform 0.2s 0.35s ease-in-out;
 
 	&.show {
 		opacity: 1;
+		pointer-events: all;
 		transform: none;
 		transition: transform 0.2s ease-in-out;
 
@@ -487,11 +497,13 @@ body {
 
 @media (width < 1400px) {
 	body {
+		overflow-y: none;
+		overscroll-behavior: contain;
 		background-repeat: no-repeat;
 		background-image: url("./assets/bg-vertical.png");
 		background-size: cover;
 		background-attachment: fixed;
-		mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 95%, transparent 100%);
+		mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 95%, transparent 100%);
 		background-position: 50%;
 	}
 

@@ -117,7 +117,7 @@ async function generateRoulettes() {
 
 async function saveTeamsClass(teamName: string, classInitials: string) {
 	let group = groups["A"] > 0 && groups["B"] > 0 ? (Math.random() < 0.5 ? "A" : "B") : groups["A"] > 0 ? "A" : groups["B"] > 0 ? "B" : null;
-	console.log(teamsArray[0], " -> ", classesArray[0], "[", group, "]");
+	console.log(teamName[0], " -> ", classInitials[0], "[", group, "]");
 	var { _, error } = await db.from(DB_CLASSES).update({ selected: true }).eq(DB_CLASS_INITIALS, classInitials);
 	if (error) console.error(error);
 

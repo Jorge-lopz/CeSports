@@ -57,12 +57,14 @@ function getScore() {
             const matches = tournament.querySelectorAll(".match");
             for (let i = 0; i < matches.length; i++) {
                 let mobileMatchId = matches[i].id.split("-");
+                console.log("Empezando a buscar en db");
                 var { data, error } = yield db
                     .from(DB_MATCHES)
                     .select(`${DB_MATCH_GOALS1}, ${DB_MATCH_GOALS2}`)
                     .eq(DB_MATCH_GROUP, mobileMatchId[0])
                     .eq(DB_MATCH_ROUND, mobileMatchId[1])
                     .eq(DB_MATCH_INDEX, mobileMatchId[3]);
+                console.log("Terminando de buscar en db");
                 if (error)
                     console.log(error);
                 else {
@@ -223,7 +225,7 @@ function loadPopup(match) {
                 }
                 yield getVotes();
                 yield getState();
-                yield getScore();
+                getScore();
                 // Finally show the popup
                 popup.classList.add("show");
             }

@@ -673,6 +673,7 @@ body {
 			}
 
 			.score {
+				color: white !important;
 				margin-block: auto;
 				max-width: 20%;
 				font-weight: bold;

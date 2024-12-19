@@ -14,7 +14,7 @@
 - [x] Tournament narrow screen list format
 - [x] Prevent voting if game hasn't started yet
 - [x] Show realtime votes on matches popups
-- [ ] Winning animation
+- [ ] End screen
 - [x] Notifing of correct admin access and disable admin button afterwards
 
 Final Checks

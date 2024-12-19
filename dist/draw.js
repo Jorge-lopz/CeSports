@@ -124,7 +124,7 @@ function saveTeamsClass(teamName, classInitials) {
         var { _, error } = yield db.from(DB_TEAMS).update({ class: classInitials, group: group }).eq(DB_TEAM_NAME, teamName);
         if (error)
             console.error(error);
-        // Save the selected team-class on an available initial position
+        // Save the selected class-team on an available initial position
         var { data, error } = yield db
             .from(DB_MATCHES)
             .select(`${DB_MATCH_INDEX}, ${DB_MATCH_TEAM1}, ${DB_MATCH_TEAM2}`)
@@ -163,7 +163,7 @@ function saveTeamsClass(teamName, classInitials) {
 }
 function setInitialMatchesState() {
     return __awaiter(this, void 0, void 0, function* () {
-        var { _, error } = yield db.from(DB_MATCHES).update({ state: "set" }).eq(DB_MATCH_ROUND, 1).not(DB_MATCH_GROUP, "is", "FINAL");
+        var { _, error } = yield db.from(DB_MATCHES).update({ state: "set" }).eq(DB_MATCH_ROUND, 1).neq('"group"', "FINAL");
         if (error)
             console.error(error);
     });
@@ -202,7 +202,6 @@ rollButton.addEventListener("click", () => {
         });
         let selectedTeam = teamsArray[numberOfSpins % teamsArray.length];
         let selectedClass = classesArray[numberOfSpins % classesArray.length];
-        console.log(selectedTeam, " -> ", selectedClass);
         saveTeamsClass(selectedTeam, selectedClass);
         // End animation
         // TEAM ROULETTE

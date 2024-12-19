@@ -124,7 +124,7 @@ async function saveTeamsClass(teamName: string, classInitials: string) {
 	var { _, error } = await db.from(DB_TEAMS).update({ class: classInitials, group: group }).eq(DB_TEAM_NAME, teamName);
 	if (error) console.error(error);
 
-	// Save the selected team-class on an available initial position
+	// Save the selected class-team on an available initial position
 	var { data, error } = await db
 		.from(DB_MATCHES)
 		.select(`${DB_MATCH_INDEX}, ${DB_MATCH_TEAM1}, ${DB_MATCH_TEAM2}`)

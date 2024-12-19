@@ -358,7 +358,7 @@ body {
 			transform: rotate(180deg);
 		}
 		.match-bracket {
-			margin-left: -3px;
+			margin-left: 3px;
 		}
 	}
 

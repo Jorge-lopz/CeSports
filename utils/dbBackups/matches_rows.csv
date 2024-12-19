@@ -1,0 +1,16 @@
+id,group,round,index,team1,team2,winner,state,t1_goals,t2_goals
+2,A,1,1,Manchester City,Chelsea,2,finished,1,11
+3,A,1,2,Barcelona,Atlético Madrid,1,finished,4,0
+4,A,1,3,Bayer Leverkusen,Manchester United,2,finished,1,3
+5,A,1,4,Real Madrid,Borussia Dortmund,1,finished,1,0
+6,A,2,1,Chelsea,Barcelona,2,finished,2,3
+7,A,2,2,Manchester United,Real Madrid,1,finished,2,0
+8,A,3,1,Barcelona,Manchester United,1,finished,1,0
+9,B,1,1,Liverpool,Inter Milan,1,finished,4,1
+10,B,1,2,Juventus,Bayern Munich,2,finished,0,1
+11,B,1,3,Tottenham Hotspur,Paris Saint-Germain,1,finished,3,0
+12,B,1,4,AC Milan,Arsenal,2,finished,2,2
+13,B,2,1,Liverpool,Bayern Munich,2,finished,0,2
+14,B,2,2,Tottenham Hotspur,Arsenal,2,finished,0,2
+15,B,3,1,Bayern Munich,Arsenal,1,finished,1,0
+16,FINAL,1,1,Barcelona,Bayern Munich,1,finished,2,1

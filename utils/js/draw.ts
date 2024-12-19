@@ -159,7 +159,7 @@ async function saveTeamsClass(teamName: string, classInitials: string) {
 }
 
 async function setInitialMatchesState() {
-	var { _, error } = await db.from(DB_MATCHES).update({ state: "set" }).eq(DB_MATCH_ROUND, 1).neq(DB_MATCH_GROUP, "FINAL");
+	var { _, error } = await db.from(DB_MATCHES).update({ state: "set" }).eq(DB_MATCH_ROUND, 1).neq('"group"', "FINAL");
 	if (error) console.error(error);
 }
 

@@ -329,7 +329,6 @@ async function init() {
 		getState();
 		loadBrackets();
 	}, 3000);
-	setInitialMatchesState();
 }
 
 async function updateScore(scoreElement: any) {

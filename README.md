@@ -8,7 +8,6 @@
 
 - [x] Turn team SVGs into same size PNGs
 - [x] Admin access and features
-- [ ] Roulette sounds on /draw
 - [x] Tournament bracket page DB connection
 - [x] Voting system to make predictions for every game
 - [x] Tournament narrow screen list format

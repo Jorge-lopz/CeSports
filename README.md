@@ -16,11 +16,9 @@
 - [x] Show realtime votes on matches popups
 - [ ] Winning animation
 - [x] Notifing of correct admin access and disable admin button afterwards
-- [ ] Winning team score on a different color
 
 Final Checks
 
-- [ ] Check only admins can manage the web
-- [ ] Check realtime connections
-- [ ] Check responsiveness on various devices
-- [ ] Check DB stability with multiple connections
+- [x] Check only admins can manage the web
+- [x] Check responsiveness on various devices
+- [x] Check DB stability with multiple connections

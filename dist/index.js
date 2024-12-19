@@ -111,7 +111,7 @@ function getState() {
             let matchId = popup.getAttribute("data-match").split("-");
             let { data, error } = yield db
                 .from(DB_MATCHES)
-                .select(DB_MATCH_STATE)
+                .select(`${DB_MATCH_STATE}, ${DB_MATCH_WINNER}`)
                 .eq(DB_MATCH_GROUP, matchId[0])
                 .eq(DB_MATCH_ROUND, matchId[1])
                 .eq(DB_MATCH_INDEX, matchId[3]);
@@ -123,6 +123,12 @@ function getState() {
                 let stateColors = ["#ffffff20", "#34ac3a50", "#f2423650"];
                 container.setAttribute("match-state", stateText[STATES.indexOf(data[0].state)]);
                 container.style.setProperty("--state-color", stateColors[STATES.indexOf(data[0].state)]);
+                if (data[0].state == "finished") {
+                    container.setAttribute("content", "🏅");
+                    container.style.setProperty("--right", data[0].winner == 1 ? "90%" : "4%");
+                }
+                else
+                    container.setAttribute("content", "");
                 // Update buttons after state update
                 if (admin)
                     document.querySelector(".admin-buttons").style.display = "flex";
@@ -215,9 +221,9 @@ function loadPopup(match) {
                     document.getElementById("win-team-2").style.opacity = "1";
                     document.getElementById("win-team-2").style.pointerEvents = "all";
                 }
-                getVotes();
-                getState();
-                getScore();
+                yield getVotes();
+                yield getState();
+                yield getScore();
                 // Finally show the popup
                 popup.classList.add("show");
             }
@@ -301,6 +307,11 @@ function getTeams() {
 }
 function loadMatch(match) {
     return __awaiter(this, void 0, void 0, function* () {
+        let elMatch = tournament.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-match-${match[DB_MATCH_INDEX]}`);
+        if (match[DB_MATCH_STATE] == "started")
+            elMatch.classList.add("online");
+        else if (elMatch.classList.contains("online"))
+            elMatch.classList.remove("online");
         if (match[DB_MATCH_TEAM1] != null) {
             let team1 = tournament.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-${match[DB_MATCH_INDEX]}-team-1`);
             team1.querySelector(".team-logo").setAttribute("src", `./assets/teams/${match[DB_MATCH_TEAM1]}.png`);
@@ -318,7 +329,7 @@ function loadBrackets() {
         teams = yield getTeams();
         var { data, error } = yield db
             .from(DB_MATCHES)
-            .select(`${DB_MATCH_GROUP}, ${DB_MATCH_ROUND}, ${DB_MATCH_INDEX}, ${DB_MATCH_TEAM1}, ${DB_MATCH_TEAM2}, ${DB_MATCH_WINNER}`);
+            .select(`${DB_MATCH_GROUP}, ${DB_MATCH_ROUND}, ${DB_MATCH_INDEX}, ${DB_MATCH_TEAM1}, ${DB_MATCH_TEAM2}, ${DB_MATCH_WINNER}, ${DB_MATCH_STATE}`);
         if (error)
             console.error(error);
         else {
@@ -345,6 +356,9 @@ function init() {
         detectResize();
         loadBrackets();
         getTournamentElements();
+        const logoElement = document.getElementById("logo");
+        if (logoElement)
+            logoElement.remove();
         // Configure the vote update every 3 seconds
         setInterval(() => __awaiter(this, void 0, void 0, function* () {
             getScore();
@@ -608,3 +622,4 @@ window.addEventListener("keydown", (e) => {
     }
 });
 init();
+initAdmin(); // TODO

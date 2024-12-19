@@ -97,7 +97,7 @@ async function getState() {
 		let matchId = popup.getAttribute("data-match").split("-");
 		let { data, error } = await db
 			.from(DB_MATCHES)
-			.select(DB_MATCH_STATE)
+			.select(`${DB_MATCH_STATE}, ${DB_MATCH_WINNER}`)
 			.eq(DB_MATCH_GROUP, matchId[0])
 			.eq(DB_MATCH_ROUND, matchId[1])
 			.eq(DB_MATCH_INDEX, matchId[3]);
@@ -108,6 +108,10 @@ async function getState() {
 			let stateColors = ["#ffffff20", "#34ac3a50", "#f2423650"];
 			(container as HTMLElement).setAttribute("match-state", stateText[STATES.indexOf(data[0].state)]);
 			(container as HTMLElement).style.setProperty("--state-color", stateColors[STATES.indexOf(data[0].state)]);
+			if (data[0].state == "finished") {
+				(container as HTMLElement).setAttribute("content", "🏅");
+				(container as HTMLElement).style.setProperty("--right", data[0].winner == 1 ? "90%" : "4%");
+			} else (container as HTMLElement).setAttribute("content", "");
 			// Update buttons after state update
 			if (admin) (document.querySelector(".admin-buttons") as HTMLElement).style.display = "flex";
 			if (admin && data[0].state != "set") {
@@ -190,9 +194,9 @@ async function loadPopup(match: Element) {
 				document.getElementById("win-team-2").style.opacity = "1";
 				document.getElementById("win-team-2").style.pointerEvents = "all";
 			}
-			getVotes();
-			getState();
-			getScore();
+			await getVotes();
+			await getState();
+			await getScore();
 			// Finally show the popup
 			popup.classList.add("show");
 		}
@@ -270,6 +274,9 @@ async function getTeams() {
 }
 
 async function loadMatch(match: any) {
+	let elMatch = tournament.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-match-${match[DB_MATCH_INDEX]}`);
+	if (match[DB_MATCH_STATE] == "started") elMatch.classList.add("online");
+	else if (elMatch.classList.contains("online")) elMatch.classList.remove("online");
 	if (match[DB_MATCH_TEAM1] != null) {
 		let team1 = tournament.querySelector(`#${match[DB_MATCH_GROUP]}-${match[DB_MATCH_ROUND]}-${match[DB_MATCH_INDEX]}-team-1`);
 		team1.querySelector(".team-logo").setAttribute("src", `./assets/teams/${match[DB_MATCH_TEAM1]}.png`);
@@ -286,7 +293,9 @@ async function loadBrackets() {
 	teams = await getTeams();
 	var { data, error } = await db
 		.from(DB_MATCHES)
-		.select(`${DB_MATCH_GROUP}, ${DB_MATCH_ROUND}, ${DB_MATCH_INDEX}, ${DB_MATCH_TEAM1}, ${DB_MATCH_TEAM2}, ${DB_MATCH_WINNER}`);
+		.select(
+			`${DB_MATCH_GROUP}, ${DB_MATCH_ROUND}, ${DB_MATCH_INDEX}, ${DB_MATCH_TEAM1}, ${DB_MATCH_TEAM2}, ${DB_MATCH_WINNER}, ${DB_MATCH_STATE}`
+		);
 	if (error) console.error(error);
 	else {
 		if (error) console.error(error);
@@ -311,6 +320,8 @@ async function init() {
 	detectResize();
 	loadBrackets();
 	getTournamentElements();
+	const logoElement = document.getElementById("logo");
+	if (logoElement) logoElement.remove();
 	// Configure the vote update every 3 seconds
 	setInterval(async () => {
 		getScore();
@@ -557,3 +568,4 @@ window.addEventListener("keydown", (e) => {
 });
 
 init();
+initAdmin(); // TODO

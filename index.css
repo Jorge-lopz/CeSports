@@ -103,6 +103,17 @@ body {
 		backdrop-filter: blur(20px);
 		gap: 1.5rem;
 		--state-color: hsla(0, 0%, 100%, 0.125);
+		--right: 0;
+
+		&::before {
+			content: attr(content);
+			position: absolute;
+			font-size: clamp(2rem, 2vw, 2.5rem);
+			filter: drop-shadow(-3px 3px 5px #00000080);
+			transition: all 0.2s ease-in-out;
+			right: var(--right);
+			top: -0.7rem;
+		}
 
 		&::after {
 			content: attr(match-state);
@@ -417,6 +428,7 @@ body {
 		}
 	}
 	.match {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -427,10 +439,29 @@ body {
 		cursor: pointer;
 		white-space: nowrap;
 
+		&.online::after {
+			content: "";
+			position: absolute;
+			width: 25px;
+			height: 25px;
+			top: -50%;
+			transform: translateY(80%);
+			right: -0.8rem;
+			filter: drop-shadow(-1px 1px 5px #17622c);
+			background-image: url("./assets/online.gif");
+			background-size: contain;
+		}
+
 		.team {
+			position: relative;
 			display: flex;
 			gap: 3px;
 			align-items: center;
+
+			&:hover::after,
+			&:hover::before {
+				opacity: 0.1;
+			}
 
 			img {
 				/* background-color: #ffffffdd; */
@@ -464,10 +495,13 @@ body {
 				opacity: 0.5;
 				color: lightgray !important;
 			}
+			img {
+				filter: grayscale(0.5);
+			}
 		}
-		s &:hover {
+		&:hover {
 			.team-name {
-				background: #ffffff40;
+				background: #ffffff30;
 			}
 		}
 	}
@@ -506,7 +540,7 @@ body {
 				pointer-events: none;
 				color: white;
 				text-align: center;
-				font-size: 1.5rem;
+				font-size: 1.3rem;
 				font-weight: bold;
 			}
 		}
@@ -515,6 +549,7 @@ body {
 
 @media (width < 1400px) {
 	body {
+		display: block;
 		overflow-y: none;
 		overscroll-behavior: contain;
 		background-repeat: no-repeat;
@@ -522,6 +557,11 @@ body {
 		background-size: cover;
 		background-attachment: fixed;
 		background-position: 50%;
+	}
+
+	.matches-container {
+		flex-direction: column !important;
+		gap: 0 !important;
 	}
 
 	#tournament {
@@ -677,15 +717,9 @@ body {
 			}
 		}
 	}
-}
 
-@media (width < 1400px) {
-	body {
-		display: block;
-	}
-	.matches-container {
-		flex-direction: column !important;
-		gap: 0 !important;
+	.online::after {
+		transform: translateY(90%) !important;
 	}
 }
 
@@ -784,4 +818,15 @@ body {
 .swal2-container {
 	background-color: rgba(0, 0, 0, 0.562) !important;
 	transition: opacity 0.3s ease-in !important;
+}
+
+#spline {
+	padding-left: 1rem;
+	margin-top: -7rem;
+	max-width: 234px;
+}
+
+#FINAL-1-match-1 {
+	max-width: 234px;
+	margin-top: -5rem;
 }

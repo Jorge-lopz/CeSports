@@ -159,7 +159,7 @@ async function saveTeamsClass(teamName: string, classInitials: string) {
 }
 
 async function setInitialMatchesState() {
-	var { _, error } = await db.from(DB_MATCHES).update({ state: "set" }).eq(DB_MATCH_ROUND, 1).not(DB_MATCH_GROUP, "is", "FINAL");
+	var { _, error } = await db.from(DB_MATCHES).update({ state: "set" }).eq(DB_MATCH_ROUND, 1).neq(DB_MATCH_GROUP, "FINAL");
 	if (error) console.error(error);
 }
 
@@ -201,7 +201,6 @@ rollButton.addEventListener("click", () => {
 		let selectedTeam = teamsArray[numberOfSpins % teamsArray.length];
 		let selectedClass = classesArray[numberOfSpins % classesArray.length];
 
-		console.log(selectedTeam, " -> ", selectedClass);
 		saveTeamsClass(selectedTeam, selectedClass);
 
 		// End animation

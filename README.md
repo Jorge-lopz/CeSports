@@ -1,6 +1,6 @@
 # CeSports
 
-**Tournament manager webapp for a school event**
+**Football tournament manager webapp for a school event**
 
 [![wakatime](https://wakatime.com/badge/user/43299b95-37b5-4319-89dd-7bbef7fb1dcb/project/c97cbd33-1164-4dc6-88b0-50f17e6377bb.svg)](https://wakatime.com/projects/CeSports)
 
@@ -13,8 +13,6 @@
 - [x] Tournament narrow screen list format
 - [x] Prevent voting if game hasn't started yet
 - [x] Show realtime votes on matches popups
-- [ ] End screen
-- [x] Notifing of correct admin access and disable admin button afterwards
 
 Final Checks
 

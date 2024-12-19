@@ -622,4 +622,3 @@ window.addEventListener("keydown", (e) => {
     }
 });
 init();
-initAdmin(); // TODO

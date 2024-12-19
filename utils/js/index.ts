@@ -194,9 +194,9 @@ async function loadPopup(match: Element) {
 				document.getElementById("win-team-2").style.opacity = "1";
 				document.getElementById("win-team-2").style.pointerEvents = "all";
 			}
-			await getVotes();
-			await getState();
-			await getScore();
+			getVotes();
+			getState();
+			getScore();
 			// Finally show the popup
 			popup.classList.add("show");
 		}

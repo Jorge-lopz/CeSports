@@ -821,7 +821,7 @@ body {
 	transition: opacity 0.3s ease-in !important;
 }
 
-#spline {
+/* #spline {
 	padding-left: 1rem;
 	margin-top: -7rem;
 	max-width: 234px;
@@ -830,4 +830,4 @@ body {
 #FINAL-1-match-1 {
 	max-width: 234px;
 	margin-top: -2rem;
-}
+} */

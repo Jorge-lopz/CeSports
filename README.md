@@ -1,21 +1,80 @@
-# CeSports &nbsp;<img src="https://visitor-badge.laobi.icu/badge?page_id=jorge-lopz.cesports">
+<div align="center">
+
+# CeSports ⚽&nbsp;<img src="https://visitor-badge.laobi.icu/badge?page_id=jorge-lopz.cesports">
 
 **Football tournament manager webapp for a school event**
 
-[![wakatime](https://wakatime.com/badge/user/43299b95-37b5-4319-89dd-7bbef7fb1dcb/project/c97cbd33-1164-4dc6-88b0-50f17e6377bb.svg)]([https://wakatime.com/badge/user/@jorge-lopz/project/cesports](https://wakatime.com/badge/user/43299b95-37b5-4319-89dd-7bbef7fb1dcb/project/c97cbd33-1164-4dc6-88b0-50f17e6377bb.svg))
+Manage tournaments with ease! From team draws to real-time bracket updates, CeSports provides everything you need to run a seamless football tournament with live voting and admin controls.
 
-## TODO
+🌐 **Live Demo**: [CeSports](https://cesports.vercel.app)
 
-- [x] Turn team SVGs into same size PNGs
-- [x] Admin access and features
-- [x] Tournament bracket page DB connection
-- [x] Voting system to make predictions for every game
-- [x] Tournament narrow screen list format
-- [x] Prevent voting if game hasn't started yet
-- [x] Show realtime votes on matches popups
+<br>
 
-Final Checks
+</div>
 
-- [x] Check only admins can manage the web
-- [x] Check responsiveness on various devices
-- [x] Check DB stability with multiple connections
+## 🚀 Features
+
+- 🎲 **Interactive Team Draw**: Randomly assign teams to tournament brackets with an engaging visual draw system
+- 🏆 **Real-time Tournament Brackets**: Dynamic bracket visualization that updates live as matches progress
+- 🗳️ **Match Predictions**: Users can vote on match outcomes and see live voting statistics
+- 🔐 **Admin Controls**: Password-protected admin access for managing matches, scores, and tournament flow
+- 📊 **Database Integration**: Full Supabase integration for real-time data synchronization across all users
+- 📱 **Responsive Design**: Optimized viewing experience on desktop, tablet, and mobile devices
+- ⚡ **Live Updates**: Real-time score updates and vote tracking for an engaging user experience
+
+## 📸 Media
+
+<div align="center">
+
+  #### · Tournament Bracket ·
+
+<table>
+  <td>
+      
+  ![Complete Tournament](media/Complete%20tournament.png)
+  </td>
+</table>
+
+  #### · Team Draw System ·
+
+<table>
+  <td>
+      
+  ![Team Draw Animation](media/Draw.gif)
+  </td>
+</table>
+
+  #### · Match Popup & Voting ·
+
+<table>
+  <td>
+      
+  ![User Match Popup](media/User%20match%20popup%20and%20voting%20UI.png)
+  </td>
+</table>
+
+  #### · Admin Management ·
+
+<table>
+  <td>
+      
+  ![Admin Controls](media/Admin%20match%20popup.png)
+  </td>
+</table>
+
+</div>
+
+## 🛠️ Tech Stack
+
+- **Frontend**: TypeScript, HTML5, CSS3
+- **Backend**: Supabase (Real-time Database)
+- **Deployment**: Vercel
+- **UI Libraries**: SweetAlert2 for interactive alerts
+
+<br>
+<div align="center">
+
+  <img src="https://wakatime.com/badge/user/43299b95-37b5-4319-89dd-7bbef7fb1dcb/project/c97cbd33-1164-4dc6-88b0-50f17e6377bb.svg">
+  &nbsp;<img src="https://visitor-badge.laobi.icu/badge?page_id=jorge-lopz.cesports">
+  
+</div>

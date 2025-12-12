@@ -29,37 +29,45 @@ Manage tournaments with ease! From team draws to real-time bracket updates, CeSp
   #### · Tournament Bracket ·
 
 <table>
-  <td>
+  <tr>
+    <td>
       
   ![Complete Tournament](media/Complete%20tournament.png)
-  </td>
+    </td>
+  </tr>
 </table>
 
   #### · Team Draw System ·
 
 <table>
-  <td>
+  <tr>
+    <td>
       
   ![Team Draw Animation](media/Draw.gif)
-  </td>
+    </td>
+  </tr>
 </table>
 
   #### · Match Popup & Voting ·
 
 <table>
-  <td>
+  <tr>
+    <td>
       
   ![User Match Popup](media/User%20match%20popup%20and%20voting%20UI.png)
-  </td>
+    </td>
+  </tr>
 </table>
 
   #### · Admin Management ·
 
 <table>
-  <td>
+  <tr>
+    <td>
       
   ![Admin Controls](media/Admin%20match%20popup.png)
-  </td>
+    </td>
+  </tr>
 </table>
 
 </div>
